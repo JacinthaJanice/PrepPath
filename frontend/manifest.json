@@ -2,8 +2,8 @@
   "name": "PrepPath — Placement Prep",
   "short_name": "PrepPath",
   "description": "Personal placement preparation tracker with real-time database sync",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#0e0a06",
   "theme_color": "#e8a020",
@@ -22,7 +22,10 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["productivity", "education"],
+  "categories": [
+    "productivity",
+    "education"
+  ],
   "screenshots": [
     {
       "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'><rect fill='%230e0a06' width='540' height='720'/><rect fill='%23160f08' y='20' width='540' height='680' rx='20'/><text x='270' y='80' font-size='32' text-anchor='middle' fill='%23e8a020' font-family='serif' font-weight='bold'>PrepPath</text><text x='270' y='200' font-size='24' text-anchor='middle' fill='%23f5e8cc'>Track Your Placement Journey</text></svg>",
@@ -36,7 +39,7 @@
       "name": "Dashboard",
       "short_name": "Dashboard",
       "description": "View your progress overview",
-      "url": "/?tab=dashboard",
+      "url": "./?tab=dashboard",
       "icons": [
         {
           "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect fill='%23e8a020' width='96' height='96'/><text x='48' y='72' font-size='40' font-weight='bold' text-anchor='middle' fill='%230e0a06' font-family='serif'>D</text></svg>",
@@ -49,7 +52,7 @@
       "name": "Schedule",
       "short_name": "Schedule",
       "description": "Check today's study schedule",
-      "url": "/?tab=schedule",
+      "url": "./?tab=schedule",
       "icons": [
         {
           "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect fill='%232dd4bf' width='96' height='96'/><text x='48' y='72' font-size='40' font-weight='bold' text-anchor='middle' fill='%23000' font-family='serif'>S</text></svg>",

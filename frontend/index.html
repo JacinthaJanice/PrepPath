@@ -1605,7 +1605,6 @@
     href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%230e0a06' width='192' height='192'/><rect fill='%23e8a020' x='30' y='30' width='132' height='132'/><text x='96' y='130' font-size='80' font-weight='bold' text-anchor='middle' fill='%230e0a06' font-family='serif'>PP</text></svg>">
   <script src="config.js"></script>
   <script src="api.js"></script>
-  <script src="pwa-ui.js"></script>
 </head>
 
 <body>
@@ -1621,6 +1620,9 @@
         <div class="hright">
           <div class="hpill faith">✝ Phil 4:13</div>
           <div class="hpill gold" id="daysLeft">— days left</div>
+          <button class="hpill" id="installBtn"
+            style="display:none;cursor:pointer;background:var(--tealdim);border-color:rgba(45,212,191,.35);color:var(--teal)"
+            onclick="showPwaInstallPrompt()">⬇ Install App</button>
           <div class="hpill" id="syncBadge" style="display:none">☁ synced</div>
         </div>
       </div>
@@ -1893,6 +1895,31 @@
           </div>
         </div>
         <div class="sync-status" id="syncStatus"></div>
+      </div>
+
+      <div class="card" style="max-width:680px;margin-bottom:16px">
+        <div class="card-title">App Settings</div>
+        <div style="font-size:.78rem;color:var(--text2);margin-bottom:12px">Manage backend URL, manual sync, and app
+          install from this page.</div>
+        <div class="setup-fields">
+          <div class="setup-row">
+            <input class="setup-input" id="backendUrl" placeholder="https://your-backend-url" />
+          </div>
+          <div class="setup-row" style="align-items:center;gap:10px;flex-wrap:wrap">
+            <label style="display:flex;align-items:center;gap:8px;font-size:.78rem;color:var(--text2)">
+              <input id="pwaPromptToggle" type="checkbox" style="accent-color:var(--teal)"> Show app install prompt
+            </label>
+          </div>
+          <div class="setup-row" style="flex-wrap:wrap;gap:8px">
+            <button class="setup-btn" onclick="saveAppSettingsFromPage()">Save Settings</button>
+            <button class="setup-btn" onclick="syncNowFromPage()"
+              style="background:var(--surface2);color:var(--text);border:1px solid var(--border2)">Sync Now</button>
+            <button class="setup-btn" id="installBtnSettings" onclick="showPwaInstallPrompt()"
+              style="display:none;background:var(--tealdim);color:var(--teal);border:1px solid rgba(45,212,191,.35)">⬇
+              Install App</button>
+          </div>
+        </div>
+        <div class="sync-status" id="appSettingsStatus"></div>
       </div>
 
       <div class="card" style="max-width:500px">
@@ -2349,6 +2376,65 @@
       el.className = 'sync-status ' + (type === 'ok' ? 'sync-ok' : type === 'err' ? 'sync-err' : 'sync-pending');
     }
 
+    const APP_SETTINGS_KEY = 'pp3_settings';
+
+    function getAppSettings() {
+      try {
+        return JSON.parse(localStorage.getItem(APP_SETTINGS_KEY) || '{}');
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function applyAppSettings(settings) {
+      if (window.PP_CONFIG && settings.backendUrl) {
+        window.PP_CONFIG.BACKEND_URL = settings.backendUrl;
+      }
+    }
+
+    function showAppSettingsStatus(msg, type) {
+      const el = document.getElementById('appSettingsStatus');
+      if (!el) return;
+      el.textContent = msg;
+      el.className = 'sync-status ' + (type === 'ok' ? 'sync-ok' : type === 'err' ? 'sync-err' : 'sync-pending');
+    }
+
+    function initAppSettingsUI() {
+      const settings = getAppSettings();
+      const backendEl = document.getElementById('backendUrl');
+      const promptEl = document.getElementById('pwaPromptToggle');
+      if (backendEl) {
+        backendEl.value = settings.backendUrl || (window.PP_CONFIG?.BACKEND_URL || 'http://localhost:3001');
+      }
+      if (promptEl) {
+        promptEl.checked = settings.showPwaPrompt !== false;
+      }
+      applyAppSettings(settings);
+    }
+
+    function saveAppSettingsFromPage() {
+      const backendUrl = (document.getElementById('backendUrl')?.value || '').trim();
+      const showPwaPrompt = !!document.getElementById('pwaPromptToggle')?.checked;
+      const settings = { backendUrl, showPwaPrompt };
+      localStorage.setItem(APP_SETTINGS_KEY, JSON.stringify(settings));
+      applyAppSettings(settings);
+      showAppSettingsStatus('✓ Settings saved', 'ok');
+    }
+
+    async function syncNowFromPage() {
+      showAppSettingsStatus('Syncing...', 'pending');
+      try {
+        if (window.API?.saveProgress) {
+          await window.API.saveProgress(state);
+        } else {
+          await syncToSupabase(true);
+        }
+        showAppSettingsStatus('✓ Sync complete', 'ok');
+      } catch (e) {
+        showAppSettingsStatus('Sync failed: ' + (e?.message || 'unknown error'), 'err');
+      }
+    }
+
     // ═══════════ EXPORT / IMPORT ═══════════
     function exportData() {
       const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
@@ -2686,6 +2772,7 @@
     document.addEventListener('DOMContentLoaded', async () => {
       loadState();
       loadSupabaseCreds();
+      initAppSettingsUI();
       await loadFromSupabase();
       renderSchedule();
       updateCountdown();
@@ -2699,7 +2786,7 @@
     (function () {
       // Register service worker
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js')
+        navigator.serviceWorker.register('sw.js')
           .then((reg) => {
             console.log('[PWA] Service worker registered:', reg.scope);
             // Check for updates periodically
@@ -2714,24 +2801,44 @@
         e.preventDefault();
         deferredPrompt = e;
         console.log('[PWA] Install prompt available');
+        const installBtn = document.getElementById('installBtn');
+        if (installBtn) installBtn.style.display = 'inline-flex';
       });
 
       window.addEventListener('appinstalled', () => {
         console.log('[PWA] App installed');
         deferredPrompt = null;
+        const installBtn = document.getElementById('installBtn');
+        if (installBtn) installBtn.style.display = 'none';
       });
 
       // Show prompt when settings ask for it (optional)
       window.showPwaInstallPrompt = () => {
-        const settings = PWA_UI?.getSettings?.() || {};
+        const settings = getAppSettings();
         if (deferredPrompt && settings.showPwaPrompt !== false) {
           deferredPrompt.prompt();
           deferredPrompt.userChoice.then(({ outcome }) => {
             console.log(`[PWA] User response to install prompt: ${outcome}`);
             deferredPrompt = null;
+            const installBtn = document.getElementById('installBtn');
+            if (installBtn) installBtn.style.display = 'none';
+            const installBtnSettings = document.getElementById('installBtnSettings');
+            if (installBtnSettings) installBtnSettings.style.display = 'none';
           });
+        } else {
+          alert('Install option is not available yet. Open this app on HTTPS and use Edge menu > Apps > Install this site as an app.');
         }
       };
+
+      window.addEventListener('beforeinstallprompt', () => {
+        const installBtnSettings = document.getElementById('installBtnSettings');
+        if (installBtnSettings) installBtnSettings.style.display = 'inline-flex';
+      });
+
+      window.addEventListener('appinstalled', () => {
+        const installBtnSettings = document.getElementById('installBtnSettings');
+        if (installBtnSettings) installBtnSettings.style.display = 'none';
+      });
     })();
   </script>
 </body>
