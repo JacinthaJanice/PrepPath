@@ -1,1203 +1,2470 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PrepPath v3</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=JetBrains+Mono:wght@400;500;600&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg:       #0e0a06;
-  --bg2:      #160f08;
-  --surface:  #1e1409;
-  --surface2: #271a0d;
-  --surface3: #321f10;
-  --border:   #3d2a14;
-  --border2:  #4f371c;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PrepPath v3</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=JetBrains+Mono:wght@400;500;600&family=Syne:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0e0a06;
+      --bg2: #160f08;
+      --surface: #1e1409;
+      --surface2: #271a0d;
+      --surface3: #321f10;
+      --border: #3d2a14;
+      --border2: #4f371c;
 
-  --gold:     #e8a020;
-  --gold2:    #f5c842;
-  --gold3:    #fde68a;
-  --golddim:  rgba(232,160,32,0.15);
+      --gold: #e8a020;
+      --gold2: #f5c842;
+      --gold3: #fde68a;
+      --golddim: rgba(232, 160, 32, 0.15);
 
-  --amber:    #d97706;
-  --cream:    #fef3c7;
+      --amber: #d97706;
+      --cream: #fef3c7;
 
-  /* Secondary accent colours */
-  --teal:     #2dd4bf;
-  --tealdim:  rgba(45,212,191,0.12);
-  --rose:     #fb7185;
-  --rosedim:  rgba(251,113,133,0.12);
-  --sage:     #86efac;
-  --sagedim:  rgba(134,239,172,0.12);
-  --sky:      #7dd3fc;
-  --skydim:   rgba(125,211,252,0.12);
-  --lavender: #c4b5fd;
-  --lavdim:   rgba(196,181,253,0.12);
-  --peach:    #fdba74;
-  --peachdim: rgba(253,186,116,0.12);
+      /* Secondary accent colours */
+      --teal: #2dd4bf;
+      --tealdim: rgba(45, 212, 191, 0.12);
+      --rose: #fb7185;
+      --rosedim: rgba(251, 113, 133, 0.12);
+      --sage: #86efac;
+      --sagedim: rgba(134, 239, 172, 0.12);
+      --sky: #7dd3fc;
+      --skydim: rgba(125, 211, 252, 0.12);
+      --lavender: #c4b5fd;
+      --lavdim: rgba(196, 181, 253, 0.12);
+      --peach: #fdba74;
+      --peachdim: rgba(253, 186, 116, 0.12);
 
-  --text:     #f5e8cc;
-  --text2:    #c4a97a;
-  --muted:    #7a6040;
-  --faith:    #fcd34d;
+      --text: #f5e8cc;
+      --text2: #c4a97a;
+      --muted: #7a6040;
+      --faith: #fcd34d;
 
-  --r: 10px;
-  --r2: 14px;
-}
+      --r: 10px;
+      --r2: 14px;
+    }
 
-*{margin:0;padding:0;box-sizing:border-box}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
 
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:'Syne',sans-serif;
-  min-height:100vh;
-  overflow-x:hidden;
-}
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-/* Subtle grain */
-body::before{
-  content:'';
-  position:fixed;inset:0;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
-  pointer-events:none;z-index:0;opacity:.5;
-}
+    /* Subtle grain */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: .5;
+    }
 
-.wrap{position:relative;z-index:1}
+    .wrap {
+      position: relative;
+      z-index: 1
+    }
 
-/* ── HEADER ── */
-header{
-  background:var(--bg2);
-  border-bottom:1px solid var(--border);
-  position:sticky;top:0;z-index:300;
-}
-.hinner{
-  max-width:1300px;margin:0 auto;
-  display:flex;align-items:center;
-  padding:0 20px;min-height:54px;gap:16px;
-}
-.logo{
-  font-family:'Playfair Display',serif;
-  font-size:1.5rem;font-weight:900;
-  color:var(--gold2);letter-spacing:-.5px;white-space:nowrap;
-}
-.logo span{color:var(--teal)}
-.htag{
-  font-family:'JetBrains Mono',monospace;
-  font-size:.6rem;color:var(--muted);
-  letter-spacing:2px;text-transform:uppercase;
-}
-.hright{display:flex;align-items:center;gap:8px;margin-left:auto;flex-wrap:wrap}
-.hpill{
-  font-family:'JetBrains Mono',monospace;font-size:.65rem;
-  padding:5px 12px;border-radius:20px;border:1px solid var(--border2);
-  color:var(--text2);white-space:nowrap;
-}
-.hpill.gold{background:var(--gold);color:#1a0a00;border-color:var(--gold);font-weight:700}
-.hpill.faith{background:rgba(252,211,77,.1);border-color:rgba(252,211,77,.3);color:var(--faith)}
+    /* ── HEADER ── */
+    header {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 300;
+    }
 
-/* ── NAV TABS ── */
-.nav-bar{
-  background:var(--surface);border-bottom:1px solid var(--border);
-  position:sticky;top:54px;z-index:200;
-}
-.nav-inner{
-  max-width:1300px;margin:0 auto;
-  display:flex;padding:0 20px;overflow-x:auto;gap:2px;
-}
-.nav-btn{
-  font-family:'Syne',sans-serif;font-size:.8rem;font-weight:600;
-  padding:14px 18px;border:none;background:transparent;
-  color:var(--muted);cursor:pointer;white-space:nowrap;
-  border-bottom:2px solid transparent;transition:all .2s;
-  letter-spacing:.3px;
-}
-.nav-btn:hover{color:var(--text2)}
-.nav-btn.active{color:var(--gold2);border-bottom-color:var(--gold2)}
+    .hinner {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      min-height: 54px;
+      gap: 16px;
+    }
 
-/* ── LAYOUT ── */
-.page{max-width:1300px;margin:0 auto;padding:28px 20px;display:none}
-.page.active{display:block}
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--gold2);
+      letter-spacing: -.5px;
+      white-space: nowrap;
+    }
 
-/* ── CARDS ── */
-.card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r2);padding:20px;
-  position:relative;overflow:hidden;
-}
-.card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,var(--gold),transparent);
-}
-.card-title{
-  font-family:'JetBrains Mono',monospace;font-size:.6rem;
-  letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);
-  margin-bottom:14px;
-}
+    .logo span {
+      color: var(--teal)
+    }
 
-/* ── DASHBOARD ── */
-.dash-grid{
-  display:grid;
-  grid-template-columns:260px 1fr;
-  gap:20px;
-}
-@media(max-width:768px){.dash-grid{grid-template-columns:1fr}}
+    .htag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .6rem;
+      color: var(--muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
 
-.sidebar{display:flex;flex-direction:column;gap:16px}
+    .hright {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: auto;
+      flex-wrap: wrap
+    }
 
-/* Ring */
-.ring-wrap{position:relative;width:100px;height:100px;margin:0 auto 12px}
-svg.ring{transform:rotate(-90deg)}
-.ring-bg{fill:none;stroke:var(--border2);stroke-width:7}
-.ring-fill{fill:none;stroke:var(--gold2);stroke-width:7;stroke-linecap:round;transition:stroke-dashoffset 1s ease}
-.ring-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.ring-pct{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--gold2)}
-.ring-lbl{font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+    .hpill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .65rem;
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--border2);
+      color: var(--text2);
+      white-space: nowrap;
+    }
 
-/* Focus tracks */
-.track{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border)}
-.track:last-child{border-bottom:none}
-.tdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.tname{font-size:.82rem;font-weight:600;flex:1;color:var(--text)}
-.tbar{width:55px;height:3px;background:var(--border2);border-radius:2px;overflow:hidden}
-.tbfill{height:100%;border-radius:2px;transition:width 1s ease}
+    .hpill.gold {
+      background: var(--gold);
+      color: #1a0a00;
+      border-color: var(--gold);
+      font-weight: 700
+    }
 
-/* Resources */
-.res-link{
-  display:flex;align-items:center;gap:8px;padding:7px 10px;
-  border-radius:8px;text-decoration:none;color:var(--text2);
-  font-size:.78rem;transition:all .15s;margin-bottom:2px;
-}
-.res-link:hover{background:var(--surface2);color:var(--text);transform:translateX(3px)}
-.res-dev{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--muted)}
+    .hpill.faith {
+      background: rgba(252, 211, 77, .1);
+      border-color: rgba(252, 211, 77, .3);
+      color: var(--faith)
+    }
 
-/* Verse */
-.verse-card{background:linear-gradient(135deg,rgba(252,211,77,.07),var(--surface));border-color:rgba(252,211,77,.2)}
-.verse-card::before{background:linear-gradient(90deg,var(--faith),transparent)}
-.verse-t{font-family:'Playfair Display',serif;font-size:.88rem;font-style:italic;color:var(--faith);line-height:1.6;margin-bottom:6px}
-.verse-r{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:rgba(252,211,77,.5);letter-spacing:1px}
+    /* ── NAV TABS ── */
+    .nav-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 54px;
+      z-index: 200;
+    }
 
-/* Day nav */
-.day-nav{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:20px}
-.day-btn{
-  padding:8px 14px;border-radius:8px;border:1px solid var(--border2);
-  background:transparent;color:var(--text2);font-family:'Syne',sans-serif;
-  font-size:.78rem;font-weight:600;cursor:pointer;transition:all .2s;
-}
-.day-btn:hover{background:var(--surface2)}
-.day-btn.active{background:var(--gold);color:#1a0a00;border-color:var(--gold)}
-.day-btn.today-btn{border-color:var(--teal);color:var(--teal)}
-.day-btn.today-btn.active{background:var(--teal);color:#000;border-color:var(--teal)}
+    .nav-inner {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: flex;
+      padding: 0 20px;
+      overflow-x: auto;
+      gap: 2px;
+    }
 
-/* Schedule */
-.sched{display:flex;flex-direction:column;gap:0}
-.trow{display:grid;grid-template-columns:68px 1fr;position:relative}
-.trow::before{content:'';position:absolute;left:68px;top:22px;bottom:-1px;width:1px;background:var(--border)}
-.trow:last-child::before{display:none}
-.tcol{padding:14px 10px 14px 0;text-align:right;padding-top:16px}
-.tlbl{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted);white-space:nowrap}
-.bcol{padding:8px 0 8px 18px}
+    .nav-btn {
+      font-family: 'Syne', sans-serif;
+      font-size: .8rem;
+      font-weight: 600;
+      padding: 14px 18px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: all .2s;
+      letter-spacing: .3px;
+    }
 
-.block{
-  border-radius:10px;padding:13px 15px;border:1px solid;
-  margin-bottom:2px;transition:transform .15s,box-shadow .15s;
-}
-.block:hover{transform:translateX(4px);box-shadow:0 4px 20px rgba(0,0,0,.3)}
-.bhead{display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap}
-.btitle{font-weight:700;font-size:.86rem}
-.bdesc{font-size:.76rem;color:var(--text2);line-height:1.5}
+    .nav-btn:hover {
+      color: var(--text2)
+    }
 
-/* Block themes */
-.b-faith{background:rgba(252,211,77,.06);border-color:rgba(252,211,77,.2)}
-.b-apt{background:rgba(232,160,32,.08);border-color:rgba(232,160,32,.25)}
-.b-code{background:var(--tealdim);border-color:rgba(45,212,191,.2)}
-.b-dsa{background:var(--lavdim);border-color:rgba(196,181,253,.2)}
-.b-cloud{background:var(--skydim);border-color:rgba(125,211,252,.2)}
-.b-gym{background:var(--rosedim);border-color:rgba(251,113,133,.2)}
-.b-music{background:var(--lavdim);border-color:rgba(196,181,253,.15)}
-.b-art{background:var(--sagedim);border-color:rgba(134,239,172,.2)}
-.b-rest{background:var(--surface2);border-color:var(--border)}
-.b-project{background:var(--sagedim);border-color:rgba(134,239,172,.15)}
-.b-ds{background:var(--peachdim);border-color:rgba(253,186,116,.2)}
+    .nav-btn.active {
+      color: var(--gold2);
+      border-bottom-color: var(--gold2)
+    }
 
-/* Tags */
-.tag{font-family:'JetBrains Mono',monospace;font-size:.56rem;padding:2px 7px;border-radius:8px;letter-spacing:.5px;text-transform:uppercase;border:1px solid;flex-shrink:0}
-.tag-faith{background:rgba(252,211,77,.1);border-color:rgba(252,211,77,.3);color:var(--faith)}
-.tag-apt{background:rgba(232,160,32,.1);border-color:rgba(232,160,32,.3);color:var(--gold)}
-.tag-code{background:var(--tealdim);border-color:rgba(45,212,191,.3);color:var(--teal)}
-.tag-dsa{background:var(--lavdim);border-color:rgba(196,181,253,.3);color:var(--lavender)}
-.tag-cloud{background:var(--skydim);border-color:rgba(125,211,252,.3);color:var(--sky)}
-.tag-gym{background:var(--rosedim);border-color:rgba(251,113,133,.3);color:var(--rose)}
-.tag-music{background:var(--lavdim);border-color:rgba(196,181,253,.2);color:var(--lavender)}
-.tag-art{background:var(--sagedim);border-color:rgba(134,239,172,.3);color:var(--sage)}
-.tag-project{background:var(--sagedim);border-color:rgba(134,239,172,.25);color:var(--sage)}
-.tag-rest{background:var(--surface2);border-color:var(--border);color:var(--muted)}
-.tag-ds{background:var(--peachdim);border-color:rgba(253,186,116,.3);color:var(--peach)}
+    /* ── LAYOUT ── */
+    .page {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 28px 20px;
+      display: none
+    }
 
-/* Chips */
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
-.chip{
-  display:inline-flex;align-items:center;gap:4px;
-  padding:4px 10px;border-radius:20px;
-  font-family:'JetBrains Mono',monospace;font-size:.6rem;
-  text-decoration:none;border:1px solid;
-  transition:all .15s;cursor:pointer;white-space:nowrap;
-}
-.chip:hover{opacity:.7;transform:translateY(-1px)}
-.c-yt{background:rgba(255,80,50,.08);border-color:rgba(255,80,50,.3);color:#ff7060}
-.c-gh{background:rgba(200,200,200,.06);border-color:rgba(200,200,200,.2);color:#ccc}
-.c-cs{background:rgba(232,160,32,.08);border-color:rgba(232,160,32,.3);color:var(--gold)}
-.c-dc{background:var(--skydim);border-color:rgba(125,211,252,.3);color:var(--sky)}
-.c-li{background:rgba(96,165,250,.08);border-color:rgba(96,165,250,.3);color:#60a5fa}
-.c-gcp{background:var(--sagedim);border-color:rgba(134,239,172,.3);color:var(--sage)}
-.c-lc{background:rgba(255,180,50,.08);border-color:rgba(255,180,50,.3);color:#ffa020}
-.c-wb{background:var(--tealdim);border-color:rgba(45,212,191,.3);color:var(--teal)}
-.c-ph{background:var(--lavdim);border-color:rgba(196,181,253,.3);color:var(--lavender)}
-.c-ud{background:var(--peachdim);border-color:rgba(253,186,116,.3);color:var(--peach)}
+    .page.active {
+      display: block
+    }
 
-/* Mini check inside blocks */
-.mcheck{display:flex;align-items:center;gap:7px;margin-top:8px;cursor:pointer;user-select:none}
-.mcheck input{accent-color:var(--teal);width:13px;height:13px;flex-shrink:0}
-.mcheck label{font-size:.75rem;color:var(--text2);cursor:pointer}
-.mcheck.done label{text-decoration:line-through;color:var(--muted)}
+    /* ── CARDS ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r2);
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
 
-/* Progress bar global */
-.pbar-wrap{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:20px}
-.pbar-lbl{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);white-space:nowrap}
-.pbar-track{flex:1;min-width:100px;height:5px;background:var(--surface3);border-radius:3px;overflow:hidden}
-.pbar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold),var(--teal));transition:width .8s ease}
-.pbar-pct{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--gold2)}
-.pbar-count{font-size:.72rem;color:var(--muted)}
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+    }
 
-/* ── ROADMAP ── */
-.roadmap-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+    .card-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .6rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
 
-.phase-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r2);overflow:hidden;
-  transition:transform .2s,border-color .2s;
-}
-.phase-card:hover{transform:translateY(-3px)}
+    /* ── DASHBOARD ── */
+    .dash-grid {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 20px;
+    }
 
-.phase-header{padding:16px 18px 12px;border-bottom:1px solid var(--border)}
-.phase-num{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
-.phase-name{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;margin-bottom:2px}
-.phase-dates{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted)}
+    @media(max-width:768px) {
+      .dash-grid {
+        grid-template-columns: 1fr
+      }
+    }
 
-.phase-progress{padding:12px 18px;border-bottom:1px solid var(--border)}
-.pp-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
-.pp-lbl{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
-.pp-pct{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--gold2);font-weight:600}
-.pp-track{height:4px;background:var(--surface3);border-radius:2px;overflow:hidden}
-.pp-fill{height:100%;border-radius:2px;transition:width .8s ease}
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 16px
+    }
 
-.phase-modules{padding:14px 18px}
-.module{margin-bottom:14px}
-.mod-head{
-  display:flex;align-items:center;gap:8px;
-  cursor:pointer;padding:8px 10px;border-radius:8px;
-  border:1px solid var(--border);background:var(--surface2);
-  transition:background .15s;margin-bottom:4px;
-}
-.mod-head:hover{background:var(--surface3)}
-.mod-check{width:14px;height:14px;border-radius:4px;border:2px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
-.mod-check.done{background:var(--teal);border-color:var(--teal)}
-.mod-check.done::after{content:'✓';font-size:.55rem;color:#000}
-.mod-title{font-size:.82rem;font-weight:600;flex:1;color:var(--text)}
-.mod-badge{font-family:'JetBrains Mono',monospace;font-size:.55rem;padding:2px 6px;border-radius:6px;border:1px solid;flex-shrink:0}
+    /* Ring */
+    .ring-wrap {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 12px
+    }
 
-.subtasks{padding-left:22px;display:flex;flex-direction:column;gap:3px}
-.subtask{
-  display:flex;align-items:center;gap:8px;padding:5px 8px;
-  border-radius:6px;cursor:pointer;transition:background .15s;
-  user-select:none;
-}
-.subtask:hover{background:var(--surface2)}
-.subtask input[type=checkbox]{accent-color:var(--gold);width:12px;height:12px;flex-shrink:0}
-.subtask label{font-size:.76rem;color:var(--text2);cursor:pointer;line-height:1.4}
-.subtask.done label{text-decoration:line-through;color:var(--muted)}
+    svg.ring {
+      transform: rotate(-90deg)
+    }
 
-/* ── PROJECTS ── */
-.proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+    .ring-bg {
+      fill: none;
+      stroke: var(--border2);
+      stroke-width: 7
+    }
 
-.proj-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r2);overflow:hidden;
-}
-.proj-head{padding:16px 18px 10px;border-bottom:1px solid var(--border)}
-.proj-icon{font-size:1.4rem;margin-bottom:6px}
-.proj-name{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin-bottom:4px}
-.proj-desc{font-size:.76rem;color:var(--text2);line-height:1.5}
+    .ring-fill {
+      fill: none;
+      stroke: var(--gold2);
+      stroke-width: 7;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1s ease
+    }
 
-.proj-tasks{padding:14px 18px}
-.ptask{
-  display:flex;align-items:flex-start;gap:8px;padding:7px 0;
-  border-bottom:1px solid var(--border);cursor:pointer;user-select:none;
-}
-.ptask:last-child{border-bottom:none}
-.ptask input[type=checkbox]{accent-color:var(--gold);width:13px;height:13px;margin-top:1px;flex-shrink:0}
-.ptask label{font-size:.78rem;color:var(--text2);cursor:pointer;line-height:1.4;flex:1}
-.ptask.done label{text-decoration:line-through;color:var(--muted)}
+    .ring-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center
+    }
 
-.ptask-diff{
-  font-family:'JetBrains Mono',monospace;font-size:.55rem;
-  padding:1px 6px;border-radius:6px;border:1px solid;flex-shrink:0;
-}
-.diff-easy{background:var(--sagedim);border-color:rgba(134,239,172,.3);color:var(--sage)}
-.diff-med{background:rgba(232,160,32,.08);border-color:rgba(232,160,32,.3);color:var(--gold)}
-.diff-hard{background:var(--rosedim);border-color:rgba(251,113,133,.3);color:var(--rose)}
+    .ring-pct {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--gold2)
+    }
 
-.proj-progress{padding:10px 18px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px}
-.pp2-track{flex:1;height:3px;background:var(--surface3);border-radius:2px;overflow:hidden}
-.pp2-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--sage));border-radius:2px;transition:width .5s}
-.pp2-lbl{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted)}
+    .ring-lbl {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .55rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px
+    }
 
-/* Add custom task */
-.add-task-row{
-  display:flex;gap:8px;padding:10px 18px 14px;border-top:1px solid var(--border);
-}
-.add-input{
-  flex:1;background:var(--surface2);border:1px solid var(--border2);
-  border-radius:7px;padding:7px 10px;color:var(--text);font-family:'Syne',sans-serif;
-  font-size:.78rem;outline:none;transition:border-color .2s;
-}
-.add-input:focus{border-color:var(--gold)}
-.add-input::placeholder{color:var(--muted)}
-.add-btn{
-  background:var(--gold);color:#1a0a00;border:none;border-radius:7px;
-  padding:7px 12px;font-size:.8rem;font-weight:700;cursor:pointer;
-  font-family:'Syne',sans-serif;transition:background .2s;flex-shrink:0;
-}
-.add-btn:hover{background:var(--gold2)}
+    /* Focus tracks */
+    .track {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--border)
+    }
 
-/* ── FUTURE ROLES ── */
-.future-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px}
+    .track:last-child {
+      border-bottom: none
+    }
 
-.future-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r2);overflow:hidden;
-  transition:transform .2s,border-color .2s;
-}
-.future-card:hover{transform:translateY(-2px);border-color:var(--teal)}
+    .tdot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0
+    }
 
-.fc-head{padding:16px 18px 12px;border-bottom:1px solid var(--border)}
-.fc-icon{font-size:1.5rem;margin-bottom:8px}
-.fc-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin-bottom:6px;line-height:1.3}
-.fc-desc{font-size:.76rem;color:var(--text2);line-height:1.5}
-.fc-badge{
-  font-family:'JetBrains Mono',monospace;font-size:.55rem;
-  padding:2px 8px;border-radius:10px;border:1px solid rgba(45,212,191,.3);
-  background:var(--tealdim);color:var(--teal);letter-spacing:1px;
-  display:inline-block;margin-bottom:8px;
-}
-.fc-salary{font-family:'Playfair Display',serif;font-size:.95rem;font-weight:700;color:var(--sage);margin-top:6px}
+    .tname {
+      font-size: .82rem;
+      font-weight: 600;
+      flex: 1;
+      color: var(--text)
+    }
 
-.fc-path{padding:14px 18px}
-.fc-path-lbl{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
-.fc-step{
-  display:flex;align-items:flex-start;gap:8px;padding:5px 0;
-  border-bottom:1px solid var(--border);user-select:none;cursor:pointer;
-}
-.fc-step:last-child{border-bottom:none}
-.fc-step input{accent-color:var(--teal);width:12px;height:12px;margin-top:2px;flex-shrink:0}
-.fc-step label{font-size:.75rem;color:var(--text2);cursor:pointer;line-height:1.4;flex:1}
-.fc-step.done label{text-decoration:line-through;color:var(--muted)}
-.fc-year{font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--muted);flex-shrink:0}
+    .tbar {
+      width: 55px;
+      height: 3px;
+      background: var(--border2);
+      border-radius: 2px;
+      overflow: hidden
+    }
 
-.fc-skills{padding:10px 18px 14px;display:flex;flex-wrap:wrap;gap:5px}
-.sk{font-family:'JetBrains Mono',monospace;font-size:.6rem;padding:3px 8px;border-radius:8px;background:var(--surface2);border:1px solid var(--border2);color:var(--text2)}
+    .tbfill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 1s ease
+    }
 
-/* ── APTITUDE PAGE ── */
-.apt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
-.apt-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:18px;border-left:3px solid}
-.apt-cat{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
-.apt-title{font-weight:700;font-size:.86rem;margin-bottom:6px}
-.apt-body{font-size:.76rem;color:var(--text2);line-height:1.55}
+    /* Resources */
+    .res-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--text2);
+      font-size: .78rem;
+      transition: all .15s;
+      margin-bottom: 2px;
+    }
 
-/* ── SUPABASE SETUP ── */
-.setup-banner{
-  background:linear-gradient(135deg,rgba(45,212,191,.08),var(--surface));
-  border:1px solid rgba(45,212,191,.25);border-radius:var(--r2);
-  padding:20px;margin-bottom:24px;
-}
-.setup-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--teal);margin-bottom:8px}
-.setup-desc{font-size:.78rem;color:var(--text2);line-height:1.6;margin-bottom:14px}
-.setup-fields{display:flex;flex-direction:column;gap:8px;max-width:500px}
-.setup-row{display:flex;gap:8px}
-.setup-input{
-  flex:1;background:var(--surface2);border:1px solid var(--border2);
-  border-radius:8px;padding:9px 12px;color:var(--text);font-family:'JetBrains Mono',monospace;
-  font-size:.72rem;outline:none;transition:border-color .2s;
-}
-.setup-input:focus{border-color:var(--teal)}
-.setup-input::placeholder{color:var(--muted)}
-.setup-btn{
-  background:var(--teal);color:#000;border:none;border-radius:8px;
-  padding:9px 16px;font-weight:700;font-size:.78rem;cursor:pointer;
-  font-family:'Syne',sans-serif;white-space:nowrap;transition:opacity .2s;
-}
-.setup-btn:hover{opacity:.85}
-.sync-status{font-family:'JetBrains Mono',monospace;font-size:.6rem;margin-top:8px}
-.sync-ok{color:var(--sage)}
-.sync-err{color:var(--rose)}
-.sync-pending{color:var(--gold)}
+    .res-link:hover {
+      background: var(--surface2);
+      color: var(--text);
+      transform: translateX(3px)
+    }
 
-/* Countdown bar */
-.countdown{
-  background:var(--surface2);border:1px solid var(--border);border-radius:var(--r2);
-  padding:16px 20px;display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:12px;margin-bottom:20px;
-}
-.cd-items{display:flex;gap:24px;flex-wrap:wrap}
-.cd-item{text-align:center}
-.cd-num{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:var(--gold2);line-height:1}
-.cd-unit{font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px}
-.cd-text{font-size:.82rem;color:var(--text2);line-height:1.5}
-.cd-text strong{color:var(--sage)}
+    .res-dev {
+      margin-left: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .55rem;
+      color: var(--muted)
+    }
 
-/* Section headings */
-.sec-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:8px}
-.sec-title{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700}
-.sec-sub{font-size:.76rem;color:var(--muted)}
-.sec-badge{font-family:'JetBrains Mono',monospace;font-size:.6rem;padding:4px 10px;border-radius:20px;background:var(--golddim);border:1px solid rgba(232,160,32,.3);color:var(--gold)}
+    /* Verse */
+    .verse-card {
+      background: linear-gradient(135deg, rgba(252, 211, 77, .07), var(--surface));
+      border-color: rgba(252, 211, 77, .2)
+    }
 
-/* Notification */
-.notif{
-  position:fixed;bottom:20px;right:20px;
-  background:var(--teal);color:#000;
-  padding:10px 18px;border-radius:10px;font-weight:700;font-size:.78rem;
-  transform:translateY(60px);opacity:0;transition:all .25s;z-index:999;
-}
-.notif.show{transform:translateY(0);opacity:1}
+    .verse-card::before {
+      background: linear-gradient(90deg, var(--faith), transparent)
+    }
 
-/* Callout */
-.callout{
-  background:rgba(252,211,77,.06);border:1px solid rgba(252,211,77,.2);
-  border-left:3px solid var(--faith);border-radius:8px;
-  padding:12px 16px;font-size:.78rem;color:var(--faith);line-height:1.55;margin-top:16px;
-}
+    .verse-t {
+      font-family: 'Playfair Display', serif;
+      font-size: .88rem;
+      font-style: italic;
+      color: var(--faith);
+      line-height: 1.6;
+      margin-bottom: 6px
+    }
 
-/* Scrollbar */
-::-webkit-scrollbar{width:5px;height:5px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+    .verse-r {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .58rem;
+      color: rgba(252, 211, 77, .5);
+      letter-spacing: 1px
+    }
 
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.page.active > *{animation:fadeUp .3s ease both}
-</style>
-<meta name="theme-color" content="#e8a020">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="PrepPath">
-<link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%230e0a06' width='192' height='192'/><rect fill='%23e8a020' x='30' y='30' width='132' height='132'/><text x='96' y='130' font-size='80' font-weight='bold' text-anchor='middle' fill='%230e0a06' font-family='serif'>PP</text></svg>">
-<script src="config.js"></script>
-<script src="api.js"></script>
-<script src="pwa-ui.js"></script>
+    /* Day nav */
+    .day-nav {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-bottom: 20px
+    }
+
+    .day-btn {
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border2);
+      background: transparent;
+      color: var(--text2);
+      font-family: 'Syne', sans-serif;
+      font-size: .78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .day-btn:hover {
+      background: var(--surface2)
+    }
+
+    .day-btn.active {
+      background: var(--gold);
+      color: #1a0a00;
+      border-color: var(--gold)
+    }
+
+    .day-btn.today-btn {
+      border-color: var(--teal);
+      color: var(--teal)
+    }
+
+    .day-btn.today-btn.active {
+      background: var(--teal);
+      color: #000;
+      border-color: var(--teal)
+    }
+
+    /* Schedule */
+    .sched {
+      display: flex;
+      flex-direction: column;
+      gap: 0
+    }
+
+    .trow {
+      display: grid;
+      grid-template-columns: 68px 1fr;
+      position: relative
+    }
+
+    .trow::before {
+      content: '';
+      position: absolute;
+      left: 68px;
+      top: 22px;
+      bottom: -1px;
+      width: 1px;
+      background: var(--border)
+    }
+
+    .trow:last-child::before {
+      display: none
+    }
+
+    .tcol {
+      padding: 14px 10px 14px 0;
+      text-align: right;
+      padding-top: 16px
+    }
+
+    .tlbl {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .62rem;
+      color: var(--muted);
+      white-space: nowrap
+    }
+
+    .bcol {
+      padding: 8px 0 8px 18px
+    }
+
+    .block {
+      border-radius: 10px;
+      padding: 13px 15px;
+      border: 1px solid;
+      margin-bottom: 2px;
+      transition: transform .15s, box-shadow .15s;
+    }
+
+    .block:hover {
+      transform: translateX(4px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, .3)
+    }
+
+    .bhead {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+      flex-wrap: wrap
+    }
+
+    .btitle {
+      font-weight: 700;
+      font-size: .86rem
+    }
+
+    .bdesc {
+      font-size: .76rem;
+      color: var(--text2);
+      line-height: 1.5
+    }
+
+    /* Block themes */
+    .b-faith {
+      background: rgba(252, 211, 77, .06);
+      border-color: rgba(252, 211, 77, .2)
+    }
+
+    .b-apt {
+      background: rgba(232, 160, 32, .08);
+      border-color: rgba(232, 160, 32, .25)
+    }
+
+    .b-code {
+      background: var(--tealdim);
+      border-color: rgba(45, 212, 191, .2)
+    }
+
+    .b-dsa {
+      background: var(--lavdim);
+      border-color: rgba(196, 181, 253, .2)
+    }
+
+    .b-cloud {
+      background: var(--skydim);
+      border-color: rgba(125, 211, 252, .2)
+    }
+
+    .b-gym {
+      background: var(--rosedim);
+      border-color: rgba(251, 113, 133, .2)
+    }
+
+    .b-music {
+      background: var(--lavdim);
+      border-color: rgba(196, 181, 253, .15)
+    }
+
+    .b-art {
+      background: var(--sagedim);
+      border-color: rgba(134, 239, 172, .2)
+    }
+
+    .b-rest {
+      background: var(--surface2);
+      border-color: var(--border)
+    }
+
+    .b-project {
+      background: var(--sagedim);
+      border-color: rgba(134, 239, 172, .15)
+    }
+
+    .b-ds {
+      background: var(--peachdim);
+      border-color: rgba(253, 186, 116, .2)
+    }
+
+    /* Tags */
+    .tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .56rem;
+      padding: 2px 7px;
+      border-radius: 8px;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      border: 1px solid;
+      flex-shrink: 0
+    }
+
+    .tag-faith {
+      background: rgba(252, 211, 77, .1);
+      border-color: rgba(252, 211, 77, .3);
+      color: var(--faith)
+    }
+
+    .tag-apt {
+      background: rgba(232, 160, 32, .1);
+      border-color: rgba(232, 160, 32, .3);
+      color: var(--gold)
+    }
+
+    .tag-code {
+      background: var(--tealdim);
+      border-color: rgba(45, 212, 191, .3);
+      color: var(--teal)
+    }
+
+    .tag-dsa {
+      background: var(--lavdim);
+      border-color: rgba(196, 181, 253, .3);
+      color: var(--lavender)
+    }
+
+    .tag-cloud {
+      background: var(--skydim);
+      border-color: rgba(125, 211, 252, .3);
+      color: var(--sky)
+    }
+
+    .tag-gym {
+      background: var(--rosedim);
+      border-color: rgba(251, 113, 133, .3);
+      color: var(--rose)
+    }
+
+    .tag-music {
+      background: var(--lavdim);
+      border-color: rgba(196, 181, 253, .2);
+      color: var(--lavender)
+    }
+
+    .tag-art {
+      background: var(--sagedim);
+      border-color: rgba(134, 239, 172, .3);
+      color: var(--sage)
+    }
+
+    .tag-project {
+      background: var(--sagedim);
+      border-color: rgba(134, 239, 172, .25);
+      color: var(--sage)
+    }
+
+    .tag-rest {
+      background: var(--surface2);
+      border-color: var(--border);
+      color: var(--muted)
+    }
+
+    .tag-ds {
+      background: var(--peachdim);
+      border-color: rgba(253, 186, 116, .3);
+      color: var(--peach)
+    }
+
+    /* Chips */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 9px
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .6rem;
+      text-decoration: none;
+      border: 1px solid;
+      transition: all .15s;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .chip:hover {
+      opacity: .7;
+      transform: translateY(-1px)
+    }
+
+    .c-yt {
+      background: rgba(255, 80, 50, .08);
+      border-color: rgba(255, 80, 50, .3);
+      color: #ff7060
+    }
+
+    .c-gh {
+      background: rgba(200, 200, 200, .06);
+      border-color: rgba(200, 200, 200, .2);
+      color: #ccc
+    }
+
+    .c-cs {
+      background: rgba(232, 160, 32, .08);
+      border-color: rgba(232, 160, 32, .3);
+      color: var(--gold)
+    }
+
+    .c-dc {
+      background: var(--skydim);
+      border-color: rgba(125, 211, 252, .3);
+      color: var(--sky)
+    }
+
+    .c-li {
+      background: rgba(96, 165, 250, .08);
+      border-color: rgba(96, 165, 250, .3);
+      color: #60a5fa
+    }
+
+    .c-gcp {
+      background: var(--sagedim);
+      border-color: rgba(134, 239, 172, .3);
+      color: var(--sage)
+    }
+
+    .c-lc {
+      background: rgba(255, 180, 50, .08);
+      border-color: rgba(255, 180, 50, .3);
+      color: #ffa020
+    }
+
+    .c-wb {
+      background: var(--tealdim);
+      border-color: rgba(45, 212, 191, .3);
+      color: var(--teal)
+    }
+
+    .c-ph {
+      background: var(--lavdim);
+      border-color: rgba(196, 181, 253, .3);
+      color: var(--lavender)
+    }
+
+    .c-ud {
+      background: var(--peachdim);
+      border-color: rgba(253, 186, 116, .3);
+      color: var(--peach)
+    }
+
+    /* Mini check inside blocks */
+    .mcheck {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 8px;
+      cursor: pointer;
+      user-select: none
+    }
+
+    .mcheck input {
+      accent-color: var(--teal);
+      width: 13px;
+      height: 13px;
+      flex-shrink: 0
+    }
+
+    .mcheck label {
+      font-size: .75rem;
+      color: var(--text2);
+      cursor: pointer
+    }
+
+    .mcheck.done label {
+      text-decoration: line-through;
+      color: var(--muted)
+    }
+
+    /* Progress bar global */
+    .pbar-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 20px
+    }
+
+    .pbar-lbl {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .62rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap
+    }
+
+    .pbar-track {
+      flex: 1;
+      min-width: 100px;
+      height: 5px;
+      background: var(--surface3);
+      border-radius: 3px;
+      overflow: hidden
+    }
+
+    .pbar-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--teal));
+      transition: width .8s ease
+    }
+
+    .pbar-pct {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gold2)
+    }
+
+    .pbar-count {
+      font-size: .72rem;
+      color: var(--muted)
+    }
+
+    /* ── ROADMAP ── */
+    .roadmap-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px
+    }
+
+    .phase-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r2);
+      overflow: hidden;
+      transition: transform .2s, border-color .2s;
+    }
+
+    .phase-card:hover {
+      transform: translateY(-3px)
+    }
+
+    .phase-header {
+      padding: 16px 18px 12px;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .phase-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .58rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px
+    }
+
+    .phase-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 2px
+    }
+
+    .phase-dates {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .62rem;
+      color: var(--muted)
+    }
+
+    .phase-progress {
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .pp-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 5px
+    }
+
+    .pp-lbl {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .58rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px
+    }
+
+    .pp-pct {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .68rem;
+      color: var(--gold2);
+      font-weight: 600
+    }
+
+    .pp-track {
+      height: 4px;
+      background: var(--surface3);
+      border-radius: 2px;
+      overflow: hidden
+    }
+
+    .pp-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width .8s ease
+    }
+
+    .phase-modules {
+      padding: 14px 18px
+    }
+
+    .module {
+      margin-bottom: 14px
+    }
+
+    .mod-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      transition: background .15s;
+      margin-bottom: 4px;
+    }
+
+    .mod-head:hover {
+      background: var(--surface3)
+    }
+
+    .mod-check {
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
+      border: 2px solid var(--border2);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .2s
+    }
+
+    .mod-check.done {
+      background: var(--teal);
+      border-color: var(--teal)
+    }
+
+    .mod-check.done::after {
+      content: '✓';
+      font-size: .55rem;
+      color: #000
+    }
+
+    .mod-title {
+      font-size: .82rem;
+      font-weight: 600;
+      flex: 1;
+      color: var(--text)
+    }
+
+    .mod-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .55rem;
+      padding: 2px 6px;
+      border-radius: 6px;
+      border: 1px solid;
+      flex-shrink: 0
+    }
+
+    .subtasks {
+      padding-left: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px
+    }
+
+    .subtask {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background .15s;
+      user-select: none;
+    }
+
+    .subtask:hover {
+      background: var(--surface2)
+    }
+
+    .subtask input[type=checkbox] {
+      accent-color: var(--gold);
+      width: 12px;
+      height: 12px;
+      flex-shrink: 0
+    }
+
+    .subtask label {
+      font-size: .76rem;
+      color: var(--text2);
+      cursor: pointer;
+      line-height: 1.4
+    }
+
+    .subtask.done label {
+      text-decoration: line-through;
+      color: var(--muted)
+    }
+
+    /* ── PROJECTS ── */
+    .proj-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 18px
+    }
+
+    .proj-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r2);
+      overflow: hidden;
+    }
+
+    .proj-head {
+      padding: 16px 18px 10px;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .proj-icon {
+      font-size: 1.4rem;
+      margin-bottom: 6px
+    }
+
+    .proj-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 4px
+    }
+
+    .proj-desc {
+      font-size: .76rem;
+      color: var(--text2);
+      line-height: 1.5
+    }
+
+    .proj-tasks {
+      padding: 14px 18px
+    }
+
+    .ptask {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .ptask:last-child {
+      border-bottom: none
+    }
+
+    .ptask input[type=checkbox] {
+      accent-color: var(--gold);
+      width: 13px;
+      height: 13px;
+      margin-top: 1px;
+      flex-shrink: 0
+    }
+
+    .ptask label {
+      font-size: .78rem;
+      color: var(--text2);
+      cursor: pointer;
+      line-height: 1.4;
+      flex: 1
+    }
+
+    .ptask.done label {
+      text-decoration: line-through;
+      color: var(--muted)
+    }
+
+    .ptask-diff {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .55rem;
+      padding: 1px 6px;
+      border-radius: 6px;
+      border: 1px solid;
+      flex-shrink: 0;
+    }
+
+    .diff-easy {
+      background: var(--sagedim);
+      border-color: rgba(134, 239, 172, .3);
+      color: var(--sage)
+    }
+
+    .diff-med {
+      background: rgba(232, 160, 32, .08);
+      border-color: rgba(232, 160, 32, .3);
+      color: var(--gold)
+    }
+
+    .diff-hard {
+      background: var(--rosedim);
+      border-color: rgba(251, 113, 133, .3);
+      color: var(--rose)
+    }
+
+    .proj-progress {
+      padding: 10px 18px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .pp2-track {
+      flex: 1;
+      height: 3px;
+      background: var(--surface3);
+      border-radius: 2px;
+      overflow: hidden
+    }
+
+    .pp2-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), var(--sage));
+      border-radius: 2px;
+      transition: width .5s
+    }
+
+    .pp2-lbl {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .6rem;
+      color: var(--muted)
+    }
+
+    /* Add custom task */
+    .add-task-row {
+      display: flex;
+      gap: 8px;
+      padding: 10px 18px 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .add-input {
+      flex: 1;
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: 7px;
+      padding: 7px 10px;
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      font-size: .78rem;
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .add-input:focus {
+      border-color: var(--gold)
+    }
+
+    .add-input::placeholder {
+      color: var(--muted)
+    }
+
+    .add-btn {
+      background: var(--gold);
+      color: #1a0a00;
+      border: none;
+      border-radius: 7px;
+      padding: 7px 12px;
+      font-size: .8rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Syne', sans-serif;
+      transition: background .2s;
+      flex-shrink: 0;
+    }
+
+    .add-btn:hover {
+      background: var(--gold2)
+    }
+
+    /* ── FUTURE ROLES ── */
+    .future-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 18px
+    }
+
+    .future-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r2);
+      overflow: hidden;
+      transition: transform .2s, border-color .2s;
+    }
+
+    .future-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--teal)
+    }
+
+    .fc-head {
+      padding: 16px 18px 12px;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .fc-icon {
+      font-size: 1.5rem;
+      margin-bottom: 8px
+    }
+
+    .fc-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      line-height: 1.3
+    }
+
+    .fc-desc {
+      font-size: .76rem;
+      color: var(--text2);
+      line-height: 1.5
+    }
+
+    .fc-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .55rem;
+      padding: 2px 8px;
+      border-radius: 10px;
+      border: 1px solid rgba(45, 212, 191, .3);
+      background: var(--tealdim);
+      color: var(--teal);
+      letter-spacing: 1px;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+
+    .fc-salary {
+      font-family: 'Playfair Display', serif;
+      font-size: .95rem;
+      font-weight: 700;
+      color: var(--sage);
+      margin-top: 6px
+    }
+
+    .fc-path {
+      padding: 14px 18px
+    }
+
+    .fc-path-lbl {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .58rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px
+    }
+
+    .fc-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 5px 0;
+      border-bottom: 1px solid var(--border);
+      user-select: none;
+      cursor: pointer;
+    }
+
+    .fc-step:last-child {
+      border-bottom: none
+    }
+
+    .fc-step input {
+      accent-color: var(--teal);
+      width: 12px;
+      height: 12px;
+      margin-top: 2px;
+      flex-shrink: 0
+    }
+
+    .fc-step label {
+      font-size: .75rem;
+      color: var(--text2);
+      cursor: pointer;
+      line-height: 1.4;
+      flex: 1
+    }
+
+    .fc-step.done label {
+      text-decoration: line-through;
+      color: var(--muted)
+    }
+
+    .fc-year {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .55rem;
+      color: var(--muted);
+      flex-shrink: 0
+    }
+
+    .fc-skills {
+      padding: 10px 18px 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px
+    }
+
+    .sk {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .6rem;
+      padding: 3px 8px;
+      border-radius: 8px;
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      color: var(--text2)
+    }
+
+    /* ── APTITUDE PAGE ── */
+    .apt-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 14px
+    }
+
+    .apt-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r2);
+      padding: 18px;
+      border-left: 3px solid
+    }
+
+    .apt-cat {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .6rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 6px
+    }
+
+    .apt-title {
+      font-weight: 700;
+      font-size: .86rem;
+      margin-bottom: 6px
+    }
+
+    .apt-body {
+      font-size: .76rem;
+      color: var(--text2);
+      line-height: 1.55
+    }
+
+    /* ── SUPABASE SETUP ── */
+    .setup-banner {
+      background: linear-gradient(135deg, rgba(45, 212, 191, .08), var(--surface));
+      border: 1px solid rgba(45, 212, 191, .25);
+      border-radius: var(--r2);
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .setup-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--teal);
+      margin-bottom: 8px
+    }
+
+    .setup-desc {
+      font-size: .78rem;
+      color: var(--text2);
+      line-height: 1.6;
+      margin-bottom: 14px
+    }
+
+    .setup-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-width: 500px
+    }
+
+    .setup-row {
+      display: flex;
+      gap: 8px
+    }
+
+    .setup-input {
+      flex: 1;
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      padding: 9px 12px;
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .72rem;
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .setup-input:focus {
+      border-color: var(--teal)
+    }
+
+    .setup-input::placeholder {
+      color: var(--muted)
+    }
+
+    .setup-btn {
+      background: var(--teal);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 16px;
+      font-weight: 700;
+      font-size: .78rem;
+      cursor: pointer;
+      font-family: 'Syne', sans-serif;
+      white-space: nowrap;
+      transition: opacity .2s;
+    }
+
+    .setup-btn:hover {
+      opacity: .85
+    }
+
+    .sync-status {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .6rem;
+      margin-top: 8px
+    }
+
+    .sync-ok {
+      color: var(--sage)
+    }
+
+    .sync-err {
+      color: var(--rose)
+    }
+
+    .sync-pending {
+      color: var(--gold)
+    }
+
+    /* Countdown bar */
+    .countdown {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--r2);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .cd-items {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap
+    }
+
+    .cd-item {
+      text-align: center
+    }
+
+    .cd-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--gold2);
+      line-height: 1
+    }
+
+    .cd-unit {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .55rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1.5px
+    }
+
+    .cd-text {
+      font-size: .82rem;
+      color: var(--text2);
+      line-height: 1.5
+    }
+
+    .cd-text strong {
+      color: var(--sage)
+    }
+
+    /* Section headings */
+    .sec-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 8px
+    }
+
+    .sec-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700
+    }
+
+    .sec-sub {
+      font-size: .76rem;
+      color: var(--muted)
+    }
+
+    .sec-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .6rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: var(--golddim);
+      border: 1px solid rgba(232, 160, 32, .3);
+      color: var(--gold)
+    }
+
+    /* Notification */
+    .notif {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--teal);
+      color: #000;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: .78rem;
+      transform: translateY(60px);
+      opacity: 0;
+      transition: all .25s;
+      z-index: 999;
+    }
+
+    .notif.show {
+      transform: translateY(0);
+      opacity: 1
+    }
+
+    /* Callout */
+    .callout {
+      background: rgba(252, 211, 77, .06);
+      border: 1px solid rgba(252, 211, 77, .2);
+      border-left: 3px solid var(--faith);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: .78rem;
+      color: var(--faith);
+      line-height: 1.55;
+      margin-top: 16px;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg)
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border2);
+      border-radius: 3px
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .page.active>* {
+      animation: fadeUp .3s ease both
+    }
+  </style>
+  <meta name="theme-color" content="#e8a020">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="PrepPath">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%230e0a06' width='192' height='192'/><rect fill='%23e8a020' x='30' y='30' width='132' height='132'/><text x='96' y='130' font-size='80' font-weight='bold' text-anchor='middle' fill='%230e0a06' font-family='serif'>PP</text></svg>">
+  <script src="config.js"></script>
+  <script src="api.js"></script>
+  <script src="pwa-ui.js"></script>
 </head>
+
 <body>
-<div class="wrap">
+  <div class="wrap">
 
-<!-- HEADER -->
-<header>
-  <div class="hinner">
-    <div>
-      <div class="logo">Prep<span>Path</span></div>
-      <div class="htag">Sierra ODC · Campus · Sept 2025</div>
-    </div>
-    <div class="hright">
-      <div class="hpill faith">✝ Phil 4:13</div>
-      <div class="hpill gold" id="daysLeft">— days left</div>
-      <div class="hpill" id="syncBadge" style="display:none">☁ synced</div>
-    </div>
-  </div>
-</header>
-
-<!-- NAV -->
-<div class="nav-bar">
-  <div class="nav-inner">
-    <button class="nav-btn active" onclick="showPage('dashboard')">📅 Schedule</button>
-    <button class="nav-btn" onclick="showPage('roadmap')">🗺 Roadmap</button>
-    <button class="nav-btn" onclick="showPage('projects')">🛠 Projects</button>
-    <button class="nav-btn" onclick="showPage('future')">🚀 Future Roles</button>
-    <button class="nav-btn" onclick="showPage('aptitude')">🧠 Aptitude</button>
-    <button class="nav-btn" onclick="showPage('settings')">⚙ Sync Setup</button>
-  </div>
-</div>
-
-<!-- ════════════════ SCHEDULE PAGE ════════════════ -->
-<div class="page active" id="page-dashboard">
-  <div class="dash-grid">
-
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="card">
-        <div class="card-title">Overall Progress</div>
-        <div class="ring-wrap">
-          <svg class="ring" width="100" height="100" viewBox="0 0 100 100">
-            <circle class="ring-bg" cx="50" cy="50" r="42"/>
-            <circle class="ring-fill" id="mainRing" cx="50" cy="50" r="42" stroke-dasharray="264" stroke-dashoffset="264"/>
-          </svg>
-          <div class="ring-text">
-            <div class="ring-pct" id="ringPct">0%</div>
-            <div class="ring-lbl">done</div>
-          </div>
-        </div>
-        <div style="text-align:center;font-size:.78rem;color:var(--text2)">Target<br>
-          <span style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--sage)">₹20–25 LPA</span><br>
-          <span style="font-size:.7rem;color:var(--muted)">by September 2025</span>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">Focus Tracks</div>
-        <div class="track"><div class="tdot" style="background:var(--teal)"></div><span class="tname">.NET / C# / VB</span><div class="tbar"><div class="tbfill" id="tr1" style="width:5%;background:var(--teal)"></div></div></div>
-        <div class="track"><div class="tdot" style="background:var(--lavender)"></div><span class="tname">DSA</span><div class="tbar"><div class="tbfill" id="tr2" style="width:3%;background:var(--lavender)"></div></div></div>
-        <div class="track"><div class="tdot" style="background:var(--sky)"></div><span class="tname">Cloud</span><div class="tbar"><div class="tbfill" id="tr3" style="width:2%;background:var(--sky)"></div></div></div>
-        <div class="track"><div class="tdot" style="background:var(--gold)"></div><span class="tname">Aptitude</span><div class="tbar"><div class="tbfill" id="tr4" style="width:8%;background:var(--gold)"></div></div></div>
-        <div class="track"><div class="tdot" style="background:var(--peach)"></div><span class="tname">Data Science</span><div class="tbar"><div class="tbfill" id="tr5" style="width:1%;background:var(--peach)"></div></div></div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">Resources</div>
-        <a class="res-link" href="https://www.youtube.com/results?search_query=C+sharp+dotnet+tutorial+beginners" target="_blank">▶️ YouTube <span class="res-dev">💻</span></a>
-        <a class="res-link" href="https://cs50.harvard.edu/x/" target="_blank">🎓 CS50 <span class="res-dev">💻</span></a>
-        <a class="res-link" href="https://app.datacamp.com" target="_blank">📊 DataCamp <span class="res-dev">💻</span></a>
-        <a class="res-link" href="https://www.linkedin.com/learning/" target="_blank">💼 LinkedIn Learning <span class="res-dev">💻</span></a>
-        <a class="res-link" href="https://www.cloudskillsboost.google/catalog" target="_blank">☁️ GCP Arcade <span class="res-dev">💻</span></a>
-        <a class="res-link" href="https://leetcode.com/problemset/" target="_blank">🔢 LeetCode <span class="res-dev">💻</span></a>
-        <a class="res-link" href="https://www.udemy.com/courses/development/" target="_blank">🎯 Udemy <span class="res-dev">💻</span></a>
-        <a class="res-link" href="https://github.com" target="_blank">🐙 GitHub <span class="res-dev">💻</span></a>
-        <a class="res-link" href="https://www.indiabix.com" target="_blank">🧠 IndiaBix <span class="res-dev">💻</span></a>
-        <a class="res-link" href="https://www.duolingo.com" target="_blank">🦜 Duolingo <span class="res-dev">📱</span></a>
-      </div>
-
-      <div class="card verse-card">
-        <div class="card-title" style="color:rgba(252,211,77,.4)">Daily Strength</div>
-        <div class="verse-t" id="verseT"></div>
-        <div class="verse-r" id="verseR"></div>
-      </div>
-    </aside>
-
-    <!-- Main -->
-    <main>
-      <div class="countdown">
+    <!-- HEADER -->
+    <header>
+      <div class="hinner">
         <div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px">Time to September 2025</div>
-          <div class="cd-items">
-            <div class="cd-item"><div class="cd-num" id="cdM">—</div><div class="cd-unit">months</div></div>
-            <div class="cd-item"><div class="cd-num" id="cdW">—</div><div class="cd-unit">weeks</div></div>
-            <div class="cd-item"><div class="cd-num" id="cdD">—</div><div class="cd-unit">days</div></div>
+          <div class="logo">Prep<span>Path</span></div>
+          <div class="htag">Sierra ODC · Campus · Sept 2025</div>
+        </div>
+        <div class="hright">
+          <div class="hpill faith">✝ Phil 4:13</div>
+          <div class="hpill gold" id="daysLeft">— days left</div>
+          <div class="hpill" id="syncBadge" style="display:none">☁ synced</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- NAV -->
+    <div class="nav-bar">
+      <div class="nav-inner">
+        <button class="nav-btn active" onclick="showPage('dashboard')">📅 Schedule</button>
+        <button class="nav-btn" onclick="showPage('roadmap')">🗺 Roadmap</button>
+        <button class="nav-btn" onclick="showPage('projects')">🛠 Projects</button>
+        <button class="nav-btn" onclick="showPage('future')">🚀 Future Roles</button>
+        <button class="nav-btn" onclick="showPage('aptitude')">🧠 Aptitude</button>
+        <button class="nav-btn" onclick="showPage('settings')">⚙ Sync Setup</button>
+      </div>
+    </div>
+
+    <!-- ════════════════ SCHEDULE PAGE ════════════════ -->
+    <div class="page active" id="page-dashboard">
+      <div class="dash-grid">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <div class="card">
+            <div class="card-title">Overall Progress</div>
+            <div class="ring-wrap">
+              <svg class="ring" width="100" height="100" viewBox="0 0 100 100">
+                <circle class="ring-bg" cx="50" cy="50" r="42" />
+                <circle class="ring-fill" id="mainRing" cx="50" cy="50" r="42" stroke-dasharray="264"
+                  stroke-dashoffset="264" />
+              </svg>
+              <div class="ring-text">
+                <div class="ring-pct" id="ringPct">0%</div>
+                <div class="ring-lbl">done</div>
+              </div>
+            </div>
+            <div style="text-align:center;font-size:.78rem;color:var(--text2)">Target<br>
+              <span
+                style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--sage)">₹20–25
+                LPA</span><br>
+              <span style="font-size:.7rem;color:var(--muted)">by September 2025</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Focus Tracks</div>
+            <div class="track">
+              <div class="tdot" style="background:var(--teal)"></div><span class="tname">.NET / C# / VB</span>
+              <div class="tbar">
+                <div class="tbfill" id="tr1" style="width:5%;background:var(--teal)"></div>
+              </div>
+            </div>
+            <div class="track">
+              <div class="tdot" style="background:var(--lavender)"></div><span class="tname">DSA</span>
+              <div class="tbar">
+                <div class="tbfill" id="tr2" style="width:3%;background:var(--lavender)"></div>
+              </div>
+            </div>
+            <div class="track">
+              <div class="tdot" style="background:var(--sky)"></div><span class="tname">Cloud</span>
+              <div class="tbar">
+                <div class="tbfill" id="tr3" style="width:2%;background:var(--sky)"></div>
+              </div>
+            </div>
+            <div class="track">
+              <div class="tdot" style="background:var(--gold)"></div><span class="tname">Aptitude</span>
+              <div class="tbar">
+                <div class="tbfill" id="tr4" style="width:8%;background:var(--gold)"></div>
+              </div>
+            </div>
+            <div class="track">
+              <div class="tdot" style="background:var(--peach)"></div><span class="tname">Data Science</span>
+              <div class="tbar">
+                <div class="tbfill" id="tr5" style="width:1%;background:var(--peach)"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Resources</div>
+            <a class="res-link" href="https://www.youtube.com/results?search_query=C+sharp+dotnet+tutorial+beginners"
+              target="_blank">▶️ YouTube <span class="res-dev">💻</span></a>
+            <a class="res-link" href="https://cs50.harvard.edu/x/" target="_blank">🎓 CS50 <span
+                class="res-dev">💻</span></a>
+            <a class="res-link" href="https://app.datacamp.com" target="_blank">📊 DataCamp <span
+                class="res-dev">💻</span></a>
+            <a class="res-link" href="https://www.linkedin.com/learning/" target="_blank">💼 LinkedIn Learning <span
+                class="res-dev">💻</span></a>
+            <a class="res-link" href="https://www.cloudskillsboost.google/catalog" target="_blank">☁️ GCP Arcade <span
+                class="res-dev">💻</span></a>
+            <a class="res-link" href="https://leetcode.com/problemset/" target="_blank">🔢 LeetCode <span
+                class="res-dev">💻</span></a>
+            <a class="res-link" href="https://www.udemy.com/courses/development/" target="_blank">🎯 Udemy <span
+                class="res-dev">💻</span></a>
+            <a class="res-link" href="https://github.com" target="_blank">🐙 GitHub <span class="res-dev">💻</span></a>
+            <a class="res-link" href="https://www.indiabix.com" target="_blank">🧠 IndiaBix <span
+                class="res-dev">💻</span></a>
+            <a class="res-link" href="https://www.duolingo.com" target="_blank">🦜 Duolingo <span
+                class="res-dev">📱</span></a>
+          </div>
+
+          <div class="card verse-card">
+            <div class="card-title" style="color:rgba(252,211,77,.4)">Daily Strength</div>
+            <div class="verse-t" id="verseT"></div>
+            <div class="verse-r" id="verseR"></div>
+          </div>
+        </aside>
+
+        <!-- Main -->
+        <main>
+          <div class="countdown">
+            <div>
+              <div
+                style="font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px">
+                Time to September 2025</div>
+              <div class="cd-items">
+                <div class="cd-item">
+                  <div class="cd-num" id="cdM">—</div>
+                  <div class="cd-unit">months</div>
+                </div>
+                <div class="cd-item">
+                  <div class="cd-num" id="cdW">—</div>
+                  <div class="cd-unit">weeks</div>
+                </div>
+                <div class="cd-item">
+                  <div class="cd-num" id="cdD">—</div>
+                  <div class="cd-unit">days</div>
+                </div>
+              </div>
+            </div>
+            <div class="cd-text"><strong>Sierra ODC → Campus Placements → 20–25 LPA</strong><br><span
+                style="color:var(--muted)">You start today. That's already the hardest part.</span></div>
+          </div>
+
+          <div class="pbar-wrap">
+            <div class="pbar-lbl">Today's Tasks</div>
+            <div class="pbar-track">
+              <div class="pbar-fill" id="progFill" style="width:0%"></div>
+            </div>
+            <div class="pbar-pct" id="progPct">0%</div>
+            <div class="pbar-count" id="progCount">0 / 0</div>
+          </div>
+
+          <!-- Day selector -->
+          <div class="day-nav" id="dayNav"></div>
+
+          <!-- Day panels injected by JS -->
+          <div id="dayPanels"></div>
+        </main>
+      </div>
+    </div>
+
+    <!-- ════════════════ ROADMAP PAGE ════════════════ -->
+    <div class="page" id="page-roadmap">
+      <div class="sec-head">
+        <div>
+          <div class="sec-title">5-Month Roadmap</div>
+          <div class="sec-sub">April → September 2025 · Click modules to track completion</div>
+        </div>
+        <div class="sec-badge">INTERACTIVE</div>
+      </div>
+      <div class="roadmap-grid" id="roadmapGrid"></div>
+    </div>
+
+    <!-- ════════════════ PROJECTS PAGE ════════════════ -->
+    <div class="page" id="page-projects">
+      <div class="sec-head">
+        <div>
+          <div class="sec-title">Project Tracks</div>
+          <div class="sec-sub">Small tasks · Add your own · Track progress</div>
+        </div>
+      </div>
+      <div class="proj-grid" id="projGrid"></div>
+    </div>
+
+    <!-- ════════════════ FUTURE ROLES PAGE ════════════════ -->
+    <div class="page" id="page-future">
+      <div class="sec-head">
+        <div>
+          <div class="sec-title">Future-Proof Roles</div>
+          <div class="sec-sub">Mark learning steps as you progress toward these roles</div>
+        </div>
+        <div class="sec-badge">HORIZON GOALS</div>
+      </div>
+      <div class="future-grid" id="futureGrid"></div>
+      <div class="callout">✝ These are your horizon goals — 2–4 years away. Every module you complete today is a brick
+        in that house. Get placed first (Sierra ODC / campus), build experience, then transition. "For I know the plans
+        I have for you." — Jeremiah 29:11</div>
+    </div>
+
+    <!-- ════════════════ APTITUDE PAGE ════════════════ -->
+    <div class="page" id="page-aptitude">
+      <div class="sec-head">
+        <div>
+          <div class="sec-title">Aptitude Strategy</div>
+          <div class="sec-sub">For Sierra ODC & Campus Placements</div>
+        </div>
+        <div class="sec-badge">SMART PREP</div>
+      </div>
+      <div class="apt-grid">
+        <div class="apt-card" style="border-color:var(--gold)">
+          <div class="apt-cat" style="color:var(--gold)">Quantitative (Tue–Thu)</div>
+          <div class="apt-title">Master These 6 First</div>
+          <div class="apt-body">Percentages, Profit/Loss, Time-Speed-Distance, Time & Work, SI/CI, Ratios. These 6 cover
+            70% of all placement tests. Do them in this exact order.</div>
+        </div>
+        <div class="apt-card" style="border-color:var(--teal)">
+          <div class="apt-cat" style="color:var(--teal)">Logical (Friday only)</div>
+          <div class="apt-title">Pattern Recognition Daily</div>
+          <div class="apt-body">Syllogisms, Blood Relations, Seating Arrangements, Coding-Decoding. One deep session
+            Friday beats scattered practice daily. Draw diagrams always.</div>
+        </div>
+        <div class="apt-card" style="border-color:var(--lavender)">
+          <div class="apt-cat" style="color:var(--lavender)">Verbal Ability</div>
+          <div class="apt-title">Read 1 Article Daily</div>
+          <div class="apt-body">The Hindu or BBC. 15 min. Para-completion, RC and vocabulary improve naturally. Use it
+            as morning warm-up before music.</div>
+        </div>
+        <div class="apt-card" style="border-color:var(--sky)">
+          <div class="apt-cat" style="color:var(--sky)">Speed & Accuracy</div>
+          <div class="apt-title">Always Use a Timer</div>
+          <div class="apt-body">Aim 1.5 min/question for quant, 1 min for logical. Full mocks on weekends: PrepInsta,
+            AmbitionBox, IndiaBix. Review every wrong answer.</div>
+        </div>
+        <div class="apt-card" style="border-color:var(--sage)">
+          <div class="apt-cat" style="color:var(--sage)">Best Free Resources</div>
+          <div class="apt-title">Where to Practice</div>
+          <div class="apt-body"><a href="https://www.indiabix.com" target="_blank"
+              style="color:var(--teal)">IndiaBix</a> · <a href="https://www.prepinsta.com" target="_blank"
+              style="color:var(--teal)">PrepInsta</a> (company-specific) · YouTube: CareerRide & Arun Sharma ·
+            GeeksforGeeks placement section.</div>
+        </div>
+        <div class="apt-card" style="border-color:var(--faith)">
+          <div class="apt-cat" style="color:var(--faith)">Mindset</div>
+          <div class="apt-title">Failure = Data</div>
+          <div class="apt-body">Every wrong answer tells you exactly what to study next. Spend 2× the time on wrong
+            answers. "God has not given us a spirit of fear." — 2 Tim 1:7</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════ SETTINGS / SYNC PAGE ════════════════ -->
+    <div class="page" id="page-settings">
+      <div class="sec-head">
+        <div>
+          <div class="sec-title">Database Sync Setup</div>
+          <div class="sec-sub">Connect Supabase to sync progress across all devices</div>
+        </div>
+      </div>
+
+      <div class="setup-banner">
+        <div class="setup-title">☁ Connect Supabase (Free — syncs phone + laptop + GitHub Pages)</div>
+        <div class="setup-desc">
+          1. Go to <a href="https://supabase.com" target="_blank" style="color:var(--teal)">supabase.com</a> → Create
+          free account → New project<br>
+          2. Go to <strong>Settings → API</strong> → copy your <strong>Project URL</strong> and <strong>anon public
+            key</strong><br>
+          3. Go to <strong>SQL Editor</strong> → run this once:<br>
+          <code
+            style="display:block;margin:8px 0;padding:8px;background:var(--surface3);border-radius:6px;font-size:.7rem;color:var(--gold3)">CREATE TABLE progress (id TEXT PRIMARY KEY, data JSONB, updated_at TIMESTAMPTZ DEFAULT now());</code>
+          4. Paste your URL and key below → Save. Your progress will sync everywhere automatically.
+        </div>
+        <div class="setup-fields">
+          <div class="setup-row">
+            <input class="setup-input" id="sbUrl" placeholder="https://xxxx.supabase.co" />
+          </div>
+          <div class="setup-row">
+            <input class="setup-input" id="sbKey" placeholder="your-anon-public-key" type="password" />
+            <button class="setup-btn" onclick="saveSupabase()">Save & Test</button>
           </div>
         </div>
-        <div class="cd-text"><strong>Sierra ODC → Campus Placements → 20–25 LPA</strong><br><span style="color:var(--muted)">You start today. That's already the hardest part.</span></div>
+        <div class="sync-status" id="syncStatus"></div>
       </div>
 
-      <div class="pbar-wrap">
-        <div class="pbar-lbl">Today's Tasks</div>
-        <div class="pbar-track"><div class="pbar-fill" id="progFill" style="width:0%"></div></div>
-        <div class="pbar-pct" id="progPct">0%</div>
-        <div class="pbar-count" id="progCount">0 / 0</div>
-      </div>
-
-      <!-- Day selector -->
-      <div class="day-nav" id="dayNav"></div>
-
-      <!-- Day panels injected by JS -->
-      <div id="dayPanels"></div>
-    </main>
-  </div>
-</div>
-
-<!-- ════════════════ ROADMAP PAGE ════════════════ -->
-<div class="page" id="page-roadmap">
-  <div class="sec-head">
-    <div><div class="sec-title">5-Month Roadmap</div><div class="sec-sub">April → September 2025 · Click modules to track completion</div></div>
-    <div class="sec-badge">INTERACTIVE</div>
-  </div>
-  <div class="roadmap-grid" id="roadmapGrid"></div>
-</div>
-
-<!-- ════════════════ PROJECTS PAGE ════════════════ -->
-<div class="page" id="page-projects">
-  <div class="sec-head">
-    <div><div class="sec-title">Project Tracks</div><div class="sec-sub">Small tasks · Add your own · Track progress</div></div>
-  </div>
-  <div class="proj-grid" id="projGrid"></div>
-</div>
-
-<!-- ════════════════ FUTURE ROLES PAGE ════════════════ -->
-<div class="page" id="page-future">
-  <div class="sec-head">
-    <div><div class="sec-title">Future-Proof Roles</div><div class="sec-sub">Mark learning steps as you progress toward these roles</div></div>
-    <div class="sec-badge">HORIZON GOALS</div>
-  </div>
-  <div class="future-grid" id="futureGrid"></div>
-  <div class="callout">✝ These are your horizon goals — 2–4 years away. Every module you complete today is a brick in that house. Get placed first (Sierra ODC / campus), build experience, then transition. "For I know the plans I have for you." — Jeremiah 29:11</div>
-</div>
-
-<!-- ════════════════ APTITUDE PAGE ════════════════ -->
-<div class="page" id="page-aptitude">
-  <div class="sec-head">
-    <div><div class="sec-title">Aptitude Strategy</div><div class="sec-sub">For Sierra ODC & Campus Placements</div></div>
-    <div class="sec-badge">SMART PREP</div>
-  </div>
-  <div class="apt-grid">
-    <div class="apt-card" style="border-color:var(--gold)"><div class="apt-cat" style="color:var(--gold)">Quantitative (Tue–Thu)</div><div class="apt-title">Master These 6 First</div><div class="apt-body">Percentages, Profit/Loss, Time-Speed-Distance, Time & Work, SI/CI, Ratios. These 6 cover 70% of all placement tests. Do them in this exact order.</div></div>
-    <div class="apt-card" style="border-color:var(--teal)"><div class="apt-cat" style="color:var(--teal)">Logical (Friday only)</div><div class="apt-title">Pattern Recognition Daily</div><div class="apt-body">Syllogisms, Blood Relations, Seating Arrangements, Coding-Decoding. One deep session Friday beats scattered practice daily. Draw diagrams always.</div></div>
-    <div class="apt-card" style="border-color:var(--lavender)"><div class="apt-cat" style="color:var(--lavender)">Verbal Ability</div><div class="apt-title">Read 1 Article Daily</div><div class="apt-body">The Hindu or BBC. 15 min. Para-completion, RC and vocabulary improve naturally. Use it as morning warm-up before music.</div></div>
-    <div class="apt-card" style="border-color:var(--sky)"><div class="apt-cat" style="color:var(--sky)">Speed & Accuracy</div><div class="apt-title">Always Use a Timer</div><div class="apt-body">Aim 1.5 min/question for quant, 1 min for logical. Full mocks on weekends: PrepInsta, AmbitionBox, IndiaBix. Review every wrong answer.</div></div>
-    <div class="apt-card" style="border-color:var(--sage)"><div class="apt-cat" style="color:var(--sage)">Best Free Resources</div><div class="apt-title">Where to Practice</div><div class="apt-body"><a href="https://www.indiabix.com" target="_blank" style="color:var(--teal)">IndiaBix</a> · <a href="https://www.prepinsta.com" target="_blank" style="color:var(--teal)">PrepInsta</a> (company-specific) · YouTube: CareerRide & Arun Sharma · GeeksforGeeks placement section.</div></div>
-    <div class="apt-card" style="border-color:var(--faith)"><div class="apt-cat" style="color:var(--faith)">Mindset</div><div class="apt-title">Failure = Data</div><div class="apt-body">Every wrong answer tells you exactly what to study next. Spend 2× the time on wrong answers. "God has not given us a spirit of fear." — 2 Tim 1:7</div></div>
-  </div>
-</div>
-
-<!-- ════════════════ SETTINGS / SYNC PAGE ════════════════ -->
-<div class="page" id="page-settings">
-  <div class="sec-head">
-    <div><div class="sec-title">Database Sync Setup</div><div class="sec-sub">Connect Supabase to sync progress across all devices</div></div>
-  </div>
-
-  <div class="setup-banner">
-    <div class="setup-title">☁ Connect Supabase (Free — syncs phone + laptop + GitHub Pages)</div>
-    <div class="setup-desc">
-      1. Go to <a href="https://supabase.com" target="_blank" style="color:var(--teal)">supabase.com</a> → Create free account → New project<br>
-      2. Go to <strong>Settings → API</strong> → copy your <strong>Project URL</strong> and <strong>anon public key</strong><br>
-      3. Go to <strong>SQL Editor</strong> → run this once:<br>
-      <code style="display:block;margin:8px 0;padding:8px;background:var(--surface3);border-radius:6px;font-size:.7rem;color:var(--gold3)">CREATE TABLE progress (id TEXT PRIMARY KEY, data JSONB, updated_at TIMESTAMPTZ DEFAULT now());</code>
-      4. Paste your URL and key below → Save. Your progress will sync everywhere automatically.
-    </div>
-    <div class="setup-fields">
-      <div class="setup-row">
-        <input class="setup-input" id="sbUrl" placeholder="https://xxxx.supabase.co" />
-      </div>
-      <div class="setup-row">
-        <input class="setup-input" id="sbKey" placeholder="your-anon-public-key" type="password"/>
-        <button class="setup-btn" onclick="saveSupabase()">Save & Test</button>
+      <div class="card" style="max-width:500px">
+        <div class="card-title">Local Backup</div>
+        <div style="font-size:.78rem;color:var(--text2);margin-bottom:12px">Export all your progress to a JSON file you
+          can reimport anytime.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button onclick="exportData()"
+            style="background:var(--gold);color:#1a0a00;border:none;padding:8px 16px;border-radius:8px;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif;font-size:.78rem">⬇
+            Export JSON</button>
+          <label
+            style="background:var(--surface2);color:var(--text);border:1px solid var(--border2);padding:8px 16px;border-radius:8px;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif;font-size:.78rem">
+            ⬆ Import JSON <input type="file" accept=".json" style="display:none" onchange="importData(event)">
+          </label>
+        </div>
       </div>
     </div>
-    <div class="sync-status" id="syncStatus"></div>
-  </div>
 
-  <div class="card" style="max-width:500px">
-    <div class="card-title">Local Backup</div>
-    <div style="font-size:.78rem;color:var(--text2);margin-bottom:12px">Export all your progress to a JSON file you can reimport anytime.</div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button onclick="exportData()" style="background:var(--gold);color:#1a0a00;border:none;padding:8px 16px;border-radius:8px;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif;font-size:.78rem">⬇ Export JSON</button>
-      <label style="background:var(--surface2);color:var(--text);border:1px solid var(--border2);padding:8px 16px;border-radius:8px;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif;font-size:.78rem">
-        ⬆ Import JSON <input type="file" accept=".json" style="display:none" onchange="importData(event)">
-      </label>
-    </div>
-  </div>
-</div>
+  </div><!-- /wrap -->
+  <div class="notif" id="notif">✓ Saved</div>
 
-</div><!-- /wrap -->
-<div class="notif" id="notif">✓ Saved</div>
+  <script>
+    // ═══════════ DATA ═══════════
 
-<script>
-// ═══════════ DATA ═══════════
-
-const DAYS_DATA = {
-  mon: {
-    label:'Monday', type:'Projects + Light',
-    dot:'var(--sage)', color:'today-btn',
-    blocks:[
-      {time:'7:30',tag:'faith',cls:'b-faith',title:'✝ Morning Prayer & Scripture',desc:'Start the week with God. Read Psalm 90. Commit the week. Journal one sentence.',id:'m0'},
-      {time:'8:00',tag:'music',cls:'b-music',title:'🎵 Music Practice',desc:'30–45 min free play. No pressure. This is joy, not performance.',id:'m1'},
-      {time:'9:00',tag:'project',cls:'b-project',title:'🛠 Weekly Project Work',desc:'Week A: Personal project · Week B: Recruiter-facing (GitHub portfolio) · Week C: Sustainability/nature tech · Week D: Art/creative coding.',id:'m2',
-        links:[{cls:'c-gh',href:'https://github.com',label:'🐙 GitHub'},{cls:'c-wb',href:'https://github.com/topics/good-first-issue',label:'🌿 Open Source Ideas'},{cls:'c-yt',href:'https://www.youtube.com/results?search_query=dotnet+project+ideas+for+portfolio',label:'▶ Project Ideas'}]},
-      {time:'12:30',tag:'rest',cls:'b-rest',title:'🍽 Lunch + Rest',desc:'Step outside. Rest properly.',id:'m3'},
-      {time:'2:00',tag:'art',cls:'b-art',title:'🎨 Art / Creative Time',desc:'Sketch, paint, digital art. Creativity feeds the technical brain.',id:'m4'},
-      {time:'4:30',tag:'gym',cls:'b-gym',title:'🏋️ Gym + Travel (4:30–6:00)',desc:'Protected. No study guilt.',id:'m5'},
-      {time:'6:30',tag:'rest',cls:'b-rest',title:'📱 Duolingo + Light Reading',desc:'20 min Duolingo on phone. Read a tech article. Nothing heavy.',id:'m6',
-        links:[{cls:'c-ph',href:'https://www.duolingo.com',label:'🦜 Duolingo (📱 phone)'}]},
-      {time:'9:00',tag:'faith',cls:'b-faith',title:'✝ Evening Prayer + Week Plan',desc:'Set 3 specific goals for the week. Then rest.',id:'m7'},
-    ]
-  },
-  tue: {
-    label:'Tuesday', type:'Numerical Apt + .NET',
-    dot:'var(--gold)', color:'',
-    blocks:[
-      {time:'7:30',tag:'faith',cls:'b-faith',title:'✝ Morning Prayer',desc:'Quick prayer. Read a verse. Set your mind before screens.',id:'t0'},
-      {time:'7:50',tag:'music',cls:'b-music',title:'🎵 Music — 20 min warmup',desc:'Wake your brain creatively. Scales, a piece you\'re learning, freestyle.',id:'t1'},
-      {time:'8:30',tag:'apt',cls:'b-apt',title:'🧮 Numerical — Percentages & Profit/Loss',desc:'Learn concept, do 10 timed questions. Aim 1.5 min/question.',id:'t2',
-        links:[{cls:'c-wb',href:'https://www.indiabix.com/aptitude/percentage/',label:'🧠 IndiaBix %'},{cls:'c-wb',href:'https://www.indiabix.com/aptitude/profit-and-loss/',label:'🧠 Profit/Loss'},{cls:'c-yt',href:'https://www.youtube.com/results?search_query=percentage+aptitude+placement+shortcut+tricks',label:'▶ Shortcuts'},{cls:'c-wb',href:'https://www.prepinsta.com/quantitative-aptitude/',label:'📋 PrepInsta'}]},
-      {time:'10:00',tag:'code',cls:'b-code',title:'💻 C# — OOP Basics',desc:'Classes, Objects, Constructors, Properties. Build a small class (e.g. Student). Push to GitHub.',id:'t3',
-        links:[{cls:'c-yt',href:'https://www.youtube.com/results?search_query=C+sharp+OOP+Tim+Corey+tutorial',label:'▶ Tim Corey C#'},{cls:'c-cs',href:'https://cs50.harvard.edu/x/',label:'🎓 CS50'},{cls:'c-li',href:'https://www.linkedin.com/learning/search?keywords=C+sharp+dotnet',label:'💼 LinkedIn'},{cls:'c-gh',href:'https://github.com',label:'🐙 Push to GitHub'}]},
-      {time:'12:30',tag:'rest',cls:'b-rest',title:'🍽 Lunch',desc:'Eat. Step outside.',id:'t4'},
-      {time:'2:00',tag:'apt',cls:'b-apt',title:'🧮 Numerical — Time, Speed & Distance',desc:'Formulas + 10 questions. Review every wrong answer — that\'s where the learning is.',id:'t5',
-        links:[{cls:'c-wb',href:'https://www.indiabix.com/aptitude/time-and-distance/',label:'🧠 TSD IndiaBix'},{cls:'c-yt',href:'https://www.youtube.com/results?search_query=time+speed+distance+aptitude+placement+tricks',label:'▶ YouTube'}]},
-      {time:'4:30',tag:'gym',cls:'b-gym',title:'🏋️ Gym + Travel (4:30–6:00)',desc:'Protected.',id:'t6'},
-      {time:'6:30',tag:'code',cls:'b-code',title:'💡 Review + GitHub Push',desc:'Re-read today\'s code, clean it up, commit. Streak = reputation.',id:'t7',
-        links:[{cls:'c-gh',href:'https://github.com',label:'🐙 GitHub'}]},
-      {time:'9:00',tag:'faith',cls:'b-faith',title:'✝ Evening Reflection',desc:'Write 3 things you learnt. Pray. Sleep by 10:30.',id:'t8'},
-    ]
-  },
-  wed: {
-    label:'Wednesday', type:'Numerical Apt + DSA + Cloud',
-    dot:'var(--teal)', color:'',
-    blocks:[
-      {time:'7:30',tag:'faith',cls:'b-faith',title:'✝ Morning Prayer',desc:'',id:'w0'},
-      {time:'7:50',tag:'music',cls:'b-music',title:'🎵 Music — 20 min',desc:'Creative warmup before heavy lifting.',id:'w1'},
-      {time:'8:30',tag:'apt',cls:'b-apt',title:'🧮 Numerical — Time & Work + Ratios',desc:'10 questions each. Write shortcuts in a notebook — you\'ll revise before Sierra ODC.',id:'w2',
-        links:[{cls:'c-wb',href:'https://www.indiabix.com/aptitude/time-and-work/',label:'🧠 Time & Work'},{cls:'c-wb',href:'https://www.indiabix.com/aptitude/ratio-and-proportion/',label:'🧠 Ratios'},{cls:'c-yt',href:'https://www.youtube.com/results?search_query=time+work+ratio+aptitude+placement+tricks',label:'▶ YouTube'}]},
-      {time:'10:00',tag:'dsa',cls:'b-dsa',title:'🔢 DSA — Arrays & Strings',desc:'2 LeetCode Easy in C#. Understand approach before coding. If stuck >20 min, hints only.',id:'w3',
-        links:[{cls:'c-lc',href:'https://leetcode.com/problemset/?difficulty=EASY&topicSlugs=array',label:'🔢 LeetCode Arrays'},{cls:'c-yt',href:'https://www.youtube.com/results?search_query=DSA+arrays+strings+C+sharp+beginners',label:'▶ DSA C#'},{cls:'c-wb',href:'https://www.geeksforgeeks.org/data-structures/',label:'📖 GFG'}]},
-      {time:'12:30',tag:'rest',cls:'b-rest',title:'🍽 Lunch',desc:'',id:'w4'},
-      {time:'2:00',tag:'cloud',cls:'b-cloud',title:'☁️ Google Cloud — 1 Module',desc:'GCP Arcade or Google Skills badge. Complete 1 lab. Track your badge progress.',id:'w5',
-        links:[{cls:'c-gcp',href:'https://www.cloudskillsboost.google/catalog',label:'☁️ GCP Arcade'},{cls:'c-yt',href:'https://www.youtube.com/results?search_query=google+cloud+fundamentals+beginners+2024',label:'▶ Cloud YouTube'},{cls:'c-li',href:'https://www.linkedin.com/learning/search?keywords=google+cloud',label:'💼 LinkedIn'}]},
-      {time:'4:30',tag:'gym',cls:'b-gym',title:'🏋️ Gym + Travel (4:30–6:00)',desc:'Protected.',id:'w6'},
-      {time:'6:30',tag:'dsa',cls:'b-dsa',title:'💡 Review LeetCode + Push',desc:'Re-read solutions. Cleaner approach? Push to GitHub.',id:'w7',links:[{cls:'c-gh',href:'https://github.com',label:'🐙 GitHub'}]},
-      {time:'9:00',tag:'faith',cls:'b-faith',title:'✝ Evening Reflection',desc:'',id:'w8'},
-    ]
-  },
-  thu: {
-    label:'Thursday', type:'Numerical Apt + .NET Deep',
-    dot:'var(--lavender)', color:'',
-    blocks:[
-      {time:'7:30',tag:'faith',cls:'b-faith',title:'✝ Morning Prayer',desc:'',id:'th0'},
-      {time:'7:50',tag:'music',cls:'b-music',title:'🎵 Music — 20 min',desc:'',id:'th1'},
-      {time:'8:30',tag:'apt',cls:'b-apt',title:'🧮 Numerical — SI & CI',desc:'15 questions. SI vs CI difference questions are very common at Sierra ODC. Write shortcut formulas.',id:'th2',
-        links:[{cls:'c-wb',href:'https://www.indiabix.com/aptitude/simple-interest/',label:'🧠 Simple Interest'},{cls:'c-wb',href:'https://www.indiabix.com/aptitude/compound-interest/',label:'🧠 Compound Interest'},{cls:'c-yt',href:'https://www.youtube.com/results?search_query=simple+compound+interest+aptitude+placement+tricks',label:'▶ YouTube'}]},
-      {time:'10:00',tag:'code',cls:'b-code',title:'💻 ASP.NET Core / VB.NET',desc:'Week A: ASP.NET Core MVC basics. Week B: VB.NET syntax vs C# comparison. Build + push.',id:'th3',
-        links:[{cls:'c-yt',href:'https://www.youtube.com/results?search_query=ASP.NET+Core+MVC+beginners+2024',label:'▶ ASP.NET Core'},{cls:'c-yt',href:'https://www.youtube.com/results?search_query=VB.NET+tutorial+beginners+2024',label:'▶ VB.NET'},{cls:'c-ud',href:'https://www.udemy.com/courses/search/?q=dotnet+csharp',label:'🎯 Udemy .NET'},{cls:'c-li',href:'https://www.linkedin.com/learning/search?keywords=asp.net+core',label:'💼 LinkedIn'}]},
-      {time:'12:30',tag:'rest',cls:'b-rest',title:'🍽 Lunch',desc:'',id:'th4'},
-      {time:'2:00',tag:'dsa',cls:'b-dsa',title:'🔢 DSA — Linked Lists / Stacks',desc:'2 LeetCode problems in C#. Understand time & space complexity of your solution.',id:'th5',
-        links:[{cls:'c-lc',href:'https://leetcode.com/problemset/?difficulty=EASY&topicSlugs=linked-list',label:'🔢 Linked List'},{cls:'c-lc',href:'https://leetcode.com/problemset/?difficulty=EASY&topicSlugs=stack',label:'🔢 Stack'},{cls:'c-yt',href:'https://www.youtube.com/results?search_query=linked+list+C+sharp+DSA',label:'▶ YouTube DSA'}]},
-      {time:'4:30',tag:'gym',cls:'b-gym',title:'🏋️ Gym + Travel (4:30–6:00)',desc:'Protected.',id:'th6'},
-      {time:'6:30',tag:'cloud',cls:'b-cloud',title:'☁️ Cloud — 30 min module',desc:'Keep momentum. Short lab or 1 concept video.',id:'th7',
-        links:[{cls:'c-gcp',href:'https://www.cloudskillsboost.google',label:'☁️ GCP Arcade'},{cls:'c-yt',href:'https://www.youtube.com/results?search_query=google+cloud+concepts+explained+2024',label:'▶ Cloud Concepts'}]},
-      {time:'9:00',tag:'faith',cls:'b-faith',title:'✝ Evening Reflection',desc:'',id:'th8'},
-    ]
-  },
-  fri: {
-    label:'Friday', type:'Logical Reasoning + Review',
-    dot:'var(--sky)', color:'',
-    blocks:[
-      {time:'7:30',tag:'faith',cls:'b-faith',title:'✝ Morning Prayer — Week thanksgiving',desc:'Thank God for what you got through. Pray for the weekend rest.',id:'f0'},
-      {time:'7:50',tag:'music',cls:'b-music',title:'🎵 Music — 20 min',desc:'',id:'f1'},
-      {time:'8:30',tag:'apt',cls:'b-apt',title:'🧩 Logical — Syllogisms + Blood Relations',desc:'Your only logical reasoning day — go deep. 15 questions. Understand patterns, don\'t memorise.',id:'f2',
-        links:[{cls:'c-wb',href:'https://www.indiabix.com/logical-reasoning/syllogism/',label:'🧠 Syllogisms'},{cls:'c-wb',href:'https://www.indiabix.com/logical-reasoning/blood-relations/',label:'🧠 Blood Relations'},{cls:'c-yt',href:'https://www.youtube.com/results?search_query=logical+reasoning+syllogism+tricks+placement+2024',label:'▶ YouTube Logic'}]},
-      {time:'10:00',tag:'apt',cls:'b-apt',title:'🧩 Logical — Seating + Coding-Decoding',desc:'15 questions. Draw diagrams for seating. Spot the pattern first in coding-decoding.',id:'f3',
-        links:[{cls:'c-wb',href:'https://www.indiabix.com/logical-reasoning/seating-arrangement/',label:'🧠 Seating'},{cls:'c-wb',href:'https://www.indiabix.com/logical-reasoning/coding-and-decoding/',label:'🧠 Coding-Decoding'},{cls:'c-wb',href:'https://www.prepinsta.com/logical-reasoning/',label:'📋 PrepInsta'}]},
-      {time:'12:00',tag:'rest',cls:'b-rest',title:'🍽 Lunch',desc:'',id:'f4'},
-      {time:'1:30',tag:'ds',cls:'b-ds',title:'📊 Data Science — DataCamp',desc:'Python & Pandas basics. Friday afternoon = exploratory, no pressure to finish.',id:'f5',
-        links:[{cls:'c-dc',href:'https://app.datacamp.com/learn/courses/introduction-to-python',label:'📊 Intro Python'},{cls:'c-dc',href:'https://app.datacamp.com/learn/courses/data-manipulation-with-pandas',label:'📊 Pandas'},{cls:'c-yt',href:'https://www.youtube.com/results?search_query=data+science+for+beginners+python+2024',label:'▶ YouTube DS'}]},
-      {time:'3:00',tag:'code',cls:'b-code',title:'🔁 Weekly Review',desc:'5 things learnt this week. 1 thing that confused you — Google it now. Update GitHub README.',id:'f6',links:[{cls:'c-gh',href:'https://github.com',label:'🐙 GitHub'}]},
-      {time:'4:30',tag:'gym',cls:'b-gym',title:'🏋️ Gym + Travel (4:30–6:00)',desc:'Protected.',id:'f7'},
-      {time:'6:30',tag:'faith',cls:'b-faith',title:'✝ End of Week — Rest & Gratitude',desc:'You showed up 5 days. That matters more than perfection. Weekend is yours.',id:'f8'},
-    ]
-  },
-  sat: {
-    label:'Saturday', type:'Rest + Art + Music',
-    dot:'var(--rose)', color:'',
-    blocks:[
-      {time:'Morning',tag:'faith',cls:'b-faith',title:'✝ Slow Morning',desc:'No alarms. Wake naturally. Long prayer. Eat slowly. Be human today, not a student.',id:'s0'},
-      {time:'Late AM',tag:'art',cls:'b-art',title:'🎨 Extended Art Session',desc:'Draw, paint, sketch — digital or traditional. No timer. No goal except enjoying it.',id:'s1'},
-      {time:'Afternoon',tag:'music',cls:'b-music',title:'🎵 Extended Music Practice',desc:'Play without a timer. Learn a new song, jam, record yourself.',id:'s2'},
-      {time:'Evening',tag:'rest',cls:'b-rest',title:'📱 Optional — Duolingo',desc:'Only if you feel like it. 20 min Duolingo on phone. Rest is productive too.',id:'s3',links:[{cls:'c-ph',href:'https://www.duolingo.com',label:'🦜 Duolingo (📱)'}]},
-    ]
-  },
-  sun: {
-    label:'Sunday', type:'Church + Rest',
-    dot:'var(--faith)', color:'',
-    blocks:[
-      {time:'Morning',tag:'faith',cls:'b-faith',title:'✝ Church & Worship',desc:'Your faith is the source, not just the motivation. Be fully present here.',id:'su0'},
-      {time:'Afternoon',tag:'rest',cls:'b-rest',title:'🏡 Family + Rest',desc:'Eat together. Walk. Watch something. No study guilt — you earned this.',id:'su1'},
-      {time:'8:00 PM',tag:'project',cls:'b-project',title:'📋 Monday Prep — 20 min only',desc:'Decide which project type for Monday. Write 1 goal for the week. Then close the laptop.',id:'su2'},
-    ]
-  }
-};
-
-const ROADMAP_DATA = [
-  {
-    id:'ph1', num:'Phase 01', name:'Foundations', color:'var(--gold2)',
-    dates:'April 2025', accent:'var(--gold)',
-    modules:[
-      {id:'rm_1_1', title:'C# Basics: Variables, Types, Methods', sub:['Understand value vs reference types','Write 5 small console programs','Push all to GitHub']},
-      {id:'rm_1_2', title:'C# OOP: Classes & Inheritance', sub:['Create 3 class hierarchies','Understand interfaces vs abstract','Implement a real example (e.g. Animal hierarchy)']},
-      {id:'rm_1_3', title:'Aptitude: Percentages + P&L', sub:['Learn all formulas','Do 50 questions on IndiaBix','Score >80% on a timed test']},
-      {id:'rm_1_4', title:'DSA: Arrays & Strings', sub:['Understand array operations','Solve 10 LeetCode easy','Know Big-O of basic operations']},
-      {id:'rm_1_5', title:'CS50 Weeks 0–4', sub:['Complete Week 0 (Scratch)','Complete Week 1 (C)','Complete Week 2–4 (Arrays, Algorithms, Memory)']},
-      {id:'rm_1_6', title:'GCP Arcade — Intro Badge', sub:['Create GCP account','Complete first lab','Earn intro badge']},
-    ]
-  },
-  {
-    id:'ph2', num:'Phase 02', name:'.NET & DSA Deep', color:'var(--teal)',
-    dates:'May 2025', accent:'var(--teal)',
-    modules:[
-      {id:'rm_2_1', title:'ASP.NET Core MVC', sub:['Understand MVC pattern','Build a CRUD web app','Connect to a local database']},
-      {id:'rm_2_2', title:'VB.NET Syntax & Windows Forms', sub:['Understand VB.NET vs C# differences','Build a simple Windows Forms app','Push to GitHub']},
-      {id:'rm_2_3', title:'DSA: Trees & Sorting', sub:['Binary trees: BFS, DFS','Implement merge sort & quicksort','Solve 15 LeetCode medium']},
-      {id:'rm_2_4', title:'Aptitude: TSD + Time & Work + SI/CI', sub:['Master shortcut formulas','Do 30 questions per topic','Take 3 mock tests this month']},
-      {id:'rm_2_5', title:'DataCamp: Python & Pandas', sub:['Complete Intro to Python','Complete Data Manipulation with Pandas','Do 1 mini data analysis project']},
-    ]
-  },
-  {
-    id:'ph3', num:'Phase 03', name:'Cloud & Data Science', color:'var(--sky)',
-    dates:'June 2025', accent:'var(--sky)',
-    modules:[
-      {id:'rm_3_1', title:'GCP: Associate Cloud Engineer Prep', sub:['Complete 3 GCP Arcade skill badges','Study compute, storage, networking basics','Do 1 practice exam']},
-      {id:'rm_3_2', title:'Azure Fundamentals (AZ-900)', sub:['Watch full AZ-900 course (YouTube)','Understand Azure vs GCP differences','Take free AZ-900 practice test']},
-      {id:'rm_3_3', title:'DataCamp: Machine Learning Basics', sub:['Complete Supervised Learning course','Build a simple classification model','Understand train/test split, accuracy']},
-      {id:'rm_3_4', title:'DSA: Graphs & Dynamic Programming', sub:['Understand graph traversal (BFS/DFS)','Solve 10 DP problems on LeetCode','Know common DP patterns']},
-      {id:'rm_3_5', title:'GitHub Portfolio: 3 Projects Live', sub:['Deploy project 1 (C# console app)','Deploy project 2 (.NET web app)','Deploy project 3 (Python data project)']},
-    ]
-  },
-  {
-    id:'ph4', num:'Phase 04', name:'Interview Ready', color:'var(--sage)',
-    dates:'July–September 2025', accent:'var(--sage)',
-    modules:[
-      {id:'rm_4_1', title:'150 LeetCode Problems', sub:['Complete 50 easy','Complete 75 medium','Complete 25 hard']},
-      {id:'rm_4_2', title:'Mock Interviews', sub:['Do 5 mock interviews on Pramp','Record 1 mock on video, review it','Practice STAR method for HR questions']},
-      {id:'rm_4_3', title:'System Design Basics', sub:['Understand load balancing, caching, CDN','Design a URL shortener','Design a simple chat app']},
-      {id:'rm_4_4', title:'Resume + LinkedIn Polish', sub:['Update all projects with GitHub links','Get resume reviewed by 1 senior','Reach 500+ LinkedIn connections']},
-      {id:'rm_4_5', title:'Aptitude Full Mock Tests', sub:['Take 10 full-length timed tests','Score >75% consistently','Do 1 company-specific test (Sierra ODC style)']},
-    ]
-  }
-];
-
-const PROJECTS_DATA = [
-  {
-    id:'proj_personal', icon:'💡', name:'Personal Project',
-    color:'var(--gold)', colorDim:'rgba(232,160,32,.1)',
-    desc:'Something you build for yourself — tools, automations, things you wish existed.',
-    tasks:[
-      {id:'pp1',label:'Decide what problem to solve (brainstorm 5 ideas)',diff:'easy'},
-      {id:'pp2',label:'Write requirements in a README.md',diff:'easy'},
-      {id:'pp3',label:'Set up GitHub repo + initial commit',diff:'easy'},
-      {id:'pp4',label:'Build basic UI or skeleton',diff:'medium'},
-      {id:'pp5',label:'Implement core feature 1',diff:'medium'},
-      {id:'pp6',label:'Implement core feature 2',diff:'medium'},
-      {id:'pp7',label:'Add error handling & edge cases',diff:'medium'},
-      {id:'pp8',label:'Write a proper README with screenshots',diff:'easy'},
-      {id:'pp9',label:'Deploy (GitHub Pages / Netlify / Azure)',diff:'hard'},
-      {id:'pp10',label:'Share on LinkedIn with a write-up',diff:'easy'},
-    ]
-  },
-  {
-    id:'proj_recruiter', icon:'🏢', name:'Recruiter-Facing Project',
-    color:'var(--teal)', colorDim:'var(--tealdim)',
-    desc:'A project companies will actually notice. Shows .NET, database, clean code.',
-    tasks:[
-      {id:'rp1',label:'Choose topic: CRUD app / REST API / task manager',diff:'easy'},
-      {id:'rp2',label:'Design database schema (tables, relationships)',diff:'medium'},
-      {id:'rp3',label:'Set up ASP.NET Core project structure',diff:'medium'},
-      {id:'rp4',label:'Build Models and DbContext',diff:'medium'},
-      {id:'rp5',label:'Implement GET endpoints',diff:'medium'},
-      {id:'rp6',label:'Implement POST / PUT / DELETE endpoints',diff:'medium'},
-      {id:'rp7',label:'Add authentication (basic JWT or identity)',diff:'hard'},
-      {id:'rp8',label:'Write unit tests for core logic',diff:'hard'},
-      {id:'rp9',label:'Add Swagger/OpenAPI documentation',diff:'medium'},
-      {id:'rp10',label:'Deploy to free Azure App Service',diff:'hard'},
-      {id:'rp11',label:'Write LinkedIn post: "I built this" with demo GIF',diff:'easy'},
-    ]
-  },
-  {
-    id:'proj_nature', icon:'🌿', name:'Sustainability / Nature Tech',
-    color:'var(--sage)', colorDim:'var(--sagedim)',
-    desc:'Tech for good — environmental, community, or sustainability focused.',
-    tasks:[
-      {id:'np1',label:'Brainstorm 3 nature/community problems tech can help',diff:'easy'},
-      {id:'np2',label:'Research existing solutions (don\'t reinvent, improve)',diff:'easy'},
-      {id:'np3',label:'Decide on 1 idea (e.g. local waste tracker, plant watering reminder)',diff:'easy'},
-      {id:'np4',label:'Build MVP in 1 week with HTML/JS or .NET',diff:'medium'},
-      {id:'np5',label:'Test with 3 real people, get feedback',diff:'easy'},
-      {id:'np6',label:'Iterate based on feedback',diff:'medium'},
-      {id:'np7',label:'Open source it on GitHub with good README',diff:'easy'},
-      {id:'np8',label:'Submit to a hackathon or open source fair',diff:'hard'},
-    ]
-  },
-  {
-    id:'proj_art', icon:'🎨', name:'Art / Creative Coding',
-    color:'var(--lavender)', colorDim:'var(--lavdim)',
-    desc:'Code that creates beauty — generative art, music visualisers, interactive sketches.',
-    tasks:[
-      {id:'ap1',label:'Learn p5.js basics (1 YouTube tutorial)',diff:'easy'},
-      {id:'ap2',label:'Recreate a simple generative art piece',diff:'easy'},
-      {id:'ap3',label:'Build a music visualiser using Web Audio API',diff:'medium'},
-      {id:'ap4',label:'Combine your art + code into 1 creative project',diff:'medium'},
-      {id:'ap5',label:'Embed it on GitHub Pages and share',diff:'easy'},
-      {id:'ap6',label:'Post on Instagram/Behance as "Creative Coder"',diff:'easy'},
-    ]
-  }
-];
-
-const FUTURE_DATA = [
-  {
-    id:'fut_1', icon:'☁️🛡️', badge:'2–3 YRS AWAY',
-    title:'Multicloud & Disaster Recovery Engineer',
-    desc:'Ensures business continuity across AWS, GCP, Azure. Designs failover systems as companies escape vendor lock-in.',
-    salary:'₹18–35 LPA', color:'var(--teal)',
-    steps:[
-      {id:'fr1_1',label:'Complete GCP Associate Cloud Engineer',year:'2025'},
-      {id:'fr1_2',label:'Complete AWS Cloud Practitioner',year:'2025'},
-      {id:'fr1_3',label:'Build disaster recovery project (multi-region)',year:'2026'},
-      {id:'fr1_4',label:'Get first cloud job (any cloud role)',year:'2026'},
-      {id:'fr1_5',label:'Learn Terraform & infrastructure as code',year:'2026'},
-      {id:'fr1_6',label:'Earn GCP Professional Cloud Architect',year:'2027'},
-    ],
-    skills:['GCP','Azure','AWS','Terraform','Backup Systems','Failover Design']
-  },
-  {
-    id:'fut_2', icon:'🔒📋', badge:'3–4 YRS AWAY',
-    title:'Data Sovereignty & Compliance Engineer',
-    desc:'Ensures data stays within legal jurisdictions (GDPR, India DPDP Act). Exploding in demand as global data regulations multiply.',
-    salary:'₹20–40 LPA', color:'var(--lavender)',
-    steps:[
-      {id:'fr2_1',label:'Learn basics of GDPR and India DPDP Act',year:'2025'},
-      {id:'fr2_2',label:'Complete a cloud security course',year:'2025'},
-      {id:'fr2_3',label:'Get cloud certification (GCP/Azure)',year:'2026'},
-      {id:'fr2_4',label:'Work on a compliance-related project',year:'2026'},
-      {id:'fr2_5',label:'Earn CIPP or similar privacy cert',year:'2027'},
-    ],
-    skills:['GDPR','DPDP Act','IAM','Cloud Policy','Audit Logs','Data Classification']
-  },
-  {
-    id:'fut_3', icon:'🌐⚡', badge:'3–5 YRS AWAY',
-    title:'Edge Computing & Decentralised Infra',
-    desc:'Builds compute closer to users (IoT, 5G edge nodes). Critical for low-latency AI and smart cities.',
-    salary:'₹22–45 LPA', color:'var(--sky)',
-    steps:[
-      {id:'fr3_1',label:'Learn Kubernetes fundamentals',year:'2025'},
-      {id:'fr3_2',label:'Build a containerised app with Docker',year:'2025'},
-      {id:'fr3_3',label:'Study IoT architecture and protocols (MQTT)',year:'2026'},
-      {id:'fr3_4',label:'Deploy an edge computing proof-of-concept',year:'2026'},
-      {id:'fr3_5',label:'Contribute to an open-source IoT project',year:'2027'},
-    ],
-    skills:['Kubernetes','Docker','IoT','MQTT','5G Edge','Microservices']
-  },
-  {
-    id:'fut_4', icon:'🔐⚔️', badge:'3–4 YRS AWAY',
-    title:'Cloud Security / Cyber Warfare Specialist',
-    desc:'Protects cloud infra from nation-state attacks. Highest-paying specialisation. Demand militarising rapidly.',
-    salary:'₹25–60 LPA', color:'var(--rose)',
-    steps:[
-      {id:'fr4_1',label:'Learn networking fundamentals (TCP/IP, DNS, TLS)',year:'2025'},
-      {id:'fr4_2',label:'Complete Google Cloud Security course',year:'2025'},
-      {id:'fr4_3',label:'Study penetration testing basics (TryHackMe free)',year:'2026'},
-      {id:'fr4_4',label:'Get CompTIA Security+ certification',year:'2026'},
-      {id:'fr4_5',label:'Work in a cloud security team for 1 year',year:'2027'},
-    ],
-    skills:['Zero Trust','SIEM','Penetration Testing','IAM','Threat Modelling','SOC']
-  },
-  {
-    id:'fut_5', icon:'🤖🚚', badge:'2–3 YRS AWAY',
-    title:'AI Infra Relocation Engineer',
-    desc:'Migrates AI workloads (LLM pipelines, GPU clusters) between clouds. Niche but premium as AI compute shifts geopolitically.',
-    salary:'₹28–55 LPA', color:'var(--peach)',
-    steps:[
-      {id:'fr5_1',label:'Learn Docker and container orchestration',year:'2025'},
-      {id:'fr5_2',label:'Understand ML model deployment (HuggingFace, MLflow)',year:'2025'},
-      {id:'fr5_3',label:'Build a cloud migration project (.NET or Python)',year:'2026'},
-      {id:'fr5_4',label:'Learn MLOps concepts and pipelines',year:'2026'},
-      {id:'fr5_5',label:'Contribute to an AI infrastructure open source project',year:'2027'},
-    ],
-    skills:['Docker','Python','.NET','MLOps','Kubernetes','Cloud Migration','LLM Infra']
-  },
-];
-
-// ═══════════ STATE ═══════════
-let state = {};
-
-function getState(key, def=false){ return key in state ? state[key] : def; }
-function setState(key, val){ state[key]=val; persistState(); }
-
-function persistState(){
-  try{ localStorage.setItem('pp3_state', JSON.stringify(state)); }catch(e){}
-  syncToSupabase();
-}
-
-function loadState(){
-  try{
-    const s = localStorage.getItem('pp3_state');
-    if(s) state = JSON.parse(s);
-  }catch(e){ state={}; }
-}
-
-// ═══════════ SUPABASE ═══════════
-let sbUrl='', sbKey='';
-
-function loadSupabaseCreds(){
-  sbUrl = localStorage.getItem('sb_url')||'';
-  sbKey = localStorage.getItem('sb_key')||'';
-  if(sbUrl && sbKey){
-    document.getElementById('sbUrl').value = sbUrl;
-    document.getElementById('sbKey').value = sbKey;
-  }
-}
-
-async function saveSupabase(){
-  sbUrl = document.getElementById('sbUrl').value.trim();
-  sbKey = document.getElementById('sbKey').value.trim();
-  if(!sbUrl||!sbKey){ showSyncStatus('Enter both URL and key','err'); return; }
-  localStorage.setItem('sb_url', sbUrl);
-  localStorage.setItem('sb_key', sbKey);
-  showSyncStatus('Testing connection...','pending');
-  const ok = await syncToSupabase(true);
-  if(ok) showSyncStatus('✓ Connected! Progress syncs automatically across all devices.','ok');
-}
-
-async function syncToSupabase(test=false){
-  if(!sbUrl||!sbKey) return false;
-  try{
-    const res = await fetch(`${sbUrl}/rest/v1/progress`, {
-      method:'POST',
-      headers:{
-        'apikey': sbKey,
-        'Authorization': `Bearer ${sbKey}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'resolution=merge-duplicates'
+    const DAYS_DATA = {
+      mon: {
+        label: 'Monday', type: 'Projects + Light',
+        dot: 'var(--sage)', color: 'today-btn',
+        blocks: [
+          { time: '7:30', tag: 'faith', cls: 'b-faith', title: '✝ Morning Prayer & Scripture', desc: 'Start the week with God. Read Psalm 90. Commit the week. Journal one sentence.', id: 'm0' },
+          { time: '8:00', tag: 'music', cls: 'b-music', title: '🎵 Music Practice', desc: '30–45 min free play. No pressure. This is joy, not performance.', id: 'm1' },
+          {
+            time: '9:00', tag: 'project', cls: 'b-project', title: '🛠 Weekly Project Work', desc: 'Week A: Personal project · Week B: Recruiter-facing (GitHub portfolio) · Week C: Sustainability/nature tech · Week D: Art/creative coding.', id: 'm2',
+            links: [{ cls: 'c-gh', href: 'https://github.com', label: '🐙 GitHub' }, { cls: 'c-wb', href: 'https://github.com/topics/good-first-issue', label: '🌿 Open Source Ideas' }, { cls: 'c-yt', href: 'https://www.youtube.com/results?search_query=dotnet+project+ideas+for+portfolio', label: '▶ Project Ideas' }]
+          },
+          { time: '12:30', tag: 'rest', cls: 'b-rest', title: '🍽 Lunch + Rest', desc: 'Step outside. Rest properly.', id: 'm3' },
+          { time: '2:00', tag: 'art', cls: 'b-art', title: '🎨 Art / Creative Time', desc: 'Sketch, paint, digital art. Creativity feeds the technical brain.', id: 'm4' },
+          { time: '4:30', tag: 'gym', cls: 'b-gym', title: '🏋️ Gym + Travel (4:30–6:00)', desc: 'Protected. No study guilt.', id: 'm5' },
+          {
+            time: '6:30', tag: 'rest', cls: 'b-rest', title: '📱 Duolingo + Light Reading', desc: '20 min Duolingo on phone. Read a tech article. Nothing heavy.', id: 'm6',
+            links: [{ cls: 'c-ph', href: 'https://www.duolingo.com', label: '🦜 Duolingo (📱 phone)' }]
+          },
+          { time: '9:00', tag: 'faith', cls: 'b-faith', title: '✝ Evening Prayer + Week Plan', desc: 'Set 3 specific goals for the week. Then rest.', id: 'm7' },
+        ]
       },
-      body: JSON.stringify({id:'user_main', data: state, updated_at: new Date().toISOString()})
-    });
-    if(res.ok){
-      const badge = document.getElementById('syncBadge');
-      if(badge){ badge.style.display='flex'; badge.textContent='☁ synced'; }
-      return true;
+      tue: {
+        label: 'Tuesday', type: 'Numerical Apt + .NET',
+        dot: 'var(--gold)', color: '',
+        blocks: [
+          { time: '7:30', tag: 'faith', cls: 'b-faith', title: '✝ Morning Prayer', desc: 'Quick prayer. Read a verse. Set your mind before screens.', id: 't0' },
+          { time: '7:50', tag: 'music', cls: 'b-music', title: '🎵 Music — 20 min warmup', desc: 'Wake your brain creatively. Scales, a piece you\'re learning, freestyle.', id: 't1' },
+          {
+            time: '8:30', tag: 'apt', cls: 'b-apt', title: '🧮 Numerical — Percentages & Profit/Loss', desc: 'Learn concept, do 10 timed questions. Aim 1.5 min/question.', id: 't2',
+            links: [{ cls: 'c-wb', href: 'https://www.indiabix.com/aptitude/percentage/', label: '🧠 IndiaBix %' }, { cls: 'c-wb', href: 'https://www.indiabix.com/aptitude/profit-and-loss/', label: '🧠 Profit/Loss' }, { cls: 'c-yt', href: 'https://www.youtube.com/results?search_query=percentage+aptitude+placement+shortcut+tricks', label: '▶ Shortcuts' }, { cls: 'c-wb', href: 'https://www.prepinsta.com/quantitative-aptitude/', label: '📋 PrepInsta' }]
+          },
+          {
+            time: '10:00', tag: 'code', cls: 'b-code', title: '💻 C# — OOP Basics', desc: 'Classes, Objects, Constructors, Properties. Build a small class (e.g. Student). Push to GitHub.', id: 't3',
+            links: [{ cls: 'c-yt', href: 'https://www.youtube.com/results?search_query=C+sharp+OOP+Tim+Corey+tutorial', label: '▶ Tim Corey C#' }, { cls: 'c-cs', href: 'https://cs50.harvard.edu/x/', label: '🎓 CS50' }, { cls: 'c-li', href: 'https://www.linkedin.com/learning/search?keywords=C+sharp+dotnet', label: '💼 LinkedIn' }, { cls: 'c-gh', href: 'https://github.com', label: '🐙 Push to GitHub' }]
+          },
+          { time: '12:30', tag: 'rest', cls: 'b-rest', title: '🍽 Lunch', desc: 'Eat. Step outside.', id: 't4' },
+          {
+            time: '2:00', tag: 'apt', cls: 'b-apt', title: '🧮 Numerical — Time, Speed & Distance', desc: 'Formulas + 10 questions. Review every wrong answer — that\'s where the learning is.', id: 't5',
+            links: [{ cls: 'c-wb', href: 'https://www.indiabix.com/aptitude/time-and-distance/', label: '🧠 TSD IndiaBix' }, { cls: 'c-yt', href: 'https://www.youtube.com/results?search_query=time+speed+distance+aptitude+placement+tricks', label: '▶ YouTube' }]
+          },
+          { time: '4:30', tag: 'gym', cls: 'b-gym', title: '🏋️ Gym + Travel (4:30–6:00)', desc: 'Protected.', id: 't6' },
+          {
+            time: '6:30', tag: 'code', cls: 'b-code', title: '💡 Review + GitHub Push', desc: 'Re-read today\'s code, clean it up, commit. Streak = reputation.', id: 't7',
+            links: [{ cls: 'c-gh', href: 'https://github.com', label: '🐙 GitHub' }]
+          },
+          { time: '9:00', tag: 'faith', cls: 'b-faith', title: '✝ Evening Reflection', desc: 'Write 3 things you learnt. Pray. Sleep by 10:30.', id: 't8' },
+        ]
+      },
+      wed: {
+        label: 'Wednesday', type: 'Numerical Apt + DSA + Cloud',
+        dot: 'var(--teal)', color: '',
+        blocks: [
+          { time: '7:30', tag: 'faith', cls: 'b-faith', title: '✝ Morning Prayer', desc: '', id: 'w0' },
+          { time: '7:50', tag: 'music', cls: 'b-music', title: '🎵 Music — 20 min', desc: 'Creative warmup before heavy lifting.', id: 'w1' },
+          {
+            time: '8:30', tag: 'apt', cls: 'b-apt', title: '🧮 Numerical — Time & Work + Ratios', desc: '10 questions each. Write shortcuts in a notebook — you\'ll revise before Sierra ODC.', id: 'w2',
+            links: [{ cls: 'c-wb', href: 'https://www.indiabix.com/aptitude/time-and-work/', label: '🧠 Time & Work' }, { cls: 'c-wb', href: 'https://www.indiabix.com/aptitude/ratio-and-proportion/', label: '🧠 Ratios' }, { cls: 'c-yt', href: 'https://www.youtube.com/results?search_query=time+work+ratio+aptitude+placement+tricks', label: '▶ YouTube' }]
+          },
+          {
+            time: '10:00', tag: 'dsa', cls: 'b-dsa', title: '🔢 DSA — Arrays & Strings', desc: '2 LeetCode Easy in C#. Understand approach before coding. If stuck >20 min, hints only.', id: 'w3',
+            links: [{ cls: 'c-lc', href: 'https://leetcode.com/problemset/?difficulty=EASY&topicSlugs=array', label: '🔢 LeetCode Arrays' }, { cls: 'c-yt', href: 'https://www.youtube.com/results?search_query=DSA+arrays+strings+C+sharp+beginners', label: '▶ DSA C#' }, { cls: 'c-wb', href: 'https://www.geeksforgeeks.org/data-structures/', label: '📖 GFG' }]
+          },
+          { time: '12:30', tag: 'rest', cls: 'b-rest', title: '🍽 Lunch', desc: '', id: 'w4' },
+          {
+            time: '2:00', tag: 'cloud', cls: 'b-cloud', title: '☁️ Google Cloud — 1 Module', desc: 'GCP Arcade or Google Skills badge. Complete 1 lab. Track your badge progress.', id: 'w5',
+            links: [{ cls: 'c-gcp', href: 'https://www.cloudskillsboost.google/catalog', label: '☁️ GCP Arcade' }, { cls: 'c-yt', href: 'https://www.youtube.com/results?search_query=google+cloud+fundamentals+beginners+2024', label: '▶ Cloud YouTube' }, { cls: 'c-li', href: 'https://www.linkedin.com/learning/search?keywords=google+cloud', label: '💼 LinkedIn' }]
+          },
+          { time: '4:30', tag: 'gym', cls: 'b-gym', title: '🏋️ Gym + Travel (4:30–6:00)', desc: 'Protected.', id: 'w6' },
+          { time: '6:30', tag: 'dsa', cls: 'b-dsa', title: '💡 Review LeetCode + Push', desc: 'Re-read solutions. Cleaner approach? Push to GitHub.', id: 'w7', links: [{ cls: 'c-gh', href: 'https://github.com', label: '🐙 GitHub' }] },
+          { time: '9:00', tag: 'faith', cls: 'b-faith', title: '✝ Evening Reflection', desc: '', id: 'w8' },
+        ]
+      },
+      thu: {
+        label: 'Thursday', type: 'Numerical Apt + .NET Deep',
+        dot: 'var(--lavender)', color: '',
+        blocks: [
+          { time: '7:30', tag: 'faith', cls: 'b-faith', title: '✝ Morning Prayer', desc: '', id: 'th0' },
+          { time: '7:50', tag: 'music', cls: 'b-music', title: '🎵 Music — 20 min', desc: '', id: 'th1' },
+          {
+            time: '8:30', tag: 'apt', cls: 'b-apt', title: '🧮 Numerical — SI & CI', desc: '15 questions. SI vs CI difference questions are very common at Sierra ODC. Write shortcut formulas.', id: 'th2',
+            links: [{ cls: 'c-wb', href: 'https://www.indiabix.com/aptitude/simple-interest/', label: '🧠 Simple Interest' }, { cls: 'c-wb', href: 'https://www.indiabix.com/aptitude/compound-interest/', label: '🧠 Compound Interest' }, { cls: 'c-yt', href: 'https://www.youtube.com/results?search_query=simple+compound+interest+aptitude+placement+tricks', label: '▶ YouTube' }]
+          },
+          {
+            time: '10:00', tag: 'code', cls: 'b-code', title: '💻 ASP.NET Core / VB.NET', desc: 'Week A: ASP.NET Core MVC basics. Week B: VB.NET syntax vs C# comparison. Build + push.', id: 'th3',
+            links: [{ cls: 'c-yt', href: 'https://www.youtube.com/results?search_query=ASP.NET+Core+MVC+beginners+2024', label: '▶ ASP.NET Core' }, { cls: 'c-yt', href: 'https://www.youtube.com/results?search_query=VB.NET+tutorial+beginners+2024', label: '▶ VB.NET' }, { cls: 'c-ud', href: 'https://www.udemy.com/courses/search/?q=dotnet+csharp', label: '🎯 Udemy .NET' }, { cls: 'c-li', href: 'https://www.linkedin.com/learning/search?keywords=asp.net+core', label: '💼 LinkedIn' }]
+          },
+          { time: '12:30', tag: 'rest', cls: 'b-rest', title: '🍽 Lunch', desc: '', id: 'th4' },
+          {
+            time: '2:00', tag: 'dsa', cls: 'b-dsa', title: '🔢 DSA — Linked Lists / Stacks', desc: '2 LeetCode problems in C#. Understand time & space complexity of your solution.', id: 'th5',
+            links: [{ cls: 'c-lc', href: 'https://leetcode.com/problemset/?difficulty=EASY&topicSlugs=linked-list', label: '🔢 Linked List' }, { cls: 'c-lc', href: 'https://leetcode.com/problemset/?difficulty=EASY&topicSlugs=stack', label: '🔢 Stack' }, { cls: 'c-yt', href: 'https://www.youtube.com/results?search_query=linked+list+C+sharp+DSA', label: '▶ YouTube DSA' }]
+          },
+          { time: '4:30', tag: 'gym', cls: 'b-gym', title: '🏋️ Gym + Travel (4:30–6:00)', desc: 'Protected.', id: 'th6' },
+          {
+            time: '6:30', tag: 'cloud', cls: 'b-cloud', title: '☁️ Cloud — 30 min module', desc: 'Keep momentum. Short lab or 1 concept video.', id: 'th7',
+            links: [{ cls: 'c-gcp', href: 'https://www.cloudskillsboost.google', label: '☁️ GCP Arcade' }, { cls: 'c-yt', href: 'https://www.youtube.com/results?search_query=google+cloud+concepts+explained+2024', label: '▶ Cloud Concepts' }]
+          },
+          { time: '9:00', tag: 'faith', cls: 'b-faith', title: '✝ Evening Reflection', desc: '', id: 'th8' },
+        ]
+      },
+      fri: {
+        label: 'Friday', type: 'Logical Reasoning + Review',
+        dot: 'var(--sky)', color: '',
+        blocks: [
+          { time: '7:30', tag: 'faith', cls: 'b-faith', title: '✝ Morning Prayer — Week thanksgiving', desc: 'Thank God for what you got through. Pray for the weekend rest.', id: 'f0' },
+          { time: '7:50', tag: 'music', cls: 'b-music', title: '🎵 Music — 20 min', desc: '', id: 'f1' },
+          {
+            time: '8:30', tag: 'apt', cls: 'b-apt', title: '🧩 Logical — Syllogisms + Blood Relations', desc: 'Your only logical reasoning day — go deep. 15 questions. Understand patterns, don\'t memorise.', id: 'f2',
+            links: [{ cls: 'c-wb', href: 'https://www.indiabix.com/logical-reasoning/syllogism/', label: '🧠 Syllogisms' }, { cls: 'c-wb', href: 'https://www.indiabix.com/logical-reasoning/blood-relations/', label: '🧠 Blood Relations' }, { cls: 'c-yt', href: 'https://www.youtube.com/results?search_query=logical+reasoning+syllogism+tricks+placement+2024', label: '▶ YouTube Logic' }]
+          },
+          {
+            time: '10:00', tag: 'apt', cls: 'b-apt', title: '🧩 Logical — Seating + Coding-Decoding', desc: '15 questions. Draw diagrams for seating. Spot the pattern first in coding-decoding.', id: 'f3',
+            links: [{ cls: 'c-wb', href: 'https://www.indiabix.com/logical-reasoning/seating-arrangement/', label: '🧠 Seating' }, { cls: 'c-wb', href: 'https://www.indiabix.com/logical-reasoning/coding-and-decoding/', label: '🧠 Coding-Decoding' }, { cls: 'c-wb', href: 'https://www.prepinsta.com/logical-reasoning/', label: '📋 PrepInsta' }]
+          },
+          { time: '12:00', tag: 'rest', cls: 'b-rest', title: '🍽 Lunch', desc: '', id: 'f4' },
+          {
+            time: '1:30', tag: 'ds', cls: 'b-ds', title: '📊 Data Science — DataCamp', desc: 'Python & Pandas basics. Friday afternoon = exploratory, no pressure to finish.', id: 'f5',
+            links: [{ cls: 'c-dc', href: 'https://app.datacamp.com/learn/courses/introduction-to-python', label: '📊 Intro Python' }, { cls: 'c-dc', href: 'https://app.datacamp.com/learn/courses/data-manipulation-with-pandas', label: '📊 Pandas' }, { cls: 'c-yt', href: 'https://www.youtube.com/results?search_query=data+science+for+beginners+python+2024', label: '▶ YouTube DS' }]
+          },
+          { time: '3:00', tag: 'code', cls: 'b-code', title: '🔁 Weekly Review', desc: '5 things learnt this week. 1 thing that confused you — Google it now. Update GitHub README.', id: 'f6', links: [{ cls: 'c-gh', href: 'https://github.com', label: '🐙 GitHub' }] },
+          { time: '4:30', tag: 'gym', cls: 'b-gym', title: '🏋️ Gym + Travel (4:30–6:00)', desc: 'Protected.', id: 'f7' },
+          { time: '6:30', tag: 'faith', cls: 'b-faith', title: '✝ End of Week — Rest & Gratitude', desc: 'You showed up 5 days. That matters more than perfection. Weekend is yours.', id: 'f8' },
+        ]
+      },
+      sat: {
+        label: 'Saturday', type: 'Rest + Art + Music',
+        dot: 'var(--rose)', color: '',
+        blocks: [
+          { time: 'Morning', tag: 'faith', cls: 'b-faith', title: '✝ Slow Morning', desc: 'No alarms. Wake naturally. Long prayer. Eat slowly. Be human today, not a student.', id: 's0' },
+          { time: 'Late AM', tag: 'art', cls: 'b-art', title: '🎨 Extended Art Session', desc: 'Draw, paint, sketch — digital or traditional. No timer. No goal except enjoying it.', id: 's1' },
+          { time: 'Afternoon', tag: 'music', cls: 'b-music', title: '🎵 Extended Music Practice', desc: 'Play without a timer. Learn a new song, jam, record yourself.', id: 's2' },
+          { time: 'Evening', tag: 'rest', cls: 'b-rest', title: '📱 Optional — Duolingo', desc: 'Only if you feel like it. 20 min Duolingo on phone. Rest is productive too.', id: 's3', links: [{ cls: 'c-ph', href: 'https://www.duolingo.com', label: '🦜 Duolingo (📱)' }] },
+        ]
+      },
+      sun: {
+        label: 'Sunday', type: 'Church + Rest',
+        dot: 'var(--faith)', color: '',
+        blocks: [
+          { time: 'Morning', tag: 'faith', cls: 'b-faith', title: '✝ Church & Worship', desc: 'Your faith is the source, not just the motivation. Be fully present here.', id: 'su0' },
+          { time: 'Afternoon', tag: 'rest', cls: 'b-rest', title: '🏡 Family + Rest', desc: 'Eat together. Walk. Watch something. No study guilt — you earned this.', id: 'su1' },
+          { time: '8:00 PM', tag: 'project', cls: 'b-project', title: '📋 Monday Prep — 20 min only', desc: 'Decide which project type for Monday. Write 1 goal for the week. Then close the laptop.', id: 'su2' },
+        ]
+      }
+    };
+
+    const ROADMAP_DATA = [
+      {
+        id: 'ph1', num: 'Phase 01', name: 'Foundations', color: 'var(--gold2)',
+        dates: 'April 2025', accent: 'var(--gold)',
+        modules: [
+          { id: 'rm_1_1', title: 'C# Basics: Variables, Types, Methods', sub: ['Understand value vs reference types', 'Write 5 small console programs', 'Push all to GitHub'] },
+          { id: 'rm_1_2', title: 'C# OOP: Classes & Inheritance', sub: ['Create 3 class hierarchies', 'Understand interfaces vs abstract', 'Implement a real example (e.g. Animal hierarchy)'] },
+          { id: 'rm_1_3', title: 'Aptitude: Percentages + P&L', sub: ['Learn all formulas', 'Do 50 questions on IndiaBix', 'Score >80% on a timed test'] },
+          { id: 'rm_1_4', title: 'DSA: Arrays & Strings', sub: ['Understand array operations', 'Solve 10 LeetCode easy', 'Know Big-O of basic operations'] },
+          { id: 'rm_1_5', title: 'CS50 Weeks 0–4', sub: ['Complete Week 0 (Scratch)', 'Complete Week 1 (C)', 'Complete Week 2–4 (Arrays, Algorithms, Memory)'] },
+          { id: 'rm_1_6', title: 'GCP Arcade — Intro Badge', sub: ['Create GCP account', 'Complete first lab', 'Earn intro badge'] },
+        ]
+      },
+      {
+        id: 'ph2', num: 'Phase 02', name: '.NET & DSA Deep', color: 'var(--teal)',
+        dates: 'May 2025', accent: 'var(--teal)',
+        modules: [
+          { id: 'rm_2_1', title: 'ASP.NET Core MVC', sub: ['Understand MVC pattern', 'Build a CRUD web app', 'Connect to a local database'] },
+          { id: 'rm_2_2', title: 'VB.NET Syntax & Windows Forms', sub: ['Understand VB.NET vs C# differences', 'Build a simple Windows Forms app', 'Push to GitHub'] },
+          { id: 'rm_2_3', title: 'DSA: Trees & Sorting', sub: ['Binary trees: BFS, DFS', 'Implement merge sort & quicksort', 'Solve 15 LeetCode medium'] },
+          { id: 'rm_2_4', title: 'Aptitude: TSD + Time & Work + SI/CI', sub: ['Master shortcut formulas', 'Do 30 questions per topic', 'Take 3 mock tests this month'] },
+          { id: 'rm_2_5', title: 'DataCamp: Python & Pandas', sub: ['Complete Intro to Python', 'Complete Data Manipulation with Pandas', 'Do 1 mini data analysis project'] },
+        ]
+      },
+      {
+        id: 'ph3', num: 'Phase 03', name: 'Cloud & Data Science', color: 'var(--sky)',
+        dates: 'June 2025', accent: 'var(--sky)',
+        modules: [
+          { id: 'rm_3_1', title: 'GCP: Associate Cloud Engineer Prep', sub: ['Complete 3 GCP Arcade skill badges', 'Study compute, storage, networking basics', 'Do 1 practice exam'] },
+          { id: 'rm_3_2', title: 'Azure Fundamentals (AZ-900)', sub: ['Watch full AZ-900 course (YouTube)', 'Understand Azure vs GCP differences', 'Take free AZ-900 practice test'] },
+          { id: 'rm_3_3', title: 'DataCamp: Machine Learning Basics', sub: ['Complete Supervised Learning course', 'Build a simple classification model', 'Understand train/test split, accuracy'] },
+          { id: 'rm_3_4', title: 'DSA: Graphs & Dynamic Programming', sub: ['Understand graph traversal (BFS/DFS)', 'Solve 10 DP problems on LeetCode', 'Know common DP patterns'] },
+          { id: 'rm_3_5', title: 'GitHub Portfolio: 3 Projects Live', sub: ['Deploy project 1 (C# console app)', 'Deploy project 2 (.NET web app)', 'Deploy project 3 (Python data project)'] },
+        ]
+      },
+      {
+        id: 'ph4', num: 'Phase 04', name: 'Interview Ready', color: 'var(--sage)',
+        dates: 'July–September 2025', accent: 'var(--sage)',
+        modules: [
+          { id: 'rm_4_1', title: '150 LeetCode Problems', sub: ['Complete 50 easy', 'Complete 75 medium', 'Complete 25 hard'] },
+          { id: 'rm_4_2', title: 'Mock Interviews', sub: ['Do 5 mock interviews on Pramp', 'Record 1 mock on video, review it', 'Practice STAR method for HR questions'] },
+          { id: 'rm_4_3', title: 'System Design Basics', sub: ['Understand load balancing, caching, CDN', 'Design a URL shortener', 'Design a simple chat app'] },
+          { id: 'rm_4_4', title: 'Resume + LinkedIn Polish', sub: ['Update all projects with GitHub links', 'Get resume reviewed by 1 senior', 'Reach 500+ LinkedIn connections'] },
+          { id: 'rm_4_5', title: 'Aptitude Full Mock Tests', sub: ['Take 10 full-length timed tests', 'Score >75% consistently', 'Do 1 company-specific test (Sierra ODC style)'] },
+        ]
+      }
+    ];
+
+    const PROJECTS_DATA = [
+      {
+        id: 'proj_personal', icon: '💡', name: 'Personal Project',
+        color: 'var(--gold)', colorDim: 'rgba(232,160,32,.1)',
+        desc: 'Something you build for yourself — tools, automations, things you wish existed.',
+        tasks: [
+          { id: 'pp1', label: 'Decide what problem to solve (brainstorm 5 ideas)', diff: 'easy' },
+          { id: 'pp2', label: 'Write requirements in a README.md', diff: 'easy' },
+          { id: 'pp3', label: 'Set up GitHub repo + initial commit', diff: 'easy' },
+          { id: 'pp4', label: 'Build basic UI or skeleton', diff: 'medium' },
+          { id: 'pp5', label: 'Implement core feature 1', diff: 'medium' },
+          { id: 'pp6', label: 'Implement core feature 2', diff: 'medium' },
+          { id: 'pp7', label: 'Add error handling & edge cases', diff: 'medium' },
+          { id: 'pp8', label: 'Write a proper README with screenshots', diff: 'easy' },
+          { id: 'pp9', label: 'Deploy (GitHub Pages / Netlify / Azure)', diff: 'hard' },
+          { id: 'pp10', label: 'Share on LinkedIn with a write-up', diff: 'easy' },
+        ]
+      },
+      {
+        id: 'proj_recruiter', icon: '🏢', name: 'Recruiter-Facing Project',
+        color: 'var(--teal)', colorDim: 'var(--tealdim)',
+        desc: 'A project companies will actually notice. Shows .NET, database, clean code.',
+        tasks: [
+          { id: 'rp1', label: 'Choose topic: CRUD app / REST API / task manager', diff: 'easy' },
+          { id: 'rp2', label: 'Design database schema (tables, relationships)', diff: 'medium' },
+          { id: 'rp3', label: 'Set up ASP.NET Core project structure', diff: 'medium' },
+          { id: 'rp4', label: 'Build Models and DbContext', diff: 'medium' },
+          { id: 'rp5', label: 'Implement GET endpoints', diff: 'medium' },
+          { id: 'rp6', label: 'Implement POST / PUT / DELETE endpoints', diff: 'medium' },
+          { id: 'rp7', label: 'Add authentication (basic JWT or identity)', diff: 'hard' },
+          { id: 'rp8', label: 'Write unit tests for core logic', diff: 'hard' },
+          { id: 'rp9', label: 'Add Swagger/OpenAPI documentation', diff: 'medium' },
+          { id: 'rp10', label: 'Deploy to free Azure App Service', diff: 'hard' },
+          { id: 'rp11', label: 'Write LinkedIn post: "I built this" with demo GIF', diff: 'easy' },
+        ]
+      },
+      {
+        id: 'proj_nature', icon: '🌿', name: 'Sustainability / Nature Tech',
+        color: 'var(--sage)', colorDim: 'var(--sagedim)',
+        desc: 'Tech for good — environmental, community, or sustainability focused.',
+        tasks: [
+          { id: 'np1', label: 'Brainstorm 3 nature/community problems tech can help', diff: 'easy' },
+          { id: 'np2', label: 'Research existing solutions (don\'t reinvent, improve)', diff: 'easy' },
+          { id: 'np3', label: 'Decide on 1 idea (e.g. local waste tracker, plant watering reminder)', diff: 'easy' },
+          { id: 'np4', label: 'Build MVP in 1 week with HTML/JS or .NET', diff: 'medium' },
+          { id: 'np5', label: 'Test with 3 real people, get feedback', diff: 'easy' },
+          { id: 'np6', label: 'Iterate based on feedback', diff: 'medium' },
+          { id: 'np7', label: 'Open source it on GitHub with good README', diff: 'easy' },
+          { id: 'np8', label: 'Submit to a hackathon or open source fair', diff: 'hard' },
+        ]
+      },
+      {
+        id: 'proj_art', icon: '🎨', name: 'Art / Creative Coding',
+        color: 'var(--lavender)', colorDim: 'var(--lavdim)',
+        desc: 'Code that creates beauty — generative art, music visualisers, interactive sketches.',
+        tasks: [
+          { id: 'ap1', label: 'Learn p5.js basics (1 YouTube tutorial)', diff: 'easy' },
+          { id: 'ap2', label: 'Recreate a simple generative art piece', diff: 'easy' },
+          { id: 'ap3', label: 'Build a music visualiser using Web Audio API', diff: 'medium' },
+          { id: 'ap4', label: 'Combine your art + code into 1 creative project', diff: 'medium' },
+          { id: 'ap5', label: 'Embed it on GitHub Pages and share', diff: 'easy' },
+          { id: 'ap6', label: 'Post on Instagram/Behance as "Creative Coder"', diff: 'easy' },
+        ]
+      }
+    ];
+
+    const FUTURE_DATA = [
+      {
+        id: 'fut_1', icon: '☁️🛡️', badge: '2–3 YRS AWAY',
+        title: 'Multicloud & Disaster Recovery Engineer',
+        desc: 'Ensures business continuity across AWS, GCP, Azure. Designs failover systems as companies escape vendor lock-in.',
+        salary: '₹18–35 LPA', color: 'var(--teal)',
+        steps: [
+          { id: 'fr1_1', label: 'Complete GCP Associate Cloud Engineer', year: '2025' },
+          { id: 'fr1_2', label: 'Complete AWS Cloud Practitioner', year: '2025' },
+          { id: 'fr1_3', label: 'Build disaster recovery project (multi-region)', year: '2026' },
+          { id: 'fr1_4', label: 'Get first cloud job (any cloud role)', year: '2026' },
+          { id: 'fr1_5', label: 'Learn Terraform & infrastructure as code', year: '2026' },
+          { id: 'fr1_6', label: 'Earn GCP Professional Cloud Architect', year: '2027' },
+        ],
+        skills: ['GCP', 'Azure', 'AWS', 'Terraform', 'Backup Systems', 'Failover Design']
+      },
+      {
+        id: 'fut_2', icon: '🔒📋', badge: '3–4 YRS AWAY',
+        title: 'Data Sovereignty & Compliance Engineer',
+        desc: 'Ensures data stays within legal jurisdictions (GDPR, India DPDP Act). Exploding in demand as global data regulations multiply.',
+        salary: '₹20–40 LPA', color: 'var(--lavender)',
+        steps: [
+          { id: 'fr2_1', label: 'Learn basics of GDPR and India DPDP Act', year: '2025' },
+          { id: 'fr2_2', label: 'Complete a cloud security course', year: '2025' },
+          { id: 'fr2_3', label: 'Get cloud certification (GCP/Azure)', year: '2026' },
+          { id: 'fr2_4', label: 'Work on a compliance-related project', year: '2026' },
+          { id: 'fr2_5', label: 'Earn CIPP or similar privacy cert', year: '2027' },
+        ],
+        skills: ['GDPR', 'DPDP Act', 'IAM', 'Cloud Policy', 'Audit Logs', 'Data Classification']
+      },
+      {
+        id: 'fut_3', icon: '🌐⚡', badge: '3–5 YRS AWAY',
+        title: 'Edge Computing & Decentralised Infra',
+        desc: 'Builds compute closer to users (IoT, 5G edge nodes). Critical for low-latency AI and smart cities.',
+        salary: '₹22–45 LPA', color: 'var(--sky)',
+        steps: [
+          { id: 'fr3_1', label: 'Learn Kubernetes fundamentals', year: '2025' },
+          { id: 'fr3_2', label: 'Build a containerised app with Docker', year: '2025' },
+          { id: 'fr3_3', label: 'Study IoT architecture and protocols (MQTT)', year: '2026' },
+          { id: 'fr3_4', label: 'Deploy an edge computing proof-of-concept', year: '2026' },
+          { id: 'fr3_5', label: 'Contribute to an open-source IoT project', year: '2027' },
+        ],
+        skills: ['Kubernetes', 'Docker', 'IoT', 'MQTT', '5G Edge', 'Microservices']
+      },
+      {
+        id: 'fut_4', icon: '🔐⚔️', badge: '3–4 YRS AWAY',
+        title: 'Cloud Security / Cyber Warfare Specialist',
+        desc: 'Protects cloud infra from nation-state attacks. Highest-paying specialisation. Demand militarising rapidly.',
+        salary: '₹25–60 LPA', color: 'var(--rose)',
+        steps: [
+          { id: 'fr4_1', label: 'Learn networking fundamentals (TCP/IP, DNS, TLS)', year: '2025' },
+          { id: 'fr4_2', label: 'Complete Google Cloud Security course', year: '2025' },
+          { id: 'fr4_3', label: 'Study penetration testing basics (TryHackMe free)', year: '2026' },
+          { id: 'fr4_4', label: 'Get CompTIA Security+ certification', year: '2026' },
+          { id: 'fr4_5', label: 'Work in a cloud security team for 1 year', year: '2027' },
+        ],
+        skills: ['Zero Trust', 'SIEM', 'Penetration Testing', 'IAM', 'Threat Modelling', 'SOC']
+      },
+      {
+        id: 'fut_5', icon: '🤖🚚', badge: '2–3 YRS AWAY',
+        title: 'AI Infra Relocation Engineer',
+        desc: 'Migrates AI workloads (LLM pipelines, GPU clusters) between clouds. Niche but premium as AI compute shifts geopolitically.',
+        salary: '₹28–55 LPA', color: 'var(--peach)',
+        steps: [
+          { id: 'fr5_1', label: 'Learn Docker and container orchestration', year: '2025' },
+          { id: 'fr5_2', label: 'Understand ML model deployment (HuggingFace, MLflow)', year: '2025' },
+          { id: 'fr5_3', label: 'Build a cloud migration project (.NET or Python)', year: '2026' },
+          { id: 'fr5_4', label: 'Learn MLOps concepts and pipelines', year: '2026' },
+          { id: 'fr5_5', label: 'Contribute to an AI infrastructure open source project', year: '2027' },
+        ],
+        skills: ['Docker', 'Python', '.NET', 'MLOps', 'Kubernetes', 'Cloud Migration', 'LLM Infra']
+      },
+    ];
+
+    // ═══════════ STATE ═══════════
+    let state = {};
+
+    function getState(key, def = false) { return key in state ? state[key] : def; }
+    function setState(key, val) { state[key] = val; persistState(); }
+
+    function persistState() {
+      try { localStorage.setItem('pp3_state', JSON.stringify(state)); } catch (e) { }
+      syncToSupabase();
     }
-    return false;
-  }catch(e){ return false; }
-}
 
-async function loadFromSupabase(){
-  if(!sbUrl||!sbKey) return;
-  try{
-    const res = await fetch(`${sbUrl}/rest/v1/progress?id=eq.user_main`, {
-      headers:{ 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
-    });
-    const data = await res.json();
-    if(data && data[0] && data[0].data){
-      state = {...data[0].data, ...state};
-      persistState();
+    function loadState() {
+      try {
+        const s = localStorage.getItem('pp3_state');
+        if (s) state = JSON.parse(s);
+      } catch (e) { state = {}; }
     }
-  }catch(e){}
-}
 
-function showSyncStatus(msg, type){
-  const el = document.getElementById('syncStatus');
-  if(!el) return;
-  el.textContent = msg;
-  el.className = 'sync-status ' + (type==='ok'?'sync-ok':type==='err'?'sync-err':'sync-pending');
-}
+    // ═══════════ SUPABASE ═══════════
+    let sbUrl = '', sbKey = '';
 
-// ═══════════ EXPORT / IMPORT ═══════════
-function exportData(){
-  const blob = new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'preppath-backup-' + new Date().toISOString().split('T')[0] + '.json';
-  a.click();
-}
+    function loadSupabaseCreds() {
+      sbUrl = localStorage.getItem('sb_url') || '';
+      sbKey = localStorage.getItem('sb_key') || '';
 
-function importData(e){
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    try{
-      state = JSON.parse(ev.target.result);
-      persistState();
-      location.reload();
-    }catch(err){ alert('Invalid JSON file'); }
-  };
-  reader.readAsText(file);
-}
+      // Fallback to deploy-time config so setup is one-time for all users/devices.
+      if ((!sbUrl || !sbKey) && window.PP_CONFIG) {
+        const cfgUrl = (window.PP_CONFIG.SUPABASE_URL || '').trim();
+        const cfgKey = (window.PP_CONFIG.SUPABASE_ANON_KEY || '').trim();
+        if (cfgUrl && cfgKey) {
+          sbUrl = cfgUrl;
+          sbKey = cfgKey;
+          try {
+            localStorage.setItem('sb_url', sbUrl);
+            localStorage.setItem('sb_key', sbKey);
+          } catch (e) { }
+        }
+      }
 
-// ═══════════ RENDER SCHEDULE ═══════════
-function renderSchedule(){
-  const nav = document.getElementById('dayNav');
-  const panels = document.getElementById('dayPanels');
-  nav.innerHTML=''; panels.innerHTML='';
-  const keys = ['mon','tue','wed','thu','fri','sat','sun'];
-  const todayKey = ['sun','mon','tue','wed','thu','fri','sat'][new Date().getDay()];
+      if (sbUrl && sbKey) {
+        document.getElementById('sbUrl').value = sbUrl;
+        document.getElementById('sbKey').value = sbKey;
+        showSyncStatus('Supabase is preconfigured for this deployment.', 'ok');
+      }
+    }
 
-  keys.forEach(k=>{
-    const d = DAYS_DATA[k];
-    const btn = document.createElement('button');
-    btn.className = 'day-btn ' + (d.color||'') + (k===todayKey?' active':'');
-    btn.id = 'dbtn-'+k;
-    btn.innerHTML = `<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${d.dot};margin-right:5px"></span>${d.label}`;
-    btn.onclick = ()=>switchDay(k);
-    nav.appendChild(btn);
+    async function saveSupabase() {
+      sbUrl = document.getElementById('sbUrl').value.trim();
+      sbKey = document.getElementById('sbKey').value.trim();
+      if (!sbUrl || !sbKey) { showSyncStatus('Enter both URL and key', 'err'); return; }
+      localStorage.setItem('sb_url', sbUrl);
+      localStorage.setItem('sb_key', sbKey);
+      showSyncStatus('Testing connection...', 'pending');
+      const ok = await syncToSupabase(true);
+      if (ok) showSyncStatus('✓ Connected! Progress syncs automatically across all devices.', 'ok');
+    }
 
-    const panel = document.createElement('div');
-    panel.id = 'dpanel-'+k;
-    panel.style.display = k===todayKey?'block':'none';
-    panel.innerHTML = renderDayHTML(k, d);
-    panels.appendChild(panel);
-  });
+    async function syncToSupabase(test = false) {
+      if (!sbUrl || !sbKey) return false;
+      try {
+        const res = await fetch(`${sbUrl}/rest/v1/progress`, {
+          method: 'POST',
+          headers: {
+            'apikey': sbKey,
+            'Authorization': `Bearer ${sbKey}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'resolution=merge-duplicates'
+          },
+          body: JSON.stringify({ id: 'user_main', data: state, updated_at: new Date().toISOString() })
+        });
+        if (res.ok) {
+          const badge = document.getElementById('syncBadge');
+          if (badge) { badge.style.display = 'flex'; badge.textContent = '☁ synced'; }
+          return true;
+        }
+        return false;
+      } catch (e) { return false; }
+    }
 
-  // events
-  document.querySelectorAll('.mcheck input').forEach(cb=>{
-    cb.addEventListener('change', e=>{
-      const id = e.target.id;
-      setState('chk_'+id, e.target.checked);
-      e.target.closest('.mcheck').classList.toggle('done', e.target.checked);
+    async function loadFromSupabase() {
+      if (!sbUrl || !sbKey) return;
+      try {
+        const res = await fetch(`${sbUrl}/rest/v1/progress?id=eq.user_main`, {
+          headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+        });
+        const data = await res.json();
+        if (data && data[0] && data[0].data) {
+          state = { ...data[0].data, ...state };
+          persistState();
+        }
+      } catch (e) { }
+    }
+
+    function showSyncStatus(msg, type) {
+      const el = document.getElementById('syncStatus');
+      if (!el) return;
+      el.textContent = msg;
+      el.className = 'sync-status ' + (type === 'ok' ? 'sync-ok' : type === 'err' ? 'sync-err' : 'sync-pending');
+    }
+
+    // ═══════════ EXPORT / IMPORT ═══════════
+    function exportData() {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'preppath-backup-' + new Date().toISOString().split('T')[0] + '.json';
+      a.click();
+    }
+
+    function importData(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        try {
+          state = JSON.parse(ev.target.result);
+          persistState();
+          location.reload();
+        } catch (err) { alert('Invalid JSON file'); }
+      };
+      reader.readAsText(file);
+    }
+
+    // ═══════════ RENDER SCHEDULE ═══════════
+    function renderSchedule() {
+      const nav = document.getElementById('dayNav');
+      const panels = document.getElementById('dayPanels');
+      nav.innerHTML = ''; panels.innerHTML = '';
+      const keys = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+      const todayKey = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][new Date().getDay()];
+
+      keys.forEach(k => {
+        const d = DAYS_DATA[k];
+        const btn = document.createElement('button');
+        btn.className = 'day-btn ' + (d.color || '') + (k === todayKey ? ' active' : '');
+        btn.id = 'dbtn-' + k;
+        btn.innerHTML = `<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${d.dot};margin-right:5px"></span>${d.label}`;
+        btn.onclick = () => switchDay(k);
+        nav.appendChild(btn);
+
+        const panel = document.createElement('div');
+        panel.id = 'dpanel-' + k;
+        panel.style.display = k === todayKey ? 'block' : 'none';
+        panel.innerHTML = renderDayHTML(k, d);
+        panels.appendChild(panel);
+      });
+
+      // events
+      document.querySelectorAll('.mcheck input').forEach(cb => {
+        cb.addEventListener('change', e => {
+          const id = e.target.id;
+          setState('chk_' + id, e.target.checked);
+          e.target.closest('.mcheck').classList.toggle('done', e.target.checked);
+          updateGlobalProgress();
+          showNotif('Saved');
+        });
+        const saved = getState('chk_' + cb.id);
+        if (saved) { cb.checked = true; cb.closest('.mcheck').classList.add('done'); }
+      });
       updateGlobalProgress();
-      showNotif('Saved');
-    });
-    const saved = getState('chk_'+cb.id);
-    if(saved){ cb.checked=true; cb.closest('.mcheck').classList.add('done'); }
-  });
-  updateGlobalProgress();
-}
+    }
 
-function renderDayHTML(k, d){
-  const blocksHTML = d.blocks.map(b=>{
-    const links = b.links ? `<div class="chips">${b.links.map(l=>`<a class="chip ${l.cls}" href="${l.href}" target="_blank">${l.label}</a>`).join('')}</div>` : '';
-    const check = b.id ? `<div class="mcheck"><input type="checkbox" id="${b.id}"><label for="${b.id}">Mark done</label></div>` : '';
-    return `
+    function renderDayHTML(k, d) {
+      const blocksHTML = d.blocks.map(b => {
+        const links = b.links ? `<div class="chips">${b.links.map(l => `<a class="chip ${l.cls}" href="${l.href}" target="_blank">${l.label}</a>`).join('')}</div>` : '';
+        const check = b.id ? `<div class="mcheck"><input type="checkbox" id="${b.id}"><label for="${b.id}">Mark done</label></div>` : '';
+        return `
       <div class="trow">
         <div class="tcol"><div class="tlbl">${b.time}</div></div>
         <div class="bcol">
           <div class="block ${b.cls}">
             <div class="bhead"><span class="tag tag-${b.tag}">${b.tag}</span><div class="btitle">${b.title}</div></div>
-            ${b.desc?`<div class="bdesc">${b.desc}</div>`:''}
+            ${b.desc ? `<div class="bdesc">${b.desc}</div>` : ''}
             ${links}${check}
           </div>
         </div>
       </div>`;
-  }).join('');
-  return `<div class="sched">${blocksHTML}</div>`;
-}
+      }).join('');
+      return `<div class="sched">${blocksHTML}</div>`;
+    }
 
-function switchDay(k){
-  document.querySelectorAll('.day-btn').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('[id^="dpanel-"]').forEach(p=>p.style.display='none');
-  document.getElementById('dbtn-'+k).classList.add('active');
-  document.getElementById('dpanel-'+k).style.display='block';
-  updateGlobalProgress();
-}
+    function switchDay(k) {
+      document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('[id^="dpanel-"]').forEach(p => p.style.display = 'none');
+      document.getElementById('dbtn-' + k).classList.add('active');
+      document.getElementById('dpanel-' + k).style.display = 'block';
+      updateGlobalProgress();
+    }
 
-// ═══════════ RENDER ROADMAP ═══════════
-function renderRoadmap(){
-  const grid = document.getElementById('roadmapGrid');
-  grid.innerHTML = ROADMAP_DATA.map(ph=>{
-    const totalSub = ph.modules.reduce((a,m)=>a+m.sub.length,0);
-    const doneSub = ph.modules.reduce((a,m)=>a+m.sub.filter((_,i)=>getState('rm_'+m.id+'_s'+i)).length,0);
-    const pct = totalSub ? Math.round(doneSub/totalSub*100) : 0;
+    // ═══════════ RENDER ROADMAP ═══════════
+    function renderRoadmap() {
+      const grid = document.getElementById('roadmapGrid');
+      grid.innerHTML = ROADMAP_DATA.map(ph => {
+        const totalSub = ph.modules.reduce((a, m) => a + m.sub.length, 0);
+        const doneSub = ph.modules.reduce((a, m) => a + m.sub.filter((_, i) => getState('rm_' + m.id + '_s' + i)).length, 0);
+        const pct = totalSub ? Math.round(doneSub / totalSub * 100) : 0;
 
-    const modsHTML = ph.modules.map(m=>{
-      const allDone = m.sub.every((_,i)=>getState('rm_'+m.id+'_s'+i));
-      const subHTML = m.sub.map((s,i)=>`
-        <div class="subtask ${getState('rm_'+m.id+'_s'+i)?'done':''}" onclick="toggleSub('${m.id}',${i},this)">
-          <input type="checkbox" ${getState('rm_'+m.id+'_s'+i)?'checked':''} onclick="event.stopPropagation()">
+        const modsHTML = ph.modules.map(m => {
+          const allDone = m.sub.every((_, i) => getState('rm_' + m.id + '_s' + i));
+          const subHTML = m.sub.map((s, i) => `
+        <div class="subtask ${getState('rm_' + m.id + '_s' + i) ? 'done' : ''}" onclick="toggleSub('${m.id}',${i},this)">
+          <input type="checkbox" ${getState('rm_' + m.id + '_s' + i) ? 'checked' : ''} onclick="event.stopPropagation()">
           <label>${s}</label>
         </div>`).join('');
-      return `
+          return `
         <div class="module">
           <div class="mod-head" onclick="toggleMod('${m.id}')">
-            <div class="mod-check ${allDone?'done':''}" id="modcheck-${m.id}"></div>
+            <div class="mod-check ${allDone ? 'done' : ''}" id="modcheck-${m.id}"></div>
             <div class="mod-title">${m.title}</div>
-            <div class="mod-badge" style="background:${ph.colorDim||'rgba(232,160,32,.08)'};border-color:rgba(232,160,32,.2);color:${ph.accent}">${m.sub.length} steps</div>
+            <div class="mod-badge" style="background:${ph.colorDim || 'rgba(232,160,32,.08)'};border-color:rgba(232,160,32,.2);color:${ph.accent}">${m.sub.length} steps</div>
           </div>
           <div class="subtasks" id="sub-${m.id}" style="display:none">${subHTML}</div>
         </div>`;
-    }).join('');
+        }).join('');
 
-    return `
+        return `
       <div class="phase-card" style="--ph-accent:${ph.accent}">
         <div class="phase-header" style="border-top:3px solid ${ph.accent}">
           <div class="phase-num">${ph.num}</div>
@@ -1210,47 +2477,47 @@ function renderRoadmap(){
         </div>
         <div class="phase-modules">${modsHTML}</div>
       </div>`;
-  }).join('');
-}
+      }).join('');
+    }
 
-function toggleMod(id){
-  const el = document.getElementById('sub-'+id);
-  if(el) el.style.display = el.style.display==='none'?'block':'none';
-}
+    function toggleMod(id) {
+      const el = document.getElementById('sub-' + id);
+      if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
 
-function toggleSub(modId, idx, el){
-  const key = 'rm_'+modId+'_s'+idx;
-  const newVal = !getState(key);
-  setState(key, newVal);
-  el.classList.toggle('done', newVal);
-  el.querySelector('input').checked = newVal;
-  // Update mod check
-  const m = ROADMAP_DATA.flatMap(p=>p.modules).find(m=>m.id===modId);
-  if(m){
-    const allDone = m.sub.every((_,i)=>getState('rm_'+modId+'_s'+i));
-    const mc = document.getElementById('modcheck-'+modId);
-    if(mc) mc.classList.toggle('done', allDone);
-  }
-  renderRoadmap(); // re-render to update progress bar
-  showNotif('Progress saved');
-}
+    function toggleSub(modId, idx, el) {
+      const key = 'rm_' + modId + '_s' + idx;
+      const newVal = !getState(key);
+      setState(key, newVal);
+      el.classList.toggle('done', newVal);
+      el.querySelector('input').checked = newVal;
+      // Update mod check
+      const m = ROADMAP_DATA.flatMap(p => p.modules).find(m => m.id === modId);
+      if (m) {
+        const allDone = m.sub.every((_, i) => getState('rm_' + modId + '_s' + i));
+        const mc = document.getElementById('modcheck-' + modId);
+        if (mc) mc.classList.toggle('done', allDone);
+      }
+      renderRoadmap(); // re-render to update progress bar
+      showNotif('Progress saved');
+    }
 
-// ═══════════ RENDER PROJECTS ═══════════
-function renderProjects(){
-  const grid = document.getElementById('projGrid');
-  grid.innerHTML = PROJECTS_DATA.map(proj=>{
-    const tasks = getProjectTasks(proj.id, proj.tasks);
-    const done = tasks.filter(t=>getState('pt_'+t.id)).length;
-    const pct = tasks.length ? Math.round(done/tasks.length*100) : 0;
+    // ═══════════ RENDER PROJECTS ═══════════
+    function renderProjects() {
+      const grid = document.getElementById('projGrid');
+      grid.innerHTML = PROJECTS_DATA.map(proj => {
+        const tasks = getProjectTasks(proj.id, proj.tasks);
+        const done = tasks.filter(t => getState('pt_' + t.id)).length;
+        const pct = tasks.length ? Math.round(done / tasks.length * 100) : 0;
 
-    const tasksHTML = tasks.map(t=>`
-      <div class="ptask ${getState('pt_'+t.id)?'done':''}" onclick="togglePTask('${t.id}',this)">
-        <input type="checkbox" ${getState('pt_'+t.id)?'checked':''} onclick="event.stopPropagation()">
+        const tasksHTML = tasks.map(t => `
+      <div class="ptask ${getState('pt_' + t.id) ? 'done' : ''}" onclick="togglePTask('${t.id}',this)">
+        <input type="checkbox" ${getState('pt_' + t.id) ? 'checked' : ''} onclick="event.stopPropagation()">
         <label>${t.label}</label>
-        <span class="ptask-diff diff-${t.diff||'easy'}">${t.diff||'easy'}</span>
+        <span class="ptask-diff diff-${t.diff || 'easy'}">${t.diff || 'easy'}</span>
       </div>`).join('');
 
-    return `
+        return `
       <div class="proj-card" style="border-top:3px solid ${proj.color}">
         <div class="proj-head">
           <div class="proj-icon">${proj.icon}</div>
@@ -1267,61 +2534,61 @@ function renderProjects(){
           <div class="pp2-lbl">${done}/${tasks.length} tasks · ${pct}%</div>
         </div>
       </div>`;
-  }).join('');
-}
+      }).join('');
+    }
 
-function getProjectTasks(projId, defaults){
-  const custom = state['custom_tasks_'+projId] || [];
-  return [...defaults, ...custom];
-}
+    function getProjectTasks(projId, defaults) {
+      const custom = state['custom_tasks_' + projId] || [];
+      return [...defaults, ...custom];
+    }
 
-function addCustomTask(projId){
-  const input = document.getElementById('addInput-'+projId);
-  const val = input.value.trim();
-  if(!val) return;
-  const custom = state['custom_tasks_'+projId] || [];
-  const id = projId+'_c'+Date.now();
-  custom.push({id, label:val, diff:'easy'});
-  state['custom_tasks_'+projId] = custom;
-  persistState();
-  input.value='';
-  renderProjects();
-  showNotif('Task added!');
-}
+    function addCustomTask(projId) {
+      const input = document.getElementById('addInput-' + projId);
+      const val = input.value.trim();
+      if (!val) return;
+      const custom = state['custom_tasks_' + projId] || [];
+      const id = projId + '_c' + Date.now();
+      custom.push({ id, label: val, diff: 'easy' });
+      state['custom_tasks_' + projId] = custom;
+      persistState();
+      input.value = '';
+      renderProjects();
+      showNotif('Task added!');
+    }
 
-function togglePTask(id, el){
-  const newVal = !getState('pt_'+id);
-  setState('pt_'+id, newVal);
-  el.classList.toggle('done', newVal);
-  el.querySelector('input').checked = newVal;
-  // Update progress bar
-  PROJECTS_DATA.forEach(proj=>{
-    const tasks = getProjectTasks(proj.id, proj.tasks);
-    const done = tasks.filter(t=>getState('pt_'+t.id)).length;
-    const pct = tasks.length ? Math.round(done/tasks.length*100) : 0;
-    const bar = document.getElementById('pp2f-'+proj.id);
-    if(bar) bar.style.width = pct+'%';
-    const lbl = bar?.closest('.proj-progress')?.querySelector('.pp2-lbl');
-    if(lbl) lbl.textContent = `${done}/${tasks.length} tasks · ${pct}%`;
-  });
-  showNotif('Saved');
-}
+    function togglePTask(id, el) {
+      const newVal = !getState('pt_' + id);
+      setState('pt_' + id, newVal);
+      el.classList.toggle('done', newVal);
+      el.querySelector('input').checked = newVal;
+      // Update progress bar
+      PROJECTS_DATA.forEach(proj => {
+        const tasks = getProjectTasks(proj.id, proj.tasks);
+        const done = tasks.filter(t => getState('pt_' + t.id)).length;
+        const pct = tasks.length ? Math.round(done / tasks.length * 100) : 0;
+        const bar = document.getElementById('pp2f-' + proj.id);
+        if (bar) bar.style.width = pct + '%';
+        const lbl = bar?.closest('.proj-progress')?.querySelector('.pp2-lbl');
+        if (lbl) lbl.textContent = `${done}/${tasks.length} tasks · ${pct}%`;
+      });
+      showNotif('Saved');
+    }
 
-// ═══════════ RENDER FUTURE ROLES ═══════════
-function renderFutureRoles(){
-  const grid = document.getElementById('futureGrid');
-  grid.innerHTML = FUTURE_DATA.map(role=>{
-    const done = role.steps.filter(s=>getState('fs_'+s.id)).length;
-    const pct = Math.round(done/role.steps.length*100);
-    const stepsHTML = role.steps.map(s=>`
-      <div class="fc-step ${getState('fs_'+s.id)?'done':''}" onclick="toggleFutureStep('${s.id}',this)">
-        <input type="checkbox" ${getState('fs_'+s.id)?'checked':''} onclick="event.stopPropagation()">
+    // ═══════════ RENDER FUTURE ROLES ═══════════
+    function renderFutureRoles() {
+      const grid = document.getElementById('futureGrid');
+      grid.innerHTML = FUTURE_DATA.map(role => {
+        const done = role.steps.filter(s => getState('fs_' + s.id)).length;
+        const pct = Math.round(done / role.steps.length * 100);
+        const stepsHTML = role.steps.map(s => `
+      <div class="fc-step ${getState('fs_' + s.id) ? 'done' : ''}" onclick="toggleFutureStep('${s.id}',this)">
+        <input type="checkbox" ${getState('fs_' + s.id) ? 'checked' : ''} onclick="event.stopPropagation()">
         <label>${s.label}</label>
         <span class="fc-year">${s.year}</span>
       </div>`).join('');
-    const skillsHTML = role.skills.map(sk=>`<span class="sk">${sk}</span>`).join('');
+        const skillsHTML = role.skills.map(sk => `<span class="sk">${sk}</span>`).join('');
 
-    return `
+        return `
       <div class="future-card">
         <div class="fc-head" style="border-top:3px solid ${role.color}">
           <div class="fc-icon">${role.icon}</div>
@@ -1340,132 +2607,133 @@ function renderFutureRoles(){
         </div>
         <div class="fc-skills">${skillsHTML}</div>
       </div>`;
-  }).join('');
-}
+      }).join('');
+    }
 
-function toggleFutureStep(id, el){
-  const newVal = !getState('fs_'+id);
-  setState('fs_'+id, newVal);
-  el.classList.toggle('done', newVal);
-  el.querySelector('input').checked = newVal;
-  renderFutureRoles();
-  showNotif('Progress saved');
-}
+    function toggleFutureStep(id, el) {
+      const newVal = !getState('fs_' + id);
+      setState('fs_' + id, newVal);
+      el.classList.toggle('done', newVal);
+      el.querySelector('input').checked = newVal;
+      renderFutureRoles();
+      showNotif('Progress saved');
+    }
 
-// ═══════════ PROGRESS ═══════════
-function updateGlobalProgress(){
-  const all = document.querySelectorAll('.mcheck input');
-  const done = document.querySelectorAll('.mcheck input:checked');
-  const pct = all.length ? Math.round(done.length/all.length*100) : 0;
-  document.getElementById('progFill').style.width = pct+'%';
-  document.getElementById('progPct').textContent = pct+'%';
-  document.getElementById('progCount').textContent = done.length+' / '+all.length;
-  // Ring
-  const ring = document.getElementById('mainRing');
-  const offset = 264 - (pct/100)*264;
-  ring.style.strokeDashoffset = offset;
-  document.getElementById('ringPct').textContent = pct+'%';
-}
+    // ═══════════ PROGRESS ═══════════
+    function updateGlobalProgress() {
+      const all = document.querySelectorAll('.mcheck input');
+      const done = document.querySelectorAll('.mcheck input:checked');
+      const pct = all.length ? Math.round(done.length / all.length * 100) : 0;
+      document.getElementById('progFill').style.width = pct + '%';
+      document.getElementById('progPct').textContent = pct + '%';
+      document.getElementById('progCount').textContent = done.length + ' / ' + all.length;
+      // Ring
+      const ring = document.getElementById('mainRing');
+      const offset = 264 - (pct / 100) * 264;
+      ring.style.strokeDashoffset = offset;
+      document.getElementById('ringPct').textContent = pct + '%';
+    }
 
-// ═══════════ COUNTDOWN ═══════════
-function updateCountdown(){
-  const target = new Date('2025-09-30');
-  const now = new Date();
-  const diff = Math.max(0, target-now);
-  const days = Math.floor(diff/86400000);
-  document.getElementById('cdM').textContent = Math.floor(days/30);
-  document.getElementById('cdW').textContent = Math.floor(days/7);
-  document.getElementById('cdD').textContent = days;
-  document.getElementById('daysLeft').textContent = days+' days left';
-}
+    // ═══════════ COUNTDOWN ═══════════
+    function updateCountdown() {
+      const target = new Date('2025-09-30');
+      const now = new Date();
+      const diff = Math.max(0, target - now);
+      const days = Math.floor(diff / 86400000);
+      document.getElementById('cdM').textContent = Math.floor(days / 30);
+      document.getElementById('cdW').textContent = Math.floor(days / 7);
+      document.getElementById('cdD').textContent = days;
+      document.getElementById('daysLeft').textContent = days + ' days left';
+    }
 
-// ═══════════ VERSE ═══════════
-const verses=[
-  {t:'"Come to me, all who are weary and burdened, and I will give you rest."',r:'— Matthew 11:28'},
-  {t:'"Commit your work to the Lord, and your plans will be established."',r:'— Proverbs 16:3'},
-  {t:'"For I know the plans I have for you — plans to prosper you."',r:'— Jeremiah 29:11'},
-  {t:'"Wisdom is the principal thing; therefore get wisdom."',r:'— Proverbs 4:7'},
-  {t:'"Whatever you do, work heartily, as for the Lord and not for men."',r:'— Colossians 3:23'},
-  {t:'"God has not given us a spirit of fear, but of power, love and a sound mind."',r:'— 2 Timothy 1:7'},
-  {t:'"I can do all things through Christ who strengthens me."',r:'— Philippians 4:13'},
-];
-function setVerse(){
-  const v=verses[new Date().getDay()];
-  document.getElementById('verseT').textContent=v.t;
-  document.getElementById('verseR').textContent=v.r;
-}
+    // ═══════════ VERSE ═══════════
+    const verses = [
+      { t: '"Come to me, all who are weary and burdened, and I will give you rest."', r: '— Matthew 11:28' },
+      { t: '"Commit your work to the Lord, and your plans will be established."', r: '— Proverbs 16:3' },
+      { t: '"For I know the plans I have for you — plans to prosper you."', r: '— Jeremiah 29:11' },
+      { t: '"Wisdom is the principal thing; therefore get wisdom."', r: '— Proverbs 4:7' },
+      { t: '"Whatever you do, work heartily, as for the Lord and not for men."', r: '— Colossians 3:23' },
+      { t: '"God has not given us a spirit of fear, but of power, love and a sound mind."', r: '— 2 Timothy 1:7' },
+      { t: '"I can do all things through Christ who strengthens me."', r: '— Philippians 4:13' },
+    ];
+    function setVerse() {
+      const v = verses[new Date().getDay()];
+      document.getElementById('verseT').textContent = v.t;
+      document.getElementById('verseR').textContent = v.r;
+    }
 
-// ═══════════ PAGE NAV ═══════════
-function showPage(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-  event.target.classList.add('active');
-  if(id==='roadmap') renderRoadmap();
-  if(id==='projects') renderProjects();
-  if(id==='future') renderFutureRoles();
-}
+    // ═══════════ PAGE NAV ═══════════
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('page-' + id).classList.add('active');
+      event.target.classList.add('active');
+      if (id === 'roadmap') renderRoadmap();
+      if (id === 'projects') renderProjects();
+      if (id === 'future') renderFutureRoles();
+    }
 
-// ═══════════ NOTIFICATION ═══════════
-function showNotif(msg='Saved'){
-  const n=document.getElementById('notif');
-  n.textContent='✓ '+msg;
-  n.classList.add('show');
-  clearTimeout(n._t);
-  n._t=setTimeout(()=>n.classList.remove('show'),1800);
-}
+    // ═══════════ NOTIFICATION ═══════════
+    function showNotif(msg = 'Saved') {
+      const n = document.getElementById('notif');
+      n.textContent = '✓ ' + msg;
+      n.classList.add('show');
+      clearTimeout(n._t);
+      n._t = setTimeout(() => n.classList.remove('show'), 1800);
+    }
 
-// ═══════════ INIT ═══════════
-document.addEventListener('DOMContentLoaded',async()=>{
-  loadState();
-  loadSupabaseCreds();
-  await loadFromSupabase();
-  renderSchedule();
-  updateCountdown();
-  setVerse();
-  setTimeout(updateGlobalProgress,100);
-});
-</script>
+    // ═══════════ INIT ═══════════
+    document.addEventListener('DOMContentLoaded', async () => {
+      loadState();
+      loadSupabaseCreds();
+      await loadFromSupabase();
+      renderSchedule();
+      updateCountdown();
+      setVerse();
+      setTimeout(updateGlobalProgress, 100);
+    });
+  </script>
 
-<!-- Service Worker Registration & PWA Install Prompt -->
-<script>
-(function () {
-  // Register service worker
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js')
-      .then((reg) => {
-        console.log('[PWA] Service worker registered:', reg.scope);
-        // Check for updates periodically
-        setInterval(() => reg.update(), 60000);
-      })
-      .catch((err) => console.log('[PWA] Service worker registration failed:', err));
-  }
+  <!-- Service Worker Registration & PWA Install Prompt -->
+  <script>
+    (function () {
+      // Register service worker
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+          .then((reg) => {
+            console.log('[PWA] Service worker registered:', reg.scope);
+            // Check for updates periodically
+            setInterval(() => reg.update(), 60000);
+          })
+          .catch((err) => console.log('[PWA] Service worker registration failed:', err));
+      }
 
-  // Handle PWA install prompt
-  let deferredPrompt;
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    console.log('[PWA] Install prompt available');
-  });
+      // Handle PWA install prompt
+      let deferredPrompt;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        console.log('[PWA] Install prompt available');
+      });
 
-  window.addEventListener('appinstalled', () => {
-    console.log('[PWA] App installed');
-    deferredPrompt = null;
-  });
-
-  // Show prompt when settings ask for it (optional)
-  window.showPwaInstallPrompt = () => {
-    const settings = PWA_UI?.getSettings?.() || {};
-    if (deferredPrompt && settings.showPwaPrompt !== false) {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(({ outcome }) => {
-        console.log(`[PWA] User response to install prompt: ${outcome}`);
+      window.addEventListener('appinstalled', () => {
+        console.log('[PWA] App installed');
         deferredPrompt = null;
       });
-    }
-  };
-})();
-</script>
+
+      // Show prompt when settings ask for it (optional)
+      window.showPwaInstallPrompt = () => {
+        const settings = PWA_UI?.getSettings?.() || {};
+        if (deferredPrompt && settings.showPwaPrompt !== false) {
+          deferredPrompt.prompt();
+          deferredPrompt.userChoice.then(({ outcome }) => {
+            console.log(`[PWA] User response to install prompt: ${outcome}`);
+            deferredPrompt = null;
+          });
+        }
+      };
+    })();
+  </script>
 </body>
+
 </html>

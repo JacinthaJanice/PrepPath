@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "description": "PrepPath study planner frontend",
   "scripts": {
-    "dev": "npx live-server --port=3000 --open=index.html",
+    "dev": "node node_modules/live-server/live-server.js --port=3000 --no-browser",
     "serve": "npx serve . -p 3000",
     "lint": "npx htmlhint index.html"
   },
