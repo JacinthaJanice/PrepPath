@@ -39,10 +39,16 @@ BACKEND_PID=$!
 (cd frontend && npm ci --prefer-offline --silent) &
 FRONTEND_PID=$!
 
-wait $BACKEND_PID && echo -e "${GREEN}✓${NC} Backend packages installed" \
+wait $BACKEND_PID
+BACKEND_EXIT=$?
+
+wait $FRONTEND_PID
+FRONTEND_EXIT=$?
+
+[ $BACKEND_EXIT -eq 0 ] && echo -e "${GREEN}✓${NC} Backend packages installed" \
   || { echo "❌ Backend install failed"; exit 1; }
 
-wait $FRONTEND_PID && echo -e "${GREEN}✓${NC} Frontend packages installed" \
+[ $FRONTEND_EXIT -eq 0 ] && echo -e "${GREEN}✓${NC} Frontend packages installed" \
   || { echo "❌ Frontend install failed"; exit 1; }
 
 # ── Create .env if missing ──
