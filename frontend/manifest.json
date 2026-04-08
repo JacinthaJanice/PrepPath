@@ -11,28 +11,20 @@
   "icons": [
     {
       "src": "PrepPath-icon.jpeg",
-      "sizes": "192x192",
+      "sizes": "768x768",
       "type": "image/jpeg",
       "purpose": "any"
     },
     {
       "src": "PrepPath-icon.jpeg",
-      "sizes": "512x512",
+      "sizes": "768x768",
       "type": "image/jpeg",
-      "purpose": "any"
+      "purpose": "maskable"
     }
   ],
   "categories": [
     "productivity",
     "education"
-  ],
-  "screenshots": [
-    {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'><rect fill='%230e0a06' width='540' height='720'/><rect fill='%23160f08' y='20' width='540' height='680' rx='20'/><text x='270' y='80' font-size='32' text-anchor='middle' fill='%23e8a020' font-family='serif' font-weight='bold'>PrepPath</text><text x='270' y='200' font-size='24' text-anchor='middle' fill='%23f5e8cc'>Track Your Placement Journey</text></svg>",
-      "sizes": "540x720",
-      "type": "image/svg+xml",
-      "form_factor": "narrow"
-    }
   ],
   "shortcuts": [
     {
