@@ -1,4 +1,3 @@
-
 # PrepPath v3 — Full Stack Setup Guide
 
 > Your personal placement preparation app with real database sync.
