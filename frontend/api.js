@@ -1,95 +1,220 @@
-// api.js — all backend communication
-// Falls back to localStorage if backend is unavailable
+// api.js — all data communication
+// Uses Supabase JS SDK directly for cross-device sync.
+// Falls back to localStorage when Supabase is unavailable.
 
 const API = (() => {
   const cfg = window.PP_CONFIG || {};
-  const BASE = cfg.BACKEND_URL || '';
   const USER = cfg.USER_ID || 'user_main';
 
-  async function request(method, path, body) {
-    if (!BASE) throw new Error('No backend URL configured');
-    const res = await fetch(`${BASE}${path}`, {
-      method,
-      headers: { 'Content-Type': 'application/json' },
-      body: body ? JSON.stringify(body) : undefined
+  // Initialise Supabase client (loaded via CDN before this script)
+  let sb = null;
+  if (cfg.SUPABASE_URL && cfg.SUPABASE_ANON_KEY && window.supabase) {
+    try {
+      sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+    } catch (e) {
+      console.warn('[API] Supabase init failed, using localStorage:', e.message);
+    }
+  }
+
+  // ── localStorage helpers ──────────────────────────────
+  function lsGet(key) {
+    try { return JSON.parse(localStorage.getItem(key) || 'null'); } catch { return null; }
+  }
+  function lsSet(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch {}
+  }
+
+  // ── UUID helper (works on HTTP and older browsers) ────
+  function uuid() {
+    if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID();
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      const r = Math.random() * 16 | 0;
+      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Request failed');
-    return data;
   }
 
   return {
-    // ── Progress ──────────────────────────────────
+    // ── Progress ──────────────────────────────────────────
     async loadProgress() {
-      try {
-        const { data } = await request('GET', `/api/progress/${USER}`);
-        return data?.state_data || {};
-      } catch {
-        // Fallback: localStorage
-        try { return JSON.parse(localStorage.getItem('pp3_state') || '{}'); } catch { return {}; }
+      if (sb) {
+        try {
+          const { data, error } = await sb
+            .from('progress')
+            .select('*')
+            .eq('user_id', USER)
+            .single();
+          if (!error && data) {
+            lsSet('pp3_state', data.state_data);
+            return data.state_data || {};
+          }
+        } catch {}
       }
+      return lsGet('pp3_state') || {};
     },
 
     async saveProgress(state) {
-      // Always save to localStorage first (instant)
-      try { localStorage.setItem('pp3_state', JSON.stringify(state)); } catch {}
-      // Then sync to backend
-      try {
-        await request('POST', `/api/progress/${USER}`, { state });
-        return true;
-      } catch { return false; }
+      lsSet('pp3_state', state);
+      if (sb) {
+        try {
+          const { error } = await sb
+            .from('progress')
+            .upsert(
+              { user_id: USER, state_data: state, updated_at: new Date().toISOString() },
+              { onConflict: 'user_id' }
+            );
+          return !error;
+        } catch {}
+      }
+      return false;
     },
 
-    // ── Custom Tasks ──────────────────────────────
+    // ── Custom Tasks ──────────────────────────────────────
     async getTasks() {
-      try {
-        const { data } = await request('GET', `/api/tasks/${USER}`);
-        return data || [];
-      } catch { return []; }
+      if (sb) {
+        try {
+          const { data, error } = await sb
+            .from('custom_tasks')
+            .select('*')
+            .eq('user_id', USER)
+            .order('created_at', { ascending: true });
+          if (!error) return data || [];
+        } catch {}
+      }
+      return lsGet('pp3_tasks') || [];
     },
 
     async addTask(project_id, label, difficulty = 'easy') {
-      try {
-        const { data } = await request('POST', `/api/tasks/${USER}`, { project_id, label, difficulty });
-        return data;
-      } catch { return null; }
+      if (sb) {
+        try {
+          const { data, error } = await sb
+            .from('custom_tasks')
+            .insert({
+              id: uuid(),
+              user_id: USER,
+              project_id,
+              label,
+              difficulty: difficulty || 'easy',
+              done: false,
+              created_at: new Date().toISOString()
+            })
+            .select()
+            .single();
+          if (!error) return data;
+        } catch {}
+      }
+      // localStorage fallback
+      const tasks = lsGet('pp3_tasks') || [];
+      const task = {
+        id: uuid(),
+        user_id: USER,
+        project_id,
+        label,
+        difficulty: difficulty || 'easy',
+        done: false,
+        created_at: new Date().toISOString()
+      };
+      tasks.push(task);
+      lsSet('pp3_tasks', tasks);
+      return task;
     },
 
     async toggleTask(taskId, done) {
-      try {
-        const { data } = await request('PATCH', `/api/tasks/${USER}/${taskId}`, { done });
-        return data;
-      } catch { return null; }
+      if (sb) {
+        try {
+          const { data, error } = await sb
+            .from('custom_tasks')
+            .update({ done, updated_at: new Date().toISOString() })
+            .eq('id', taskId)
+            .eq('user_id', USER)
+            .select()
+            .single();
+          if (!error) return data;
+        } catch {}
+      }
+      const tasks = lsGet('pp3_tasks') || [];
+      const task = tasks.find(t => t.id === taskId);
+      if (task) { task.done = done; lsSet('pp3_tasks', tasks); }
+      return task || null;
     },
 
     async deleteTask(taskId) {
-      try {
-        await request('DELETE', `/api/tasks/${USER}/${taskId}`);
-        return true;
-      } catch { return false; }
+      if (sb) {
+        try {
+          const { error } = await sb
+            .from('custom_tasks')
+            .delete()
+            .eq('id', taskId)
+            .eq('user_id', USER);
+          if (!error) return true;
+        } catch {}
+      }
+      lsSet('pp3_tasks', (lsGet('pp3_tasks') || []).filter(t => t.id !== taskId));
+      return true;
     },
 
-    // ── Journal ───────────────────────────────────
+    // ── Journal ───────────────────────────────────────────
     async getJournal() {
-      try {
-        const { data } = await request('GET', `/api/journal/${USER}`);
-        return data || [];
-      } catch { return []; }
+      if (sb) {
+        try {
+          const { data, error } = await sb
+            .from('journal')
+            .select('*')
+            .eq('user_id', USER)
+            .order('entry_date', { ascending: false })
+            .limit(30);
+          if (!error) return data || [];
+        } catch {}
+      }
+      return lsGet('pp3_journal') || [];
     },
 
     async saveJournal(entry) {
-      try {
-        const { data } = await request('POST', `/api/journal/${USER}`, entry);
-        return data;
-      } catch { return null; }
+      const today = new Date().toISOString().split('T')[0];
+      const payload = { ...entry, user_id: USER, entry_date: entry.entry_date || today, updated_at: new Date().toISOString() };
+      if (sb) {
+        try {
+          const { data, error } = await sb
+            .from('journal')
+            .upsert(payload, { onConflict: 'user_id,entry_date' })
+            .select()
+            .single();
+          if (!error) return data;
+        } catch {}
+      }
+      const journal = lsGet('pp3_journal') || [];
+      const idx = journal.findIndex(j => j.entry_date === payload.entry_date);
+      if (idx >= 0) journal[idx] = { ...journal[idx], ...payload };
+      else journal.unshift(payload);
+      lsSet('pp3_journal', journal);
+      return payload;
     },
 
-    // ── Stats ─────────────────────────────────────
+    // ── Stats ─────────────────────────────────────────────
     async getStats() {
-      try {
-        const { stats } = await request('GET', `/api/stats/${USER}`);
-        return stats;
-      } catch { return null; }
+      if (sb) {
+        try {
+          const [pRes, tRes, jRes] = await Promise.all([
+            sb.from('progress').select('state_data,updated_at').eq('user_id', USER).single(),
+            sb.from('custom_tasks').select('done').eq('user_id', USER),
+            sb.from('journal').select('entry_date').eq('user_id', USER).order('entry_date', { ascending: false })
+          ]);
+          const state = pRes.data?.state_data || {};
+          const tasks = tRes.data || [];
+          const journal = jRes.data || [];
+          return {
+            schedule_tasks_done:  Object.keys(state).filter(k => k.startsWith('chk_') && state[k]).length,
+            roadmap_steps_done:   Object.keys(state).filter(k => k.startsWith('rm_')  && state[k]).length,
+            future_steps_done:    Object.keys(state).filter(k => k.startsWith('fs_')  && state[k]).length,
+            project_tasks_done:   Object.keys(state).filter(k => k.startsWith('pt_')  && state[k]).length,
+            custom_tasks_total:   tasks.length,
+            custom_tasks_done:    tasks.filter(t => t.done).length,
+            journal_entries:      journal.length,
+            last_active:          pRes.data?.updated_at || null,
+            days_until_sept:      Math.max(0, Math.floor((new Date('2025-09-30') - new Date()) / 86400000))
+          };
+        } catch {}
+      }
+      return null;
     }
   };
 })();
