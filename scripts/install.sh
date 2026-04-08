@@ -29,29 +29,28 @@ fi
 echo -e "${GREEN}✓${NC} Node.js $(node -v)"
 echo -e "${GREEN}✓${NC} npm $(npm -v)"
 
-# ── Install backend deps ──
+# ── Install deps in parallel ──
 echo ""
-echo "📦 Installing backend dependencies..."
-cd backend
-npm install --silent
-echo -e "${GREEN}✓${NC} Backend packages installed"
+echo "📦 Installing backend and frontend dependencies in parallel..."
+
+(cd backend && npm ci --prefer-offline --silent) &
+BACKEND_PID=$!
+
+(cd frontend && npm ci --prefer-offline --silent) &
+FRONTEND_PID=$!
+
+wait $BACKEND_PID && echo -e "${GREEN}✓${NC} Backend packages installed" \
+  || { echo "❌ Backend install failed"; exit 1; }
+
+wait $FRONTEND_PID && echo -e "${GREEN}✓${NC} Frontend packages installed" \
+  || { echo "❌ Frontend install failed"; exit 1; }
 
 # ── Create .env if missing ──
-if [ ! -f .env ]; then
-  cp .env.example .env
+if [ ! -f backend/.env ]; then
+  cp backend/.env.example backend/.env
   echo -e "${YELLOW}⚠${NC}  Created backend/.env from template"
   echo -e "   👉 Edit backend/.env and fill in your Supabase URL and keys"
 fi
-
-cd ..
-
-# ── Install frontend deps ──
-echo ""
-echo "📦 Installing frontend dependencies..."
-cd frontend
-npm install --silent
-echo -e "${GREEN}✓${NC} Frontend packages installed"
-cd ..
 
 # ── Copy app file if not present ──
 if [ ! -f frontend/index.html ]; then
