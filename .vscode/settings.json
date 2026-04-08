@@ -1,0 +1,7 @@
+{
+  "files.associations": {
+    "database/setup.sql": "plaintext"
+  },
+  "mssql.intelliSense.enableIntelliSense": false,
+  "mssql.intelliSense.enableErrorChecking": false
+}
