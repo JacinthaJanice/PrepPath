@@ -34,8 +34,7 @@ const SYNC = (() => {
     async function loadSupabaseFromCDN() {
         return new Promise((resolve, reject) => {
             const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/module/index.js';
-            script.type = 'module';
+            script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.102.1/dist/umd/supabase.js';
             script.onload = resolve;
             script.onerror = reject;
             document.head.appendChild(script);
@@ -55,7 +54,7 @@ const SYNC = (() => {
         });
 
         if (error) throw error;
-        return { email, message: 'Check your email for the magic link!' };
+        return { email, message: 'Check your email for the secure sign-in link.' };
     }
 
     async function verifyMagicLink() {
