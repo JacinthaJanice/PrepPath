@@ -2852,8 +2852,9 @@
       // Mount the auth header UI
       AuthUI.mount('#auth-header');
 
-      // Check if user is already logged in (from magic link redirect)
+      // Check if user is already logged in (from sign-in callback)
       const user = await SYNC.verifyMagicLink();
+      const authMsg = SYNC.getAuthMessage();
 
       if (user) {
         console.log('✓ Logged in:', user.email);
@@ -2861,6 +2862,15 @@
         // This would enable real-time subscriptions for tasks, journal, and progress
       } else {
         console.log('ℹ Not logged in - using offline mode (localStorage)');
+      }
+
+      // Surface callback errors (for example, expired one-time link)
+      if (authMsg) {
+        const msgEl = document.getElementById('auth-message');
+        if (msgEl) {
+          msgEl.style.color = 'var(--rose, #fb7185)';
+          msgEl.textContent = `✗ ${authMsg}`;
+        }
       }
     })();
   </script>

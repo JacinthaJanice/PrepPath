@@ -9,6 +9,21 @@ const SYNC = (() => {
     let subscriptions = [];
     let syncStatus = 'disconnected'; // 'connected', 'syncing', 'error'
     let syncListeners = [];
+    let authMessage = '';
+
+    function setAuthMessage(message) {
+        authMessage = message || '';
+    }
+
+    function getAuthMessage() {
+        return authMessage;
+    }
+
+    function clearUrlHash() {
+        if (window.location.hash) {
+            history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
+    }
 
     // ── Initialize Supabase Client ──────────────────
     async function init() {
@@ -56,10 +71,11 @@ const SYNC = (() => {
         const client = await init();
         if (!client) throw new Error('Supabase not initialized');
 
+        const callbackUrl = window.location.origin + window.location.pathname;
         const { data, error } = await client.auth.signInWithOtp({
             email,
             options: {
-                emailRedirectTo: `${window.location.origin}/frontend/index.html`
+                emailRedirectTo: callbackUrl
             }
         });
 
@@ -71,11 +87,38 @@ const SYNC = (() => {
         const client = await init();
         if (!client) throw new Error('Supabase not initialized');
 
+        setAuthMessage('');
+
+        const hash = (window.location.hash || '').replace(/^#/, '');
+        const hashParams = new URLSearchParams(hash);
+        const callbackError = hashParams.get('error_code') || hashParams.get('error');
+        const callbackDescription = hashParams.get('error_description');
+
+        if (callbackError) {
+            if (callbackError === 'otp_expired') {
+                setAuthMessage('Sign-in link expired. Request a new sign-in link.');
+            } else if (callbackDescription) {
+                setAuthMessage(callbackDescription.replace(/\+/g, ' '));
+            } else {
+                setAuthMessage('Sign-in failed. Request a new sign-in link.');
+            }
+            setSyncStatus('error');
+            clearUrlHash();
+            return null;
+        }
+
         // Auto-verify if hash is present (Supabase redirect)
         const { data, error } = await client.auth.getSession();
+        if (error) {
+            setAuthMessage(error.message || 'Unable to verify sign-in link.');
+            setSyncStatus('error');
+            return null;
+        }
+
         if (data?.session) {
             currentUser = data.session.user;
             setSyncStatus('connected');
+            clearUrlHash();
             return currentUser;
         }
         return null;
@@ -284,6 +327,7 @@ const SYNC = (() => {
         verifyMagicLink,
         logOut,
         getCurrentUser,
+        getAuthMessage,
 
         // Subscriptions
         subscribeToProgress,
