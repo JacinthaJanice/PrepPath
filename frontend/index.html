@@ -1606,10 +1606,15 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.102.1/dist/umd/supabase.js"></script>
   <script src="config.js"></script>
   <script src="api.js"></script>
+  <script src="realtime-sync.js"></script>
+  <script src="auth-ui.js"></script>
 </head>
 
 <body>
   <div class="wrap">
+
+    <!-- AUTH HEADER (Real-Time Sync UI) -->
+    <div id="auth-header"></div>
 
     <!-- HEADER -->
     <header>
@@ -2840,6 +2845,23 @@
         const installBtnSettings = document.getElementById('installBtnSettings');
         if (installBtnSettings) installBtnSettings.style.display = 'none';
       });
+    })();
+
+    // ── Initialize Auth UI and Real-Time Sync ──────────────
+    (async () => {
+      // Mount the auth header UI
+      AuthUI.mount('#auth-header');
+
+      // Check if user is already logged in (from magic link redirect)
+      const user = await SYNC.verifyMagicLink();
+
+      if (user) {
+        console.log('✓ Logged in:', user.email);
+        // TODO: Optional - call initializeAllSync() from REALTIME_SYNC_GUIDE.js
+        // This would enable real-time subscriptions for tasks, journal, and progress
+      } else {
+        console.log('ℹ Not logged in - using offline mode (localStorage)');
+      }
     })();
   </script>
   <script src="pwa-ui.js"></script>
