@@ -138,7 +138,7 @@ const AuthUI = (() => {
       msg.style.color = 'var(--rose, #fb7185)';
       const reason = (error && error.message ? error.message : '').toLowerCase();
       if (reason.includes('invalid api key')) {
-        msg.textContent = '✗ Sign-in setup incomplete. Update SUPABASE_ANON_KEY in config.js.';
+        msg.textContent = '✗ Sign-in setup incomplete. Update the Supabase URL/key in Sync Setup.';
       } else {
         msg.textContent = `✗ ${error.message}`;
       }

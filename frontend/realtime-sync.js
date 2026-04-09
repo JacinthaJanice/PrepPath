@@ -3,8 +3,6 @@
 
 const SYNC = (() => {
     const cfg = window.PP_CONFIG || {};
-    const SUPABASE_URL = cfg.SUPABASE_URL;
-    const SUPABASE_ANON_KEY = cfg.SUPABASE_ANON_KEY;
 
     let supabaseClient = null;
     let currentUser = null;
@@ -16,7 +14,19 @@ const SYNC = (() => {
     async function init() {
         if (supabaseClient) return supabaseClient;
 
-        if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+        // Prefer credentials saved in app settings, then fall back to config.js
+        let supabaseUrl = '';
+        let supabaseAnonKey = '';
+        try {
+            supabaseUrl = (localStorage.getItem('sb_url') || '').trim();
+            supabaseAnonKey = (localStorage.getItem('sb_key') || '').trim();
+        } catch (e) {
+            // Ignore storage access issues and continue with config fallback.
+        }
+        if (!supabaseUrl) supabaseUrl = (cfg.SUPABASE_URL || '').trim();
+        if (!supabaseAnonKey) supabaseAnonKey = (cfg.SUPABASE_ANON_KEY || '').trim();
+
+        if (!supabaseUrl || !supabaseAnonKey) {
             console.error('✗ Supabase credentials missing in config.js');
             return null;
         }
@@ -26,7 +36,7 @@ const SYNC = (() => {
             await loadSupabaseFromCDN();
         }
 
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
         setSyncStatus('connected');
         return supabaseClient;
     }
