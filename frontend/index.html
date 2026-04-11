@@ -396,6 +396,119 @@
       letter-spacing: 1px
     }
 
+    /* ── STREAK CARD ── */
+    .streak-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r2);
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .streak-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--rose), transparent);
+    }
+
+    .streak-card.type1::before {
+      background: linear-gradient(90deg, #f97316, #fbbf24, transparent);
+    }
+
+    .streak-card.type2::before {
+      background: linear-gradient(90deg, var(--sage), transparent);
+    }
+
+    .streak-card.type3::before {
+      background: linear-gradient(90deg, var(--muted), transparent);
+    }
+
+    .streak-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .6rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .streak-main {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .streak-emoji {
+      font-size: 2.2rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .streak-count-wrap {
+      flex: 1;
+    }
+
+    .streak-count {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--gold2);
+      line-height: 1;
+    }
+
+    .streak-card.type1 .streak-count { color: #f97316; }
+    .streak-card.type2 .streak-count { color: var(--sage); }
+    .streak-card.type3 .streak-count { color: var(--muted); }
+
+    .streak-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .55rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 2px;
+    }
+
+    .streak-status {
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--text2);
+      margin-bottom: 8px;
+    }
+
+    .streak-card.type1 .streak-status { color: #f97316; }
+    .streak-card.type2 .streak-status { color: var(--sage); }
+    .streak-card.type3 .streak-status { color: var(--muted); }
+
+    .streak-sub {
+      font-size: .72rem;
+      color: var(--muted);
+    }
+
+    .streak-dots {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .streak-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      background: var(--border2);
+    }
+
+    .streak-dot.t1 { background: #f97316; }
+    .streak-dot.t2 { background: var(--sage); }
+    .streak-dot.t3 { background: var(--border2); }
+
     /* Day nav */
     .day-nav {
       display: flex;
@@ -1673,6 +1786,21 @@
             </div>
           </div>
 
+          <!-- Daily Streak Card -->
+          <div class="streak-card" id="streakCard">
+            <div class="streak-title">Daily Streak</div>
+            <div class="streak-main">
+              <div class="streak-emoji" id="streakEmoji">🔥</div>
+              <div class="streak-count-wrap">
+                <div class="streak-count" id="streakCount">0</div>
+                <div class="streak-label">day streak</div>
+              </div>
+            </div>
+            <div class="streak-status" id="streakStatus">Start your streak!</div>
+            <div class="streak-sub" id="streakSub">Complete tasks today to begin.</div>
+            <div class="streak-dots" id="streakDots"></div>
+          </div>
+
           <div class="card">
             <div class="card-title">Focus Tracks</div>
             <div class="track">
@@ -2724,6 +2852,97 @@
       const offset = 264 - (pct / 100) * 264;
       ring.style.strokeDashoffset = offset;
       document.getElementById('ringPct').textContent = pct + '%';
+      // Update streak
+      updateStreakForToday(pct, all.length);
+      updateStreakDisplay();
+    }
+
+    // ═══════════ STREAK ═══════════
+    function todayStr() {
+      return new Date().toISOString().split('T')[0];
+    }
+
+    function getStreakType(pct, total) {
+      if (total === 0) return 0; // no tasks — don't count
+      if (pct === 100) return 1;
+      if (pct > 0) return 2;
+      return 3;
+    }
+
+    function updateStreakForToday(pct, total) {
+      if (total === 0) return; // schedule has no checkboxes on this day view
+      const history = state.streak_history || {};
+      const today = todayStr();
+      const type = getStreakType(pct, total);
+      // Only update if it changed
+      const existing = history[today];
+      if (!existing || existing.pct !== pct || existing.type !== type) {
+        history[today] = { pct, type };
+        state.streak_history = history;
+        persistState();
+      }
+    }
+
+    function updateStreakDisplay() {
+      const history = state.streak_history || {};
+      const today = todayStr();
+      const todayEntry = history[today];
+      const todayType = todayEntry ? todayEntry.type : 3;
+      const todayPct = todayEntry ? todayEntry.pct : 0;
+
+      // Calculate current consecutive streak (walk backwards from today)
+      let streak = 0;
+      let d = new Date(today);
+      for (let i = 0; i < 365; i++) {
+        const dk = d.toISOString().split('T')[0];
+        const e = history[dk];
+        if (e && (e.type === 1 || e.type === 2)) {
+          streak++;
+        } else {
+          break;
+        }
+        d.setDate(d.getDate() - 1);
+      }
+
+      const card = document.getElementById('streakCard');
+      const emoji = document.getElementById('streakEmoji');
+      const count = document.getElementById('streakCount');
+      const status = document.getElementById('streakStatus');
+      const sub = document.getElementById('streakSub');
+      const dots = document.getElementById('streakDots');
+
+      // Set type class
+      card.classList.remove('type1', 'type2', 'type3');
+      card.classList.add('type' + (todayType || 3));
+
+      count.textContent = streak;
+
+      if (todayType === 1) {
+        emoji.textContent = '🔥';
+        status.textContent = 'Full streak! All done!';
+        sub.textContent = todayPct + '% — every task completed today. Keep it up!';
+      } else if (todayType === 2) {
+        emoji.textContent = '🌱';
+        status.textContent = 'Partial streak — keep going!';
+        sub.textContent = todayPct + '% done today. Finish the rest to hit 🔥';
+      } else {
+        emoji.textContent = '😴';
+        status.textContent = streak > 0 ? 'Streak at risk!' : 'Start your streak!';
+        sub.textContent = streak > 0 ? 'Your ' + streak + '-day streak is at risk — complete tasks today to continue!' : 'Complete at least one task today to begin.';
+      }
+
+      // Last 7 days dots
+      dots.innerHTML = '';
+      for (let i = 6; i >= 0; i--) {
+        const dd = new Date(today);
+        dd.setDate(dd.getDate() - i);
+        const dk = dd.toISOString().split('T')[0];
+        const e = history[dk];
+        const dot = document.createElement('div');
+        dot.className = 'streak-dot' + (e ? ' t' + e.type : ' t3');
+        dot.title = dk + (e ? ' · ' + e.pct + '%' : ' · no activity');
+        dots.appendChild(dot);
+      }
     }
 
     // ═══════════ COUNTDOWN ═══════════
@@ -2783,7 +3002,7 @@
       renderSchedule();
       updateCountdown();
       setVerse();
-      setTimeout(updateGlobalProgress, 100);
+      setTimeout(() => { updateGlobalProgress(); updateStreakDisplay(); }, 100);
     });
   </script>
 
