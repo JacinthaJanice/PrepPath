@@ -72,11 +72,13 @@ const SYNC = (() => {
         if (!client) throw new Error('Supabase not initialized');
 
         const callbackUrl = window.location.origin + window.location.pathname;
+        // Only set emailRedirectTo for valid HTTP/HTTPS URLs (not file://)
+        const redirectOptions = callbackUrl.startsWith('http')
+            ? { emailRedirectTo: callbackUrl }
+            : {};
         const { data, error } = await client.auth.signInWithOtp({
             email,
-            options: {
-                emailRedirectTo: callbackUrl
-            }
+            options: redirectOptions
         });
 
         if (error) throw error;
