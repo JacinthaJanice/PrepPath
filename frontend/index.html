@@ -2598,7 +2598,7 @@
       const panels = document.getElementById('dayPanels');
       nav.innerHTML = ''; panels.innerHTML = '';
       const keys = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
-      const todayKey = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][new Date().getDay()];
+      const todayKey = getDayKey();
 
       keys.forEach(k => {
         const d = DAYS_DATA[k];
@@ -2841,25 +2841,36 @@
 
     // ═══════════ PROGRESS ═══════════
     function updateGlobalProgress() {
+      // Today's tasks only — for the "Today's Tasks" bar and the streak
+      const todayPanel = document.getElementById('dpanel-' + getDayKey());
+      const todayAll = todayPanel ? Array.from(todayPanel.querySelectorAll('.mcheck input')) : [];
+      const todayDone = todayAll.filter(el => el.checked);
+      const todayPct = todayAll.length ? Math.round(todayDone.length / todayAll.length * 100) : 0;
+
+      document.getElementById('progFill').style.width = todayPct + '%';
+      document.getElementById('progPct').textContent = todayPct + '%';
+      document.getElementById('progCount').textContent = todayDone.length + ' / ' + todayAll.length;
+
+      // Ring shows overall weekly progress (all days combined)
       const all = document.querySelectorAll('.mcheck input');
       const done = document.querySelectorAll('.mcheck input:checked');
-      const pct = all.length ? Math.round(done.length / all.length * 100) : 0;
-      document.getElementById('progFill').style.width = pct + '%';
-      document.getElementById('progPct').textContent = pct + '%';
-      document.getElementById('progCount').textContent = done.length + ' / ' + all.length;
-      // Ring
+      const weeklyPct = all.length ? Math.round(done.length / all.length * 100) : 0;
       const ring = document.getElementById('mainRing');
-      const offset = 264 - (pct / 100) * 264;
-      ring.style.strokeDashoffset = offset;
-      document.getElementById('ringPct').textContent = pct + '%';
-      // Update streak
-      updateStreakForToday(pct, all.length);
+      ring.style.strokeDashoffset = 264 - (weeklyPct / 100) * 264;
+      document.getElementById('ringPct').textContent = weeklyPct + '%';
+
+      // Streak is based on today's tasks only, not the weekly average
+      updateStreakForToday(todayPct, todayAll.length);
       updateStreakDisplay();
     }
 
     // ═══════════ STREAK ═══════════
     function todayStr() {
       return new Date().toISOString().split('T')[0];
+    }
+
+    function getDayKey() {
+      return ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][new Date().getDay()];
     }
 
     function getStreakType(pct, total) {
@@ -3077,6 +3088,8 @@
 
       if (user) {
         console.log('✓ Logged in:', user.email);
+        // Re-render the auth header to show the logged-in state (email + logout button)
+        AuthUI.mount('#auth-header');
         // TODO: Optional - call initializeAllSync() from REALTIME_SYNC_GUIDE.js
         // This would enable real-time subscriptions for tasks, journal, and progress
       } else {
