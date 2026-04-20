@@ -3090,8 +3090,7 @@
         console.log('✓ Logged in:', user.email);
         // Re-render the auth header to show the logged-in state (email + logout button)
         AuthUI.mount('#auth-header');
-        // TODO: Optional - call initializeAllSync() from REALTIME_SYNC_GUIDE.js
-        // This would enable real-time subscriptions for tasks, journal, and progress
+        // Real-time subscriptions can be enabled here if needed
       } else {
         console.log('ℹ Not logged in - using offline mode (localStorage)');
       }
