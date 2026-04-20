@@ -1,13 +1,12 @@
 // Service Worker for PrepPath PWA
 // Handles caching, offline support, and background sync
 
-const CACHE_NAME = 'preppath-v4';
+const CACHE_NAME = 'preppath-v5';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/config.js',
   '/api.js',
-  '/pwa-ui.js',
   '/sw.js',
   '/manifest.json',
   'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.102.1/dist/umd/supabase.js',
