@@ -1732,446 +1732,6 @@
     .page.active>* {
       animation: fadeUp .3s ease both
     }
-
-    /* ── LOADING OVERLAY ── */
-    #loadOverlay {
-      position: fixed;
-      inset: 0;
-      background: var(--bg);
-      z-index: 9998;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      transition: opacity .4s
-    }
-
-    #loadOverlay.out {
-      opacity: 0;
-      pointer-events: none
-    }
-
-    .load-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.5rem;
-      font-weight: 900;
-      color: var(--gold2)
-    }
-
-    .load-logo span {
-      color: var(--teal)
-    }
-
-    .load-spin {
-      width: 32px;
-      height: 32px;
-      border: 3px solid var(--border2);
-      border-top-color: var(--gold);
-      border-radius: 50%;
-      animation: spin .8s linear infinite
-    }
-
-    .load-txt {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .62rem;
-      color: var(--muted);
-      letter-spacing: 2px;
-      text-transform: uppercase
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg)
-      }
-    }
-
-    /* ── AUTH SCREEN ── */
-    #authScreen {
-      position: fixed;
-      inset: 0;
-      z-index: 9997;
-      background: var(--bg);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px
-    }
-
-    #authScreen.show {
-      display: flex
-    }
-
-    .auth-box {
-      width: 100%;
-      max-width: 420px;
-      background: var(--surface);
-      border: 1px solid var(--border2);
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 40px 80px rgba(0, 0, 0, .7);
-      animation: fadeUp .4s ease
-    }
-
-    .auth-top {
-      padding: 30px 32px 22px;
-      background: linear-gradient(135deg, var(--surface2), var(--surface));
-      border-bottom: 1px solid var(--border);
-      text-align: center
-    }
-
-    .auth-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 2rem;
-      font-weight: 900;
-      color: var(--gold2);
-      margin-bottom: 2px
-    }
-
-    .auth-logo span {
-      color: var(--teal)
-    }
-
-    .auth-tag {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .58rem;
-      color: var(--muted);
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 14px
-    }
-
-    .auth-verse {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-size: .8rem;
-      color: var(--faith);
-      line-height: 1.5
-    }
-
-    .auth-body {
-      padding: 26px 32px
-    }
-
-    .cfg-warn {
-      display: none;
-      background: var(--rosedim);
-      border: 1px solid rgba(251, 113, 133, .3);
-      border-radius: 8px;
-      padding: 12px 14px;
-      margin-bottom: 16px;
-      font-size: .74rem;
-      color: var(--rose);
-      line-height: 1.5
-    }
-
-    .cfg-warn.show {
-      display: block
-    }
-
-    .cfg-warn code {
-      background: rgba(251, 113, 133, .15);
-      padding: 1px 5px;
-      border-radius: 4px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .7rem
-    }
-
-    .auth-tabs {
-      display: flex;
-      gap: 4px;
-      background: var(--surface2);
-      border-radius: 10px;
-      padding: 4px;
-      margin-bottom: 22px
-    }
-
-    .auth-tab {
-      flex: 1;
-      padding: 8px;
-      border: none;
-      background: transparent;
-      border-radius: 7px;
-      cursor: pointer;
-      font-family: 'Syne', sans-serif;
-      font-size: .82rem;
-      font-weight: 600;
-      color: var(--muted);
-      transition: all .2s
-    }
-
-    .auth-tab.active {
-      background: var(--gold);
-      color: #1a0a00
-    }
-
-    .auth-panel {
-      display: none
-    }
-
-    .auth-panel.active {
-      display: block
-    }
-
-    .auth-field {
-      margin-bottom: 13px
-    }
-
-    .auth-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .58rem;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 5px;
-      display: block
-    }
-
-    .auth-input {
-      width: 100%;
-      background: var(--surface2);
-      border: 1px solid var(--border2);
-      border-radius: 9px;
-      padding: 11px 13px;
-      color: var(--text);
-      font-family: 'Syne', sans-serif;
-      font-size: .86rem;
-      outline: none;
-      transition: border-color .2s
-    }
-
-    .auth-input:focus {
-      border-color: var(--gold)
-    }
-
-    .auth-input::placeholder {
-      color: var(--muted)
-    }
-
-    .auth-btn {
-      width: 100%;
-      background: var(--gold);
-      color: #1a0a00;
-      border: none;
-      border-radius: 9px;
-      padding: 12px;
-      font-family: 'Syne', sans-serif;
-      font-size: .88rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all .2s;
-      margin-top: 4px
-    }
-
-    .auth-btn:hover {
-      background: var(--gold2);
-      transform: translateY(-1px)
-    }
-
-    .auth-btn:disabled {
-      opacity: .5;
-      cursor: not-allowed;
-      transform: none
-    }
-
-    .auth-div {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 14px 0;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .58rem;
-      color: var(--muted)
-    }
-
-    .auth-div::before,
-    .auth-div::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border)
-    }
-
-    .auth-google {
-      width: 100%;
-      background: var(--surface2);
-      color: var(--text);
-      border: 1px solid var(--border2);
-      border-radius: 9px;
-      padding: 11px;
-      font-family: 'Syne', sans-serif;
-      font-size: .84rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all .2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px
-    }
-
-    .auth-google:hover {
-      border-color: var(--gold);
-      background: var(--surface3)
-    }
-
-    .auth-msg {
-      margin-top: 11px;
-      padding: 9px 13px;
-      border-radius: 8px;
-      font-size: .76rem;
-      line-height: 1.5;
-      display: none
-    }
-
-    .auth-msg.err {
-      background: var(--rosedim);
-      border: 1px solid rgba(251, 113, 133, .3);
-      color: var(--rose);
-      display: block
-    }
-
-    .auth-msg.ok {
-      background: var(--sagedim);
-      border: 1px solid rgba(134, 239, 172, .3);
-      color: var(--sage);
-      display: block
-    }
-
-    .auth-forgot {
-      text-align: right;
-      margin-top: -6px;
-      margin-bottom: 12px;
-      font-size: .72rem;
-      color: var(--teal);
-      cursor: pointer
-    }
-
-    .auth-forgot:hover {
-      text-decoration: underline
-    }
-
-    /* Email confirm */
-    #confirmScreen {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      background: var(--bg);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px
-    }
-
-    #confirmScreen.show {
-      display: flex
-    }
-
-    .confirm-box {
-      max-width: 360px;
-      text-align: center;
-      background: var(--surface);
-      border: 1px solid var(--border2);
-      border-radius: 20px;
-      padding: 38px 30px;
-      animation: fadeUp .4s ease
-    }
-
-    .confirm-icon {
-      font-size: 3rem;
-      margin-bottom: 14px
-    }
-
-    .confirm-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--gold2);
-      margin-bottom: 10px
-    }
-
-    .confirm-text {
-      font-size: .8rem;
-      color: var(--text2);
-      line-height: 1.6;
-      margin-bottom: 20px
-    }
-
-    .confirm-email {
-      color: var(--teal);
-      font-weight: 600
-    }
-
-    /* User menu */
-    .user-menu {
-      position: fixed;
-      top: 58px;
-      right: 16px;
-      z-index: 500;
-      background: var(--surface);
-      border: 1px solid var(--border2);
-      border-radius: 12px;
-      padding: 8px;
-      min-width: 210px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, .6);
-      display: none;
-      animation: fadeUp .2s ease
-    }
-
-    .user-menu.open {
-      display: block
-    }
-
-    .u-email {
-      font-size: .68rem;
-      color: var(--muted);
-      padding: 8px 12px 10px;
-      border-bottom: 1px solid var(--border);
-      font-family: 'JetBrains Mono', monospace;
-      word-break: break-all
-    }
-
-    .u-btn {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      width: 100%;
-      padding: 9px 12px;
-      border: none;
-      background: transparent;
-      color: var(--text2);
-      font-family: 'Syne', sans-serif;
-      font-size: .82rem;
-      cursor: pointer;
-      border-radius: 8px;
-      transition: background .15s;
-      text-align: left
-    }
-
-    .u-btn:hover {
-      background: var(--surface2)
-    }
-
-    .u-btn.danger {
-      color: var(--rose)
-    }
-
-    .user-avatar {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background: var(--gold);
-      color: #1a0a00;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: .75rem;
-      cursor: pointer;
-      font-family: 'Syne', sans-serif;
-      flex-shrink: 0;
-      border: 2px solid var(--gold2)
-    }
   </style>
   <meta name="theme-color" content="#e8a020">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -2188,111 +1748,7 @@
 </head>
 
 <body>
-  <!-- LOADING -->
-  <div id="loadOverlay">
-    <div class="load-logo">Prep<span>Path</span></div>
-    <div class="load-spin"></div>
-    <div class="load-txt">Loading your journey...</div>
-  </div>
-
-  <!-- AUTH SCREEN -->
-  <div id="authScreen">
-    <div class="auth-box">
-      <div class="auth-top">
-        <div class="auth-logo">Prep<span>Path</span></div>
-        <div class="auth-tag">Sierra ODC · Campus · Sept 2025</div>
-        <div class="auth-verse">"I can do all things through Christ who strengthens me." — Phil 4:13</div>
-      </div>
-      <div class="auth-body">
-        <div class="cfg-warn" id="cfgWarn">
-          ⚠ Supabase not configured. Open this file and set <code>SUPABASE_URL</code> and <code>SUPABASE_ANON_KEY</code>
-          at the top of the &lt;script&gt; section, then reload.
-        </div>
-
-        <div class="auth-tabs">
-          <button class="auth-tab active" onclick="switchAuthTab('login')">Sign In</button>
-          <button class="auth-tab" onclick="switchAuthTab('signup')">Sign Up</button>
-        </div>
-
-        <!-- LOGIN -->
-        <div class="auth-panel active" id="panelLogin">
-          <div class="auth-field"><label class="auth-label">Email</label><input class="auth-input" id="loginEmail"
-              type="email" placeholder="you@example.com" autocomplete="email"></div>
-          <div class="auth-field"><label class="auth-label">Password</label><input class="auth-input" id="loginPass"
-              type="password" placeholder="••••••••" autocomplete="current-password"
-              onkeydown="if(event.key==='Enter')doLogin()"></div>
-          <div class="auth-forgot" onclick="doForgot()">Forgot password?</div>
-          <button class="auth-btn" id="loginBtn" onclick="doLogin()">Sign In</button>
-          <div class="auth-div">or</div>
-          <button class="auth-google" onclick="doGoogle()">
-            <svg width="17" height="17" viewBox="0 0 48 48">
-              <path fill="#EA4335"
-                d="M24 9.5c3.5 0 6.6 1.2 9 3.2l6.7-6.7C35.8 2.5 30.2 0 24 0 14.7 0 6.7 5.4 2.7 13.3l7.8 6c1.8-5.5 6.9-9.8 13.5-9.8z" />
-              <path fill="#4285F4"
-                d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17z" />
-              <path fill="#FBBC05"
-                d="M10.5 28.6A14.5 14.5 0 0 1 9.5 24c0-1.6.3-3.2.8-4.6l-7.8-6A24 24 0 0 0 0 24c0 3.9.9 7.5 2.7 10.7l7.8-6.1z" />
-              <path fill="#34A853"
-                d="M24 48c6.2 0 11.4-2 15.2-5.5l-7.5-5.8c-2 1.4-4.6 2.2-7.7 2.2-6.5 0-12-4.3-13.9-10.2l-7.8 6C6.7 42.6 14.7 48 24 48z" />
-            </svg>
-            Continue with Google
-          </button>
-          <div class="auth-msg" id="loginMsg"></div>
-        </div>
-
-        <!-- SIGNUP -->
-        <div class="auth-panel" id="panelSignup">
-          <div class="auth-field"><label class="auth-label">Email</label><input class="auth-input" id="signupEmail"
-              type="email" placeholder="you@example.com" autocomplete="email"></div>
-          <div class="auth-field"><label class="auth-label">Password</label><input class="auth-input" id="signupPass"
-              type="password" placeholder="Min 6 characters" autocomplete="new-password"></div>
-          <div class="auth-field"><label class="auth-label">Confirm Password</label><input class="auth-input"
-              id="signupPass2" type="password" placeholder="••••••••" autocomplete="new-password"
-              onkeydown="if(event.key==='Enter')doSignup()"></div>
-          <button class="auth-btn" id="signupBtn" onclick="doSignup()">Create Account</button>
-          <div class="auth-div">or</div>
-          <button class="auth-google" onclick="doGoogle()">
-            <svg width="17" height="17" viewBox="0 0 48 48">
-              <path fill="#EA4335"
-                d="M24 9.5c3.5 0 6.6 1.2 9 3.2l6.7-6.7C35.8 2.5 30.2 0 24 0 14.7 0 6.7 5.4 2.7 13.3l7.8 6c1.8-5.5 6.9-9.8 13.5-9.8z" />
-              <path fill="#4285F4"
-                d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17z" />
-              <path fill="#FBBC05"
-                d="M10.5 28.6A14.5 14.5 0 0 1 9.5 24c0-1.6.3-3.2.8-4.6l-7.8-6A24 24 0 0 0 0 24c0 3.9.9 7.5 2.7 10.7l7.8-6.1z" />
-              <path fill="#34A853"
-                d="M24 48c6.2 0 11.4-2 15.2-5.5l-7.5-5.8c-2 1.4-4.6 2.2-7.7 2.2-6.5 0-12-4.3-13.9-10.2l-7.8 6C6.7 42.6 14.7 48 24 48z" />
-            </svg>
-            Continue with Google
-          </button>
-          <div class="auth-msg" id="signupMsg"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- EMAIL CONFIRM -->
-  <div id="confirmScreen">
-    <div class="confirm-box">
-      <div class="confirm-icon">✉️</div>
-      <div class="confirm-title">Check your email</div>
-      <div class="confirm-text">We sent a confirmation link to<br><span class="confirm-email"
-          id="confirmEmail"></span><br><br>Click that link, then come back and sign in.</div>
-      <button class="auth-btn" style="margin-top:0"
-        onclick="document.getElementById('confirmScreen').classList.remove('show');switchAuthTab('login')">Back to Sign
-        In</button>
-    </div>
-  </div>
-
-  <!-- USER MENU -->
-  <div id="userMenu" class="user-menu">
-    <div class="u-email" id="uMenuEmail">—</div>
-    <button class="u-btn" onclick="exportData();closeMenu()">⬇ Export progress (JSON)</button>
-    <label class="u-btn">⬆ Import progress <input type="file" accept=".json" style="display:none"
-        onchange="importData(event)"></label>
-    <button class="u-btn danger" onclick="doSignOut()">Sign out</button>
-  </div>
-
-  <div class="wrap" style="display:none">
+  <div class="wrap">
 
     <!-- AUTH HEADER (Real-Time Sync UI) -->
     <div id="auth-header"></div>
@@ -2311,7 +1767,6 @@
             style="display:none;cursor:pointer;background:var(--tealdim);border-color:rgba(45,212,191,.35);color:var(--teal)"
             onclick="showPwaInstallPrompt()">⬇ Install App</button>
           <div class="hpill" id="syncBadge" style="display:none">☁ synced</div>
-          <div class="user-avatar" id="userAvatar" onclick="toggleMenu()" style="display:none">?</div>
         </div>
       </div>
     </header>
@@ -2999,10 +2454,7 @@
 
     // ═══════════ SUPABASE ═══════════
     let sbUrl = '', sbKey = '';
-    const REDIRECT_URL = window.location.origin + window.location.pathname;
     let sb = null;
-    let configured = false;
-    let currentUser = null;
 
     function loadSupabaseCreds() {
       sbUrl = localStorage.getItem('sb_url') || '';
@@ -3024,7 +2476,6 @@
 
       // Initialize Supabase client if credentials are available
       if (sbUrl && sbKey) {
-        configured = true;
         if (window.supabase) {
           sb = window.supabase.createClient(sbUrl, sbKey);
         }
@@ -3036,207 +2487,186 @@
       }
     }
 
-    function loadLocal() {
+    async function saveSupabase() {
+      sbUrl = document.getElementById('sbUrl').value.trim();
+      sbKey = document.getElementById('sbKey').value.trim();
+      if (!sbUrl || !sbKey) { showSyncStatus('Enter both URL and key', 'err'); return; }
+      localStorage.setItem('sb_url', sbUrl);
+      localStorage.setItem('sb_key', sbKey);
+      showSyncStatus('Testing connection...', 'pending');
+      const ok = await syncToSupabase(true);
+      if (ok) showSyncStatus('✓ Connected! Progress syncs automatically across all devices.', 'ok');
+    }
+
+    async function syncToSupabase(test = false) {
+      if (!sbUrl || !sbKey) return false;
       try {
-        const s = localStorage.getItem('pp4_' + (currentUser?.id || 'local'));
-        if (s) state = JSON.parse(s);
+        const res = await fetch(`${sbUrl}/rest/v1/progress`, {
+          method: 'POST',
+          headers: {
+            'apikey': sbKey,
+            'Authorization': `Bearer ${sbKey}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'resolution=merge-duplicates'
+          },
+          body: JSON.stringify({ id: 'user_main', data: state, updated_at: new Date().toISOString() })
+        });
+        if (res.ok) {
+          const badge = document.getElementById('syncBadge');
+          if (badge) { badge.style.display = 'flex'; badge.textContent = '☁ synced'; }
+          return true;
+        }
+        return false;
+      } catch (e) { return false; }
+    }
+
+    async function loadFromSupabase() {
+      if (!sbUrl || !sbKey) return;
+      try {
+        const res = await fetch(`${sbUrl}/rest/v1/progress?id=eq.user_main`, {
+          headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+        });
+        const data = await res.json();
+        if (data && data[0] && data[0].data) {
+          state = { ...data[0].data, ...state };
+          persistState();
+        }
+      } catch (e) { }
+    }
+
+    function showSyncStatus(msg, type) {
+      const el = document.getElementById('syncStatus');
+      if (!el) return;
+      el.textContent = msg;
+      el.className = 'sync-status ' + (type === 'ok' ? 'sync-ok' : type === 'err' ? 'sync-err' : 'sync-pending');
+    }
+
+    const APP_SETTINGS_KEY = 'pp3_settings';
+
+    function getAppSettings() {
+      try {
+        return JSON.parse(localStorage.getItem(APP_SETTINGS_KEY) || '{}');
       } catch (e) {
-        state = {};
+        return {};
       }
     }
 
-    async function pullState() {
-      if (!sb || !currentUser) return;
+    function applyAppSettings(settings) {
+      if (window.PP_CONFIG && settings.backendUrl) {
+        window.PP_CONFIG.BACKEND_URL = settings.backendUrl;
+      }
+    }
+
+    function showAppSettingsStatus(msg, type) {
+      const el = document.getElementById('appSettingsStatus');
+      if (!el) return;
+      el.textContent = msg;
+      el.className = 'sync-status ' + (type === 'ok' ? 'sync-ok' : type === 'err' ? 'sync-err' : 'sync-pending');
+    }
+
+    function initAppSettingsUI() {
+      const settings = getAppSettings();
+      const backendEl = document.getElementById('backendUrl');
+      const promptEl = document.getElementById('pwaPromptToggle');
+      if (backendEl) {
+        backendEl.value = settings.backendUrl || (window.PP_CONFIG?.BACKEND_URL || 'http://localhost:3001');
+      }
+      if (promptEl) {
+        promptEl.checked = settings.showPwaPrompt !== false;
+      }
+      applyAppSettings(settings);
+    }
+
+    function saveAppSettingsFromPage() {
+      const backendUrl = (document.getElementById('backendUrl')?.value || '').trim();
+      const showPwaPrompt = !!document.getElementById('pwaPromptToggle')?.checked;
+      const settings = { backendUrl, showPwaPrompt };
+      localStorage.setItem(APP_SETTINGS_KEY, JSON.stringify(settings));
+      applyAppSettings(settings);
+      showAppSettingsStatus('✓ Settings saved', 'ok');
+    }
+
+    async function syncNowFromPage() {
+      showAppSettingsStatus('Syncing...', 'pending');
       try {
-        const { data } = await sb.from('progress').select('state_data').eq('user_id', currentUser.id).single();
-        if (data?.state_data) {
-          state = { ...data.state_data, ...state };
-          try {
-            localStorage.setItem('pp4_' + currentUser.id, JSON.stringify(state));
-          } catch (e) { }
+        if (window.API?.saveProgress) {
+          await window.API.saveProgress(state);
+        } else {
+          await syncToSupabase(true);
         }
-      } catch (e) { }
-
-      async function saveSupabase() {
-        sbUrl = document.getElementById('sbUrl').value.trim();
-        sbKey = document.getElementById('sbKey').value.trim();
-        if (!sbUrl || !sbKey) { showSyncStatus('Enter both URL and key', 'err'); return; }
-        localStorage.setItem('sb_url', sbUrl);
-        localStorage.setItem('sb_key', sbKey);
-        showSyncStatus('Testing connection...', 'pending');
-        const ok = await syncToSupabase(true);
-        if (ok) showSyncStatus('✓ Connected! Progress syncs automatically across all devices.', 'ok');
+        showAppSettingsStatus('✓ Sync complete', 'ok');
+      } catch (e) {
+        showAppSettingsStatus('Sync failed: ' + (e?.message || 'unknown error'), 'err');
       }
+    }
 
-      async function syncToSupabase(test = false) {
-        if (!sbUrl || !sbKey) return false;
+    // ═══════════ EXPORT / IMPORT ═══════════
+    function exportData() {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'preppath-backup-' + new Date().toISOString().split('T')[0] + '.json';
+      a.click();
+    }
+
+    function importData(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
         try {
-          const res = await fetch(`${sbUrl}/rest/v1/progress`, {
-            method: 'POST',
-            headers: {
-              'apikey': sbKey,
-              'Authorization': `Bearer ${sbKey}`,
-              'Content-Type': 'application/json',
-              'Prefer': 'resolution=merge-duplicates'
-            },
-            body: JSON.stringify({ id: 'user_main', data: state, updated_at: new Date().toISOString() })
-          });
-          if (res.ok) {
-            const badge = document.getElementById('syncBadge');
-            if (badge) { badge.style.display = 'flex'; badge.textContent = '☁ synced'; }
-            return true;
-          }
-          return false;
-        } catch (e) { return false; }
-      }
+          state = JSON.parse(ev.target.result);
+          persistState();
+          location.reload();
+        } catch (err) { alert('Invalid JSON file'); }
+      };
+      reader.readAsText(file);
+    }
 
-      async function loadFromSupabase() {
-        if (!sbUrl || !sbKey) return;
-        try {
-          const res = await fetch(`${sbUrl}/rest/v1/progress?id=eq.user_main`, {
-            headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
-          });
-          const data = await res.json();
-          if (data && data[0] && data[0].data) {
-            state = { ...data[0].data, ...state };
-            persistState();
-          }
-        } catch (e) { }
-      }
+    // ═══════════ RENDER SCHEDULE ═══════════
+    function renderSchedule() {
+      const nav = document.getElementById('dayNav');
+      const panels = document.getElementById('dayPanels');
+      nav.innerHTML = ''; panels.innerHTML = '';
+      const keys = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+      const todayKey = getDayKey();
 
-      function showSyncStatus(msg, type) {
-        const el = document.getElementById('syncStatus');
-        if (!el) return;
-        el.textContent = msg;
-        el.className = 'sync-status ' + (type === 'ok' ? 'sync-ok' : type === 'err' ? 'sync-err' : 'sync-pending');
-      }
+      keys.forEach(k => {
+        const d = DAYS_DATA[k];
+        const btn = document.createElement('button');
+        btn.className = 'day-btn ' + (d.color || '') + (k === todayKey ? ' active' : '');
+        btn.id = 'dbtn-' + k;
+        btn.innerHTML = `<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${d.dot};margin-right:5px"></span>${d.label}`;
+        btn.onclick = () => switchDay(k);
+        nav.appendChild(btn);
 
-      const APP_SETTINGS_KEY = 'pp3_settings';
+        const panel = document.createElement('div');
+        panel.id = 'dpanel-' + k;
+        panel.style.display = k === todayKey ? 'block' : 'none';
+        panel.innerHTML = renderDayHTML(k, d);
+        panels.appendChild(panel);
+      });
 
-      function getAppSettings() {
-        try {
-          return JSON.parse(localStorage.getItem(APP_SETTINGS_KEY) || '{}');
-        } catch (e) {
-          return {};
-        }
-      }
-
-      function applyAppSettings(settings) {
-        if (window.PP_CONFIG && settings.backendUrl) {
-          window.PP_CONFIG.BACKEND_URL = settings.backendUrl;
-        }
-      }
-
-      function showAppSettingsStatus(msg, type) {
-        const el = document.getElementById('appSettingsStatus');
-        if (!el) return;
-        el.textContent = msg;
-        el.className = 'sync-status ' + (type === 'ok' ? 'sync-ok' : type === 'err' ? 'sync-err' : 'sync-pending');
-      }
-
-      function initAppSettingsUI() {
-        const settings = getAppSettings();
-        const backendEl = document.getElementById('backendUrl');
-        const promptEl = document.getElementById('pwaPromptToggle');
-        if (backendEl) {
-          backendEl.value = settings.backendUrl || (window.PP_CONFIG?.BACKEND_URL || 'http://localhost:3001');
-        }
-        if (promptEl) {
-          promptEl.checked = settings.showPwaPrompt !== false;
-        }
-        applyAppSettings(settings);
-      }
-
-      function saveAppSettingsFromPage() {
-        const backendUrl = (document.getElementById('backendUrl')?.value || '').trim();
-        const showPwaPrompt = !!document.getElementById('pwaPromptToggle')?.checked;
-        const settings = { backendUrl, showPwaPrompt };
-        localStorage.setItem(APP_SETTINGS_KEY, JSON.stringify(settings));
-        applyAppSettings(settings);
-        showAppSettingsStatus('✓ Settings saved', 'ok');
-      }
-
-      async function syncNowFromPage() {
-        showAppSettingsStatus('Syncing...', 'pending');
-        try {
-          if (window.API?.saveProgress) {
-            await window.API.saveProgress(state);
-          } else {
-            await syncToSupabase(true);
-          }
-          showAppSettingsStatus('✓ Sync complete', 'ok');
-        } catch (e) {
-          showAppSettingsStatus('Sync failed: ' + (e?.message || 'unknown error'), 'err');
-        }
-      }
-
-      // ═══════════ EXPORT / IMPORT ═══════════
-      function exportData() {
-        const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'preppath-backup-' + new Date().toISOString().split('T')[0] + '.json';
-        a.click();
-      }
-
-      function importData(e) {
-        const file = e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = ev => {
-          try {
-            state = JSON.parse(ev.target.result);
-            persistState();
-            location.reload();
-          } catch (err) { alert('Invalid JSON file'); }
-        };
-        reader.readAsText(file);
-      }
-
-      // ═══════════ RENDER SCHEDULE ═══════════
-      function renderSchedule() {
-        const nav = document.getElementById('dayNav');
-        const panels = document.getElementById('dayPanels');
-        nav.innerHTML = ''; panels.innerHTML = '';
-        const keys = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
-        const todayKey = getDayKey();
-
-        keys.forEach(k => {
-          const d = DAYS_DATA[k];
-          const btn = document.createElement('button');
-          btn.className = 'day-btn ' + (d.color || '') + (k === todayKey ? ' active' : '');
-          btn.id = 'dbtn-' + k;
-          btn.innerHTML = `<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${d.dot};margin-right:5px"></span>${d.label}`;
-          btn.onclick = () => switchDay(k);
-          nav.appendChild(btn);
-
-          const panel = document.createElement('div');
-          panel.id = 'dpanel-' + k;
-          panel.style.display = k === todayKey ? 'block' : 'none';
-          panel.innerHTML = renderDayHTML(k, d);
-          panels.appendChild(panel);
+      // events
+      document.querySelectorAll('.mcheck input').forEach(cb => {
+        cb.addEventListener('change', e => {
+          const id = e.target.id;
+          setState('chk_' + id, e.target.checked);
+          e.target.closest('.mcheck').classList.toggle('done', e.target.checked);
+          updateGlobalProgress();
+          showNotif('Saved');
         });
+        const saved = getState('chk_' + cb.id);
+        if (saved) { cb.checked = true; cb.closest('.mcheck').classList.add('done'); }
+      });
+      updateGlobalProgress();
+    }
 
-        // events
-        document.querySelectorAll('.mcheck input').forEach(cb => {
-          cb.addEventListener('change', e => {
-            const id = e.target.id;
-            setState('chk_' + id, e.target.checked);
-            e.target.closest('.mcheck').classList.toggle('done', e.target.checked);
-            updateGlobalProgress();
-            showNotif('Saved');
-          });
-          const saved = getState('chk_' + cb.id);
-          if (saved) { cb.checked = true; cb.closest('.mcheck').classList.add('done'); }
-        });
-        updateGlobalProgress();
-      }
-
-      function renderDayHTML(k, d) {
-        const blocksHTML = d.blocks.map(b => {
-          const links = b.links ? `<div class="chips">${b.links.map(l => `<a class="chip ${l.cls}" href="${l.href}" target="_blank">${l.label}</a>`).join('')}</div>` : '';
-          const check = b.id ? `<div class="mcheck"><input type="checkbox" id="${b.id}"><label for="${b.id}">Mark done</label></div>` : '';
-          return `
+    function renderDayHTML(k, d) {
+      const blocksHTML = d.blocks.map(b => {
+        const links = b.links ? `<div class="chips">${b.links.map(l => `<a class="chip ${l.cls}" href="${l.href}" target="_blank">${l.label}</a>`).join('')}</div>` : '';
+        const check = b.id ? `<div class="mcheck"><input type="checkbox" id="${b.id}"><label for="${b.id}">Mark done</label></div>` : '';
+        return `
       <div class="trow">
         <div class="tcol"><div class="tlbl">${b.time}</div></div>
         <div class="bcol">
@@ -3247,34 +2677,34 @@
           </div>
         </div>
       </div>`;
-        }).join('');
-        return `<div class="sched">${blocksHTML}</div>`;
-      }
+      }).join('');
+      return `<div class="sched">${blocksHTML}</div>`;
+    }
 
-      function switchDay(k) {
-        document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('[id^="dpanel-"]').forEach(p => p.style.display = 'none');
-        document.getElementById('dbtn-' + k).classList.add('active');
-        document.getElementById('dpanel-' + k).style.display = 'block';
-        updateGlobalProgress();
-      }
+    function switchDay(k) {
+      document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('[id^="dpanel-"]').forEach(p => p.style.display = 'none');
+      document.getElementById('dbtn-' + k).classList.add('active');
+      document.getElementById('dpanel-' + k).style.display = 'block';
+      updateGlobalProgress();
+    }
 
-      // ═══════════ RENDER ROADMAP ═══════════
-      function renderRoadmap() {
-        const grid = document.getElementById('roadmapGrid');
-        grid.innerHTML = ROADMAP_DATA.map(ph => {
-          const totalSub = ph.modules.reduce((a, m) => a + m.sub.length, 0);
-          const doneSub = ph.modules.reduce((a, m) => a + m.sub.filter((_, i) => getState('rm_' + m.id + '_s' + i)).length, 0);
-          const pct = totalSub ? Math.round(doneSub / totalSub * 100) : 0;
+    // ═══════════ RENDER ROADMAP ═══════════
+    function renderRoadmap() {
+      const grid = document.getElementById('roadmapGrid');
+      grid.innerHTML = ROADMAP_DATA.map(ph => {
+        const totalSub = ph.modules.reduce((a, m) => a + m.sub.length, 0);
+        const doneSub = ph.modules.reduce((a, m) => a + m.sub.filter((_, i) => getState('rm_' + m.id + '_s' + i)).length, 0);
+        const pct = totalSub ? Math.round(doneSub / totalSub * 100) : 0;
 
-          const modsHTML = ph.modules.map(m => {
-            const allDone = m.sub.every((_, i) => getState('rm_' + m.id + '_s' + i));
-            const subHTML = m.sub.map((s, i) => `
+        const modsHTML = ph.modules.map(m => {
+          const allDone = m.sub.every((_, i) => getState('rm_' + m.id + '_s' + i));
+          const subHTML = m.sub.map((s, i) => `
         <div class="subtask ${getState('rm_' + m.id + '_s' + i) ? 'done' : ''}" onclick="toggleSub('${m.id}',${i},this)">
           <input type="checkbox" ${getState('rm_' + m.id + '_s' + i) ? 'checked' : ''} onclick="event.stopPropagation()">
           <label>${s}</label>
         </div>`).join('');
-            return `
+          return `
         <div class="module">
           <div class="mod-head" onclick="toggleMod('${m.id}')">
             <div class="mod-check ${allDone ? 'done' : ''}" id="modcheck-${m.id}"></div>
@@ -3283,9 +2713,9 @@
           </div>
           <div class="subtasks" id="sub-${m.id}" style="display:none">${subHTML}</div>
         </div>`;
-          }).join('');
+        }).join('');
 
-          return `
+        return `
       <div class="phase-card" style="--ph-accent:${ph.accent}">
         <div class="phase-header" style="border-top:3px solid ${ph.accent}">
           <div class="phase-num">${ph.num}</div>
@@ -3298,47 +2728,47 @@
         </div>
         <div class="phase-modules">${modsHTML}</div>
       </div>`;
-        }).join('');
+      }).join('');
+    }
+
+    function toggleMod(id) {
+      const el = document.getElementById('sub-' + id);
+      if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function toggleSub(modId, idx, el) {
+      const key = 'rm_' + modId + '_s' + idx;
+      const newVal = !getState(key);
+      setState(key, newVal);
+      el.classList.toggle('done', newVal);
+      el.querySelector('input').checked = newVal;
+      // Update mod check
+      const m = ROADMAP_DATA.flatMap(p => p.modules).find(m => m.id === modId);
+      if (m) {
+        const allDone = m.sub.every((_, i) => getState('rm_' + modId + '_s' + i));
+        const mc = document.getElementById('modcheck-' + modId);
+        if (mc) mc.classList.toggle('done', allDone);
       }
+      renderRoadmap(); // re-render to update progress bar
+      showNotif('Progress saved');
+    }
 
-      function toggleMod(id) {
-        const el = document.getElementById('sub-' + id);
-        if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
-      }
+    // ═══════════ RENDER PROJECTS ═══════════
+    function renderProjects() {
+      const grid = document.getElementById('projGrid');
+      grid.innerHTML = PROJECTS_DATA.map(proj => {
+        const tasks = getProjectTasks(proj.id, proj.tasks);
+        const done = tasks.filter(t => getState('pt_' + t.id)).length;
+        const pct = tasks.length ? Math.round(done / tasks.length * 100) : 0;
 
-      function toggleSub(modId, idx, el) {
-        const key = 'rm_' + modId + '_s' + idx;
-        const newVal = !getState(key);
-        setState(key, newVal);
-        el.classList.toggle('done', newVal);
-        el.querySelector('input').checked = newVal;
-        // Update mod check
-        const m = ROADMAP_DATA.flatMap(p => p.modules).find(m => m.id === modId);
-        if (m) {
-          const allDone = m.sub.every((_, i) => getState('rm_' + modId + '_s' + i));
-          const mc = document.getElementById('modcheck-' + modId);
-          if (mc) mc.classList.toggle('done', allDone);
-        }
-        renderRoadmap(); // re-render to update progress bar
-        showNotif('Progress saved');
-      }
-
-      // ═══════════ RENDER PROJECTS ═══════════
-      function renderProjects() {
-        const grid = document.getElementById('projGrid');
-        grid.innerHTML = PROJECTS_DATA.map(proj => {
-          const tasks = getProjectTasks(proj.id, proj.tasks);
-          const done = tasks.filter(t => getState('pt_' + t.id)).length;
-          const pct = tasks.length ? Math.round(done / tasks.length * 100) : 0;
-
-          const tasksHTML = tasks.map(t => `
+        const tasksHTML = tasks.map(t => `
       <div class="ptask ${getState('pt_' + t.id) ? 'done' : ''}" onclick="togglePTask('${t.id}',this)">
         <input type="checkbox" ${getState('pt_' + t.id) ? 'checked' : ''} onclick="event.stopPropagation()">
         <label>${t.label}</label>
         <span class="ptask-diff diff-${t.diff || 'easy'}">${t.diff || 'easy'}</span>
       </div>`).join('');
 
-          return `
+        return `
       <div class="proj-card" style="border-top:3px solid ${proj.color}">
         <div class="proj-head">
           <div class="proj-icon">${proj.icon}</div>
@@ -3355,61 +2785,61 @@
           <div class="pp2-lbl">${done}/${tasks.length} tasks · ${pct}%</div>
         </div>
       </div>`;
-        }).join('');
-      }
+      }).join('');
+    }
 
-      function getProjectTasks(projId, defaults) {
-        const custom = state['custom_tasks_' + projId] || [];
-        return [...defaults, ...custom];
-      }
+    function getProjectTasks(projId, defaults) {
+      const custom = state['custom_tasks_' + projId] || [];
+      return [...defaults, ...custom];
+    }
 
-      function addCustomTask(projId) {
-        const input = document.getElementById('addInput-' + projId);
-        const val = input.value.trim();
-        if (!val) return;
-        const custom = state['custom_tasks_' + projId] || [];
-        const id = projId + '_c' + Date.now();
-        custom.push({ id, label: val, diff: 'easy' });
-        state['custom_tasks_' + projId] = custom;
-        persistState();
-        input.value = '';
-        renderProjects();
-        showNotif('Task added!');
-      }
+    function addCustomTask(projId) {
+      const input = document.getElementById('addInput-' + projId);
+      const val = input.value.trim();
+      if (!val) return;
+      const custom = state['custom_tasks_' + projId] || [];
+      const id = projId + '_c' + Date.now();
+      custom.push({ id, label: val, diff: 'easy' });
+      state['custom_tasks_' + projId] = custom;
+      persistState();
+      input.value = '';
+      renderProjects();
+      showNotif('Task added!');
+    }
 
-      function togglePTask(id, el) {
-        const newVal = !getState('pt_' + id);
-        setState('pt_' + id, newVal);
-        el.classList.toggle('done', newVal);
-        el.querySelector('input').checked = newVal;
-        // Update progress bar
-        PROJECTS_DATA.forEach(proj => {
-          const tasks = getProjectTasks(proj.id, proj.tasks);
-          const done = tasks.filter(t => getState('pt_' + t.id)).length;
-          const pct = tasks.length ? Math.round(done / tasks.length * 100) : 0;
-          const bar = document.getElementById('pp2f-' + proj.id);
-          if (bar) bar.style.width = pct + '%';
-          const lbl = bar?.closest('.proj-progress')?.querySelector('.pp2-lbl');
-          if (lbl) lbl.textContent = `${done}/${tasks.length} tasks · ${pct}%`;
-        });
-        showNotif('Saved');
-      }
+    function togglePTask(id, el) {
+      const newVal = !getState('pt_' + id);
+      setState('pt_' + id, newVal);
+      el.classList.toggle('done', newVal);
+      el.querySelector('input').checked = newVal;
+      // Update progress bar
+      PROJECTS_DATA.forEach(proj => {
+        const tasks = getProjectTasks(proj.id, proj.tasks);
+        const done = tasks.filter(t => getState('pt_' + t.id)).length;
+        const pct = tasks.length ? Math.round(done / tasks.length * 100) : 0;
+        const bar = document.getElementById('pp2f-' + proj.id);
+        if (bar) bar.style.width = pct + '%';
+        const lbl = bar?.closest('.proj-progress')?.querySelector('.pp2-lbl');
+        if (lbl) lbl.textContent = `${done}/${tasks.length} tasks · ${pct}%`;
+      });
+      showNotif('Saved');
+    }
 
-      // ═══════════ RENDER FUTURE ROLES ═══════════
-      function renderFutureRoles() {
-        const grid = document.getElementById('futureGrid');
-        grid.innerHTML = FUTURE_DATA.map(role => {
-          const done = role.steps.filter(s => getState('fs_' + s.id)).length;
-          const pct = Math.round(done / role.steps.length * 100);
-          const stepsHTML = role.steps.map(s => `
+    // ═══════════ RENDER FUTURE ROLES ═══════════
+    function renderFutureRoles() {
+      const grid = document.getElementById('futureGrid');
+      grid.innerHTML = FUTURE_DATA.map(role => {
+        const done = role.steps.filter(s => getState('fs_' + s.id)).length;
+        const pct = Math.round(done / role.steps.length * 100);
+        const stepsHTML = role.steps.map(s => `
       <div class="fc-step ${getState('fs_' + s.id) ? 'done' : ''}" onclick="toggleFutureStep('${s.id}',this)">
         <input type="checkbox" ${getState('fs_' + s.id) ? 'checked' : ''} onclick="event.stopPropagation()">
         <label>${s.label}</label>
         <span class="fc-year">${s.year}</span>
       </div>`).join('');
-          const skillsHTML = role.skills.map(sk => `<span class="sk">${sk}</span>`).join('');
+        const skillsHTML = role.skills.map(sk => `<span class="sk">${sk}</span>`).join('');
 
-          return `
+        return `
       <div class="future-card">
         <div class="fc-head" style="border-top:3px solid ${role.color}">
           <div class="fc-icon">${role.icon}</div>
@@ -3428,477 +2858,289 @@
         </div>
         <div class="fc-skills">${skillsHTML}</div>
       </div>`;
-        }).join('');
+      }).join('');
+    }
+
+    function toggleFutureStep(id, el) {
+      const newVal = !getState('fs_' + id);
+      setState('fs_' + id, newVal);
+      el.classList.toggle('done', newVal);
+      el.querySelector('input').checked = newVal;
+      renderFutureRoles();
+      showNotif('Progress saved');
+    }
+
+    // ═══════════ PROGRESS ═══════════
+    function updateGlobalProgress() {
+      // Today's tasks only — for the "Today's Tasks" bar and the streak
+      const todayPanel = document.getElementById('dpanel-' + getDayKey());
+      const todayAll = todayPanel ? Array.from(todayPanel.querySelectorAll('.mcheck input')) : [];
+      const todayDone = todayAll.filter(el => el.checked);
+      const todayPct = todayAll.length ? Math.round(todayDone.length / todayAll.length * 100) : 0;
+
+      document.getElementById('progFill').style.width = todayPct + '%';
+      document.getElementById('progPct').textContent = todayPct + '%';
+      document.getElementById('progCount').textContent = todayDone.length + ' / ' + todayAll.length;
+
+      // Ring shows overall weekly progress (all days combined)
+      const all = document.querySelectorAll('.mcheck input');
+      const done = document.querySelectorAll('.mcheck input:checked');
+      const weeklyPct = all.length ? Math.round(done.length / all.length * 100) : 0;
+      const ring = document.getElementById('mainRing');
+      ring.style.strokeDashoffset = 264 - (weeklyPct / 100) * 264;
+      document.getElementById('ringPct').textContent = weeklyPct + '%';
+
+      // Streak is based on today's tasks only, not the weekly average
+      updateStreakForToday(todayPct, todayAll.length);
+      updateStreakDisplay();
+    }
+
+    // ═══════════ STREAK ═══════════
+    function todayStr() {
+      return new Date().toISOString().split('T')[0];
+    }
+
+    function getDayKey() {
+      return ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][new Date().getDay()];
+    }
+
+    function getStreakType(pct, total) {
+      if (total === 0) return 0; // no tasks — don't count
+      if (pct === 100) return 1;
+      if (pct > 0) return 2;
+      return 3;
+    }
+
+    function updateStreakForToday(pct, total) {
+      if (total === 0) return; // schedule has no checkboxes on this day view
+      const history = state.streak_history || {};
+      const today = todayStr();
+      const type = getStreakType(pct, total);
+      // Only update if it changed
+      const existing = history[today];
+      if (!existing || existing.pct !== pct || existing.type !== type) {
+        history[today] = { pct, type };
+        state.streak_history = history;
+        persistState();
       }
+    }
 
-      function toggleFutureStep(id, el) {
-        const newVal = !getState('fs_' + id);
-        setState('fs_' + id, newVal);
-        el.classList.toggle('done', newVal);
-        el.querySelector('input').checked = newVal;
-        renderFutureRoles();
-        showNotif('Progress saved');
-      }
+    function updateStreakDisplay() {
+      const history = state.streak_history || {};
+      const today = todayStr();
+      const todayEntry = history[today];
+      const todayType = todayEntry ? todayEntry.type : 3;
+      const todayPct = todayEntry ? todayEntry.pct : 0;
 
-      // ═══════════ PROGRESS ═══════════
-      function updateGlobalProgress() {
-        // Today's tasks only — for the "Today's Tasks" bar and the streak
-        const todayPanel = document.getElementById('dpanel-' + getDayKey());
-        const todayAll = todayPanel ? Array.from(todayPanel.querySelectorAll('.mcheck input')) : [];
-        const todayDone = todayAll.filter(el => el.checked);
-        const todayPct = todayAll.length ? Math.round(todayDone.length / todayAll.length * 100) : 0;
-
-        document.getElementById('progFill').style.width = todayPct + '%';
-        document.getElementById('progPct').textContent = todayPct + '%';
-        document.getElementById('progCount').textContent = todayDone.length + ' / ' + todayAll.length;
-
-        // Ring shows overall weekly progress (all days combined)
-        const all = document.querySelectorAll('.mcheck input');
-        const done = document.querySelectorAll('.mcheck input:checked');
-        const weeklyPct = all.length ? Math.round(done.length / all.length * 100) : 0;
-        const ring = document.getElementById('mainRing');
-        ring.style.strokeDashoffset = 264 - (weeklyPct / 100) * 264;
-        document.getElementById('ringPct').textContent = weeklyPct + '%';
-
-        // Streak is based on today's tasks only, not the weekly average
-        updateStreakForToday(todayPct, todayAll.length);
-        updateStreakDisplay();
-      }
-
-      // ═══════════ STREAK ═══════════
-      function todayStr() {
-        return new Date().toISOString().split('T')[0];
-      }
-
-      function getDayKey() {
-        return ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][new Date().getDay()];
-      }
-
-      function getStreakType(pct, total) {
-        if (total === 0) return 0; // no tasks — don't count
-        if (pct === 100) return 1;
-        if (pct > 0) return 2;
-        return 3;
-      }
-
-      function updateStreakForToday(pct, total) {
-        if (total === 0) return; // schedule has no checkboxes on this day view
-        const history = state.streak_history || {};
-        const today = todayStr();
-        const type = getStreakType(pct, total);
-        // Only update if it changed
-        const existing = history[today];
-        if (!existing || existing.pct !== pct || existing.type !== type) {
-          history[today] = { pct, type };
-          state.streak_history = history;
-          persistState();
-        }
-      }
-
-      function updateStreakDisplay() {
-        const history = state.streak_history || {};
-        const today = todayStr();
-        const todayEntry = history[today];
-        const todayType = todayEntry ? todayEntry.type : 3;
-        const todayPct = todayEntry ? todayEntry.pct : 0;
-
-        // Calculate current consecutive streak (walk backwards from today)
-        let streak = 0;
-        let d = new Date(today);
-        for (let i = 0; i < 365; i++) {
-          const dk = d.toISOString().split('T')[0];
-          const e = history[dk];
-          if (e && (e.type === 1 || e.type === 2)) {
-            streak++;
-          } else {
-            break;
-          }
-          d.setDate(d.getDate() - 1);
-        }
-
-        const card = document.getElementById('streakCard');
-        const emoji = document.getElementById('streakEmoji');
-        const count = document.getElementById('streakCount');
-        const status = document.getElementById('streakStatus');
-        const sub = document.getElementById('streakSub');
-        const dots = document.getElementById('streakDots');
-
-        // Set type class
-        card.classList.remove('type1', 'type2', 'type3');
-        card.classList.add('type' + (todayType || 3));
-
-        count.textContent = streak;
-
-        if (todayType === 1) {
-          emoji.textContent = '🔥';
-          status.textContent = 'Full streak! All done!';
-          sub.textContent = todayPct + '% — every task completed today. Keep it up!';
-        } else if (todayType === 2) {
-          emoji.textContent = '🌱';
-          status.textContent = 'Partial streak — keep going!';
-          sub.textContent = todayPct + '% done today. Finish the rest to hit 🔥';
+      // Calculate current consecutive streak (walk backwards from today)
+      let streak = 0;
+      let d = new Date(today);
+      for (let i = 0; i < 365; i++) {
+        const dk = d.toISOString().split('T')[0];
+        const e = history[dk];
+        if (e && (e.type === 1 || e.type === 2)) {
+          streak++;
         } else {
-          emoji.textContent = '😴';
-          status.textContent = streak > 0 ? 'Streak at risk!' : 'Start your streak!';
-          sub.textContent = streak > 0 ? 'Your ' + streak + '-day streak is at risk — complete tasks today to continue!' : 'Complete at least one task today to begin.';
+          break;
         }
-
-        // Last 7 days dots
-        dots.innerHTML = '';
-        for (let i = 6; i >= 0; i--) {
-          const dd = new Date(today);
-          dd.setDate(dd.getDate() - i);
-          const dk = dd.toISOString().split('T')[0];
-          const e = history[dk];
-          const dot = document.createElement('div');
-          dot.className = 'streak-dot' + (e ? ' t' + e.type : ' t3');
-          dot.title = dk + (e ? ' · ' + e.pct + '%' : ' · no activity');
-          dots.appendChild(dot);
-        }
+        d.setDate(d.getDate() - 1);
       }
 
-      // ═══════════ COUNTDOWN ═══════════
-      function updateCountdown() {
-        const target = new Date('2025-09-30');
-        const now = new Date();
-        const diff = Math.max(0, target - now);
-        const days = Math.floor(diff / 86400000);
-        document.getElementById('cdM').textContent = Math.floor(days / 30);
-        document.getElementById('cdW').textContent = Math.floor(days / 7);
-        document.getElementById('cdD').textContent = days;
-        document.getElementById('daysLeft').textContent = days + ' days left';
+      const card = document.getElementById('streakCard');
+      const emoji = document.getElementById('streakEmoji');
+      const count = document.getElementById('streakCount');
+      const status = document.getElementById('streakStatus');
+      const sub = document.getElementById('streakSub');
+      const dots = document.getElementById('streakDots');
+
+      // Set type class
+      card.classList.remove('type1', 'type2', 'type3');
+      card.classList.add('type' + (todayType || 3));
+
+      count.textContent = streak;
+
+      if (todayType === 1) {
+        emoji.textContent = '🔥';
+        status.textContent = 'Full streak! All done!';
+        sub.textContent = todayPct + '% — every task completed today. Keep it up!';
+      } else if (todayType === 2) {
+        emoji.textContent = '🌱';
+        status.textContent = 'Partial streak — keep going!';
+        sub.textContent = todayPct + '% done today. Finish the rest to hit 🔥';
+      } else {
+        emoji.textContent = '😴';
+        status.textContent = streak > 0 ? 'Streak at risk!' : 'Start your streak!';
+        sub.textContent = streak > 0 ? 'Your ' + streak + '-day streak is at risk — complete tasks today to continue!' : 'Complete at least one task today to begin.';
       }
 
-      // ═══════════ VERSE ═══════════
-      const verses = [
-        { t: '"Come to me, all who are weary and burdened, and I will give you rest."', r: '— Matthew 11:28' },
-        { t: '"Commit your work to the Lord, and your plans will be established."', r: '— Proverbs 16:3' },
-        { t: '"For I know the plans I have for you — plans to prosper you."', r: '— Jeremiah 29:11' },
-        { t: '"Wisdom is the principal thing; therefore get wisdom."', r: '— Proverbs 4:7' },
-        { t: '"Whatever you do, work heartily, as for the Lord and not for men."', r: '— Colossians 3:23' },
-        { t: '"God has not given us a spirit of fear, but of power, love and a sound mind."', r: '— 2 Timothy 1:7' },
-        { t: '"I can do all things through Christ who strengthens me."', r: '— Philippians 4:13' },
-      ];
-      function setVerse() {
-        const v = verses[new Date().getDay()];
-        document.getElementById('verseT').textContent = v.t;
-        document.getElementById('verseR').textContent = v.r;
+      // Last 7 days dots
+      dots.innerHTML = '';
+      for (let i = 6; i >= 0; i--) {
+        const dd = new Date(today);
+        dd.setDate(dd.getDate() - i);
+        const dk = dd.toISOString().split('T')[0];
+        const e = history[dk];
+        const dot = document.createElement('div');
+        dot.className = 'streak-dot' + (e ? ' t' + e.type : ' t3');
+        dot.title = dk + (e ? ' · ' + e.pct + '%' : ' · no activity');
+        dots.appendChild(dot);
       }
+    }
 
-      // ═══════════ PAGE NAV ═══════════
-      function showPage(id) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('page-' + id).classList.add('active');
-        event.target.classList.add('active');
-        if (id === 'roadmap') renderRoadmap();
-        if (id === 'projects') renderProjects();
-        if (id === 'future') renderFutureRoles();
-      }
+    // ═══════════ COUNTDOWN ═══════════
+    function updateCountdown() {
+      const target = new Date('2025-09-30');
+      const now = new Date();
+      const diff = Math.max(0, target - now);
+      const days = Math.floor(diff / 86400000);
+      document.getElementById('cdM').textContent = Math.floor(days / 30);
+      document.getElementById('cdW').textContent = Math.floor(days / 7);
+      document.getElementById('cdD').textContent = days;
+      document.getElementById('daysLeft').textContent = days + ' days left';
+    }
 
-      // ═══════════ NOTIFICATION ═══════════
-      function showNotif(msg = 'Saved') {
-        const n = document.getElementById('notif');
-        n.textContent = '✓ ' + msg;
-        n.classList.add('show');
-        clearTimeout(n._t);
-        n._t = setTimeout(() => n.classList.remove('show'), 1800);
-      }
+    // ═══════════ VERSE ═══════════
+    const verses = [
+      { t: '"Come to me, all who are weary and burdened, and I will give you rest."', r: '— Matthew 11:28' },
+      { t: '"Commit your work to the Lord, and your plans will be established."', r: '— Proverbs 16:3' },
+      { t: '"For I know the plans I have for you — plans to prosper you."', r: '— Jeremiah 29:11' },
+      { t: '"Wisdom is the principal thing; therefore get wisdom."', r: '— Proverbs 4:7' },
+      { t: '"Whatever you do, work heartily, as for the Lord and not for men."', r: '— Colossians 3:23' },
+      { t: '"God has not given us a spirit of fear, but of power, love and a sound mind."', r: '— 2 Timothy 1:7' },
+      { t: '"I can do all things through Christ who strengthens me."', r: '— Philippians 4:13' },
+    ];
+    function setVerse() {
+      const v = verses[new Date().getDay()];
+      document.getElementById('verseT').textContent = v.t;
+      document.getElementById('verseR').textContent = v.r;
+    }
 
-      // ═══════════ AUTH FUNCTIONS ═══════════
-      function switchAuthTab(tab) {
-        document.querySelectorAll('.auth-tab').forEach((t, i) => t.classList.toggle('active', (i === 0 && tab === 'login') || (i === 1 && tab === 'signup')));
-        document.getElementById('panelLogin').classList.toggle('active', tab === 'login');
-        document.getElementById('panelSignup').classList.toggle('active', tab === 'signup');
-      }
+    // ═══════════ PAGE NAV ═══════════
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('page-' + id).classList.add('active');
+      event.target.classList.add('active');
+      if (id === 'roadmap') renderRoadmap();
+      if (id === 'projects') renderProjects();
+      if (id === 'future') renderFutureRoles();
+    }
 
-      function setAuthMsg(id, msg, type) {
-        const el = document.getElementById(id);
-        el.textContent = msg;
-        el.className = 'auth-msg ' + type;
-      }
+    // ═══════════ NOTIFICATION ═══════════
+    function showNotif(msg = 'Saved') {
+      const n = document.getElementById('notif');
+      n.textContent = '✓ ' + msg;
+      n.classList.add('show');
+      clearTimeout(n._t);
+      n._t = setTimeout(() => n.classList.remove('show'), 1800);
+    }
 
-      function setBtnLoading(id, loading, label) {
-        const btn = document.getElementById(id);
-        btn.disabled = loading;
-        btn.textContent = loading ? 'Please wait...' : label;
-      }
+    // ═══════════ INIT ═══════════
+    document.addEventListener('DOMContentLoaded', async () => {
+      loadState();
+      loadSupabaseCreds();
+      initAppSettingsUI();
 
-      async function doLogin() {
-        if (!sb) {
-          setAuthMsg('loginMsg', 'Supabase not configured — see cfgWarn above', 'err');
-          return;
-        }
-        const email = document.getElementById('loginEmail').value.trim();
-        const pass = document.getElementById('loginPass').value;
-        if (!email || !pass) {
-          setAuthMsg('loginMsg', 'Enter email and password', 'err');
-          return;
-        }
-        setBtnLoading('loginBtn', true, 'Sign In');
-        const { error } = await sb.auth.signInWithPassword({ email, password: pass });
-        setBtnLoading('loginBtn', false, 'Sign In');
-        if (error) {
-          setAuthMsg('loginMsg', error.message, 'err');
-          return;
-        }
-      }
+      // Render instantly from local state, then refresh from cloud in background.
+      renderSchedule();
+      updateCountdown();
+      setVerse();
+      setTimeout(() => { updateGlobalProgress(); updateStreakDisplay(); }, 80);
 
-      async function doSignup() {
-        if (!sb) {
-          setAuthMsg('signupMsg', 'Supabase not configured', 'err');
-          return;
-        }
-        const email = document.getElementById('signupEmail').value.trim();
-        const pass = document.getElementById('signupPass').value;
-        const pass2 = document.getElementById('signupPass2').value;
-        if (!email || !pass) {
-          setAuthMsg('signupMsg', 'Enter email and password', 'err');
-          return;
-        }
-        if (pass !== pass2) {
-          setAuthMsg('signupMsg', 'Passwords do not match', 'err');
-          return;
-        }
-        if (pass.length < 6) {
-          setAuthMsg('signupMsg', 'Password must be at least 6 characters', 'err');
-          return;
-        }
-        setBtnLoading('signupBtn', true, 'Create Account');
-        const { error } = await sb.auth.signUp({ email, password: pass, options: { emailRedirectTo: REDIRECT_URL } });
-        setBtnLoading('signupBtn', false, 'Create Account');
-        if (error) {
-          setAuthMsg('signupMsg', error.message, 'err');
-          return;
-        }
-        document.getElementById('confirmEmail').textContent = email;
-        document.getElementById('confirmScreen').classList.add('show');
-      }
-
-      async function doGoogle() {
-        if (!sb) return;
-        await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: REDIRECT_URL } });
-      }
-
-      async function doForgot() {
-        if (!sb) return;
-        const email = document.getElementById('loginEmail').value.trim();
-        if (!email) {
-          setAuthMsg('loginMsg', 'Enter your email first', 'err');
-          return;
-        }
-        const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: REDIRECT_URL });
-        if (error) {
-          setAuthMsg('loginMsg', error.message, 'err');
-          return;
-        }
-        setAuthMsg('loginMsg', '✓ Reset email sent — check your inbox', 'ok');
-      }
-
-      async function doSignOut() {
-        closeMenu();
-        if (sb) await sb.auth.signOut();
-        currentUser = null;
-        state = {};
-        showAuth();
-      }
-
-      function toggleMenu() {
-        document.getElementById('userMenu').classList.toggle('open');
-      }
-
-      function closeMenu() {
-        document.getElementById('userMenu').classList.remove('open');
-      }
-
-      document.addEventListener('click', e => {
-        if (!e.target.closest('#userMenu') && !e.target.closest('#userAvatar')) closeMenu();
-      });
-
-      function exportData() {
-        const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'preppath-backup-' + new Date().toISOString().split('T')[0] + '.json';
-        a.click();
-      }
-
-      function importData(e) {
-        const file = e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = ev => {
-          try {
-            state = JSON.parse(ev.target.result);
-            try {
-              localStorage.setItem('pp4_state', JSON.stringify(state));
-            } catch (er) { }
-            location.reload();
-          } catch (err) {
-            alert('Invalid JSON file');
-          }
-        };
-        reader.readAsText(file);
-      }
-
-      async function initAuth() {
-        const ol = document.getElementById('loadOverlay');
-
-        if (!sb || !configured) {
-          document.getElementById('cfgWarn').classList.add('show');
-          ol.classList.add('out');
-          setTimeout(() => ol.style.display = 'none', 400);
-          showAuth();
-          return;
-        }
-
-        const { data: { session } } = await sb.auth.getSession();
-
-        if (session) {
-          await onSignedIn(session.user);
-        } else {
-          ol.classList.add('out');
-          setTimeout(() => ol.style.display = 'none', 400);
-          showAuth();
-        }
-
-        sb.auth.onAuthStateChange(async (event, session) => {
-          if (event === 'SIGNED_IN' && session) {
-            document.getElementById('confirmScreen').classList.remove('show');
-            await onSignedIn(session.user);
-          }
-          if (event === 'SIGNED_OUT') {
-            showAuth();
-          }
-        });
-      }
-
-      async function onSignedIn(user) {
-        currentUser = user;
-        loadLocal();
-        await pullState();
-
-        const initial = (user.email || 'U')[0].toUpperCase();
-        document.getElementById('userAvatar').textContent = initial;
-        document.getElementById('userAvatar').style.display = 'block';
-        document.getElementById('uMenuEmail').textContent = user.email || '';
-
-        document.getElementById('authScreen').classList.remove('show');
-        document.querySelector('.wrap').style.display = 'block';
-
-        const ol = document.getElementById('loadOverlay');
-        ol.classList.add('out');
-        setTimeout(() => ol.style.display = 'none', 400);
-
+      loadFromSupabase().then(() => {
         renderSchedule();
-        updateCountdown();
-        setVerse();
-        setTimeout(updateGlobalProgress, 100);
-      }
-
-      function showAuth() {
-        document.querySelector('.wrap').style.display = 'none';
-        document.getElementById('authScreen').classList.add('show');
-        document.getElementById('userAvatar').style.display = 'none';
-      }
-
-      // ═══════════ INIT ═══════════
-      document.addEventListener('DOMContentLoaded', async () => {
-        loadState();
-        loadSupabaseCreds();
-        updateCountdown();
-        setVerse();
-        initAuth();
-      });
+        setTimeout(() => { updateGlobalProgress(); updateStreakDisplay(); }, 80);
+      }).catch(() => { });
+    });
   </script>
 
   <!-- Service Worker Registration & PWA Install Prompt -->
   <script>
-      (function () {
-        // Register service worker
-        if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.register('sw.js')
-            .then((reg) => {
-              console.log('[PWA] Service worker registered:', reg.scope);
-              // Check for updates periodically
-              setInterval(() => reg.update(), 60000);
-            })
-            .catch((err) => console.log('[PWA] Service worker registration failed:', err));
-        }
+    (function () {
+      // Register service worker
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js')
+          .then((reg) => {
+            console.log('[PWA] Service worker registered:', reg.scope);
+            // Check for updates periodically
+            setInterval(() => reg.update(), 60000);
+          })
+          .catch((err) => console.log('[PWA] Service worker registration failed:', err));
+      }
 
-        // Handle PWA install prompt
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-          e.preventDefault();
-          deferredPrompt = e;
-          console.log('[PWA] Install prompt available');
-          const installBtn = document.getElementById('installBtn');
-          if (installBtn) installBtn.style.display = 'inline-flex';
-        });
+      // Handle PWA install prompt
+      let deferredPrompt;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        console.log('[PWA] Install prompt available');
+        const installBtn = document.getElementById('installBtn');
+        if (installBtn) installBtn.style.display = 'inline-flex';
+      });
 
-        window.addEventListener('appinstalled', () => {
-          console.log('[PWA] App installed');
-          deferredPrompt = null;
-          const installBtn = document.getElementById('installBtn');
-          if (installBtn) installBtn.style.display = 'none';
-        });
+      window.addEventListener('appinstalled', () => {
+        console.log('[PWA] App installed');
+        deferredPrompt = null;
+        const installBtn = document.getElementById('installBtn');
+        if (installBtn) installBtn.style.display = 'none';
+      });
 
-        // Show prompt when settings ask for it (optional)
-        window.showPwaInstallPrompt = () => {
-          const settings = getAppSettings();
-          if (deferredPrompt && settings.showPwaPrompt !== false) {
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then(({ outcome }) => {
-              console.log(`[PWA] User response to install prompt: ${outcome}`);
-              deferredPrompt = null;
-              const installBtn = document.getElementById('installBtn');
-              if (installBtn) installBtn.style.display = 'none';
-              const installBtnSettings = document.getElementById('installBtnSettings');
-              if (installBtnSettings) installBtnSettings.style.display = 'none';
-            });
-          } else {
-            alert('Install option is not available yet. Open this app on HTTPS and use Edge menu > Apps > Install this site as an app.');
-          }
-        };
-
-        window.addEventListener('beforeinstallprompt', () => {
-          const installBtnSettings = document.getElementById('installBtnSettings');
-          if (installBtnSettings) installBtnSettings.style.display = 'inline-flex';
-        });
-
-        window.addEventListener('appinstalled', () => {
-          const installBtnSettings = document.getElementById('installBtnSettings');
-          if (installBtnSettings) installBtnSettings.style.display = 'none';
-        });
-      })();
-
-      // ── Initialize Auth UI and Real-Time Sync ──────────────
-      (async () => {
-        // Mount the auth header UI
-        AuthUI.mount('#auth-header');
-
-        // Check if user is already logged in (from sign-in callback)
-        const user = await SYNC.verifyMagicLink();
-        const authMsg = SYNC.getAuthMessage();
-
-        if (user) {
-          console.log('✓ Logged in:', user.email);
-          // Re-render the auth header to show the logged-in state (email + logout button)
-          AuthUI.mount('#auth-header');
-          // Real-time subscriptions can be enabled here if needed
+      // Show prompt when settings ask for it (optional)
+      window.showPwaInstallPrompt = () => {
+        const settings = getAppSettings();
+        if (deferredPrompt && settings.showPwaPrompt !== false) {
+          deferredPrompt.prompt();
+          deferredPrompt.userChoice.then(({ outcome }) => {
+            console.log(`[PWA] User response to install prompt: ${outcome}`);
+            deferredPrompt = null;
+            const installBtn = document.getElementById('installBtn');
+            if (installBtn) installBtn.style.display = 'none';
+            const installBtnSettings = document.getElementById('installBtnSettings');
+            if (installBtnSettings) installBtnSettings.style.display = 'none';
+          });
         } else {
-          console.log('ℹ Not logged in - using offline mode (localStorage)');
+          alert('Install option is not available yet. Open this app on HTTPS and use Edge menu > Apps > Install this site as an app.');
         }
+      };
 
-        // Surface callback errors (for example, expired one-time link)
-        if (authMsg) {
-          const msgEl = document.getElementById('auth-message');
-          if (msgEl) {
-            msgEl.style.color = 'var(--rose, #fb7185)';
-            msgEl.textContent = `✗ ${authMsg}`;
-          }
+      window.addEventListener('beforeinstallprompt', () => {
+        const installBtnSettings = document.getElementById('installBtnSettings');
+        if (installBtnSettings) installBtnSettings.style.display = 'inline-flex';
+      });
+
+      window.addEventListener('appinstalled', () => {
+        const installBtnSettings = document.getElementById('installBtnSettings');
+        if (installBtnSettings) installBtnSettings.style.display = 'none';
+      });
+    })();
+
+    // ── Initialize Auth UI and Real-Time Sync ──────────────
+    (async () => {
+      // Mount the auth header UI
+      AuthUI.mount('#auth-header');
+
+      // Check if user is already logged in (from sign-in callback)
+      const user = await SYNC.verifyMagicLink();
+      const authMsg = SYNC.getAuthMessage();
+
+      if (user) {
+        console.log('✓ Logged in:', user.email);
+        // Re-render the auth header to show the logged-in state (email + logout button)
+        AuthUI.mount('#auth-header');
+        // Real-time subscriptions can be enabled here if needed
+      } else {
+        console.log('ℹ Not logged in - using offline mode (localStorage)');
+      }
+
+      // Surface callback errors (for example, expired one-time link)
+      if (authMsg) {
+        const msgEl = document.getElementById('auth-message');
+        if (msgEl) {
+          msgEl.style.color = 'var(--rose, #fb7185)';
+          msgEl.textContent = `✗ ${authMsg}`;
         }
-      })();
+      }
+    })();
   </script>
   <script src="pwa-ui.js"></script>
 </body>
