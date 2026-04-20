@@ -3048,16 +3048,38 @@
     const verses = [
       { t: '"Come to me, all who are weary and burdened, and I will give you rest."', r: '— Matthew 11:28' },
       { t: '"Commit your work to the Lord, and your plans will be established."', r: '— Proverbs 16:3' },
-      { t: '"For I know the plans I have for you — plans to prosper you."', r: '— Jeremiah 29:11' },
+      { t: '"For I know the plans I have for you — plans to prosper you and not to harm you."', r: '— Jeremiah 29:11' },
       { t: '"Wisdom is the principal thing; therefore get wisdom."', r: '— Proverbs 4:7' },
       { t: '"Whatever you do, work heartily, as for the Lord and not for men."', r: '— Colossians 3:23' },
       { t: '"God has not given us a spirit of fear, but of power, love and a sound mind."', r: '— 2 Timothy 1:7' },
       { t: '"I can do all things through Christ who strengthens me."', r: '— Philippians 4:13' },
+      { t: '"Trust in the Lord with all your heart and lean not on your own understanding."', r: '— Proverbs 3:5' },
+      { t: '"Cast all your anxiety on Him because He cares for you."', r: '— 1 Peter 5:7' },
+      { t: '"The Lord will fight for you; you need only to be still."', r: '— Exodus 14:14' },
+      { t: '"My grace is sufficient for you, for my power is made perfect in weakness."', r: '— 2 Corinthians 12:9' },
+      { t: '"Be strong and courageous. Do not be afraid; do not be discouraged."', r: '— Joshua 1:9' },
+      { t: '"The joy of the Lord is your strength."', r: '— Nehemiah 8:10' },
+      { t: '"Let all that you do be done in love."', r: '— 1 Corinthians 16:14' },
     ];
+
+    function getVerseIndexForToday() {
+      const now = new Date();
+      const startOfYear = new Date(now.getFullYear(), 0, 0);
+      const diff = now - startOfYear;
+      const dayOfYear = Math.floor(diff / 86400000);
+      return dayOfYear % verses.length;
+    }
+
     function setVerse() {
-      const v = verses[new Date().getDay()];
-      document.getElementById('verseT').textContent = v.t;
-      document.getElementById('verseR').textContent = v.r;
+      const verseT = document.getElementById('verseT');
+      const verseR = document.getElementById('verseR');
+      if (!verseT || !verseR) return;
+
+      const v = verses[getVerseIndexForToday()];
+      if (!v) return;
+
+      verseT.textContent = v.t;
+      verseR.textContent = v.r;
     }
 
     // ═══════════ WEEK TRACKING ═══════════
@@ -3101,6 +3123,7 @@
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
       document.getElementById('page-' + id).classList.add('active');
       event.target.classList.add('active');
+      if (id === 'dashboard') setVerse();
       if (id === 'roadmap') renderRoadmap();
       if (id === 'projects') renderProjects();
       if (id === 'future') renderFutureRoles();
@@ -3181,6 +3204,11 @@
         renderSchedule();
         setTimeout(() => { updateGlobalProgress(); updateStreakDisplay(); }, 80);
       }).catch(() => { });
+
+      // If the tab regains focus after midnight, refresh the Daily Strength verse.
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') setVerse();
+      });
     });
   </script>
 
