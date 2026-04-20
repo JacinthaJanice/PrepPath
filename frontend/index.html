@@ -1888,6 +1888,12 @@
             <div class="verse-t" id="verseT"></div>
             <div class="verse-r" id="verseR"></div>
           </div>
+
+          <div class="card verse-card">
+            <div class="card-title" style="color:rgba(252,211,77,.4)">Weekly Strength</div>
+            <div class="verse-t" id="weekVerseT"></div>
+            <div class="verse-r" id="weekVerseR"></div>
+          </div>
         </aside>
 
         <!-- Main -->
@@ -3062,6 +3068,19 @@
       { t: '"Let all that you do be done in love."', r: '— 1 Corinthians 16:14' },
     ];
 
+    const weeklyVerses = [
+      { t: '"Those who hope in the Lord will renew their strength."', r: '— Isaiah 40:31' },
+      { t: '"The Lord is my light and my salvation — whom shall I fear?"', r: '— Psalm 27:1' },
+      { t: '"In all your ways submit to Him, and He will make your paths straight."', r: '— Proverbs 3:6' },
+      { t: '"Be joyful in hope, patient in affliction, faithful in prayer."', r: '— Romans 12:12' },
+      { t: '"The Lord will guide you always; He will satisfy your needs."', r: '— Isaiah 58:11' },
+      { t: '"Let us not become weary in doing good, for at the proper time we will reap a harvest."', r: '— Galatians 6:9' },
+      { t: '"If God is for us, who can be against us?"', r: '— Romans 8:31' },
+      { t: '"The name of the Lord is a strong tower; the righteous run to it and are safe."', r: '— Proverbs 18:10' },
+      { t: '"He gives strength to the weary and increases the power of the weak."', r: '— Isaiah 40:29' },
+      { t: '"The Lord is close to the brokenhearted and saves those who are crushed in spirit."', r: '— Psalm 34:18' },
+    ];
+
     function getVerseIndexForToday() {
       const now = new Date();
       const startOfYear = new Date(now.getFullYear(), 0, 0);
@@ -3080,6 +3099,24 @@
 
       verseT.textContent = v.t;
       verseR.textContent = v.r;
+    }
+
+    function setWeeklyVerse() {
+      const weekVerseT = document.getElementById('weekVerseT');
+      const weekVerseR = document.getElementById('weekVerseR');
+      if (!weekVerseT || !weekVerseR || !weeklyVerses.length) return;
+
+      const weekIndex = (getCurrentWeek() - 1) % weeklyVerses.length;
+      const v = weeklyVerses[weekIndex];
+      if (!v) return;
+
+      weekVerseT.textContent = v.t;
+      weekVerseR.textContent = 'Week ' + getCurrentWeek() + ' · ' + v.r;
+    }
+
+    function setAllVerses() {
+      setVerse();
+      setWeeklyVerse();
     }
 
     // ═══════════ WEEK TRACKING ═══════════
@@ -3123,7 +3160,7 @@
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
       document.getElementById('page-' + id).classList.add('active');
       event.target.classList.add('active');
-      if (id === 'dashboard') setVerse();
+      if (id === 'dashboard') setAllVerses();
       if (id === 'roadmap') renderRoadmap();
       if (id === 'projects') renderProjects();
       if (id === 'future') renderFutureRoles();
@@ -3197,7 +3234,7 @@
       // Render instantly from local state, then refresh from cloud in background.
       renderSchedule();
       updateCountdown();
-      setVerse();
+      setAllVerses();
       setTimeout(() => { updateGlobalProgress(); updateStreakDisplay(); }, 80);
 
       loadFromSupabase().then(() => {
@@ -3205,9 +3242,9 @@
         setTimeout(() => { updateGlobalProgress(); updateStreakDisplay(); }, 80);
       }).catch(() => { });
 
-      // If the tab regains focus after midnight, refresh the Daily Strength verse.
+      // If the tab regains focus after midnight, refresh daily and weekly verses.
       document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible') setVerse();
+        if (document.visibilityState === 'visible') setAllVerses();
       });
     });
   </script>
