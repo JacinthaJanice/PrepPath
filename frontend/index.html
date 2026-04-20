@@ -1779,6 +1779,7 @@
         <button class="nav-btn" onclick="showPage('projects')">🛠 Projects</button>
         <button class="nav-btn" onclick="showPage('future')">🚀 Future Roles</button>
         <button class="nav-btn" onclick="showPage('aptitude')">🧠 Aptitude</button>
+        <button class="nav-btn" onclick="showPage('profile')">👤 Profile</button>
         <button class="nav-btn" onclick="showPage('settings')">⚙ Sync Setup</button>
       </div>
     </div>
@@ -2018,6 +2019,52 @@
           <div class="apt-title">Failure = Data</div>
           <div class="apt-body">Every wrong answer tells you exactly what to study next. Spend 2× the time on wrong
             answers. "God has not given us a spirit of fear." — 2 Tim 1:7</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════ PROFILE PAGE ════════════════ -->
+    <div class="page" id="page-profile">
+      <div class="sec-head">
+        <div>
+          <div class="sec-title">Your Profile</div>
+          <div class="sec-sub">Track your progress across weeks</div>
+        </div>
+      </div>
+
+      <!-- Profile Info -->
+      <div class="card" style="max-width:500px;margin-bottom:20px">
+        <div class="card-title">Account Info</div>
+        <div style="font-size:.9rem;color:var(--text2);margin:12px 0">
+          <div style="margin-bottom:8px"><strong>Email:</strong> <span id="profileEmail">Not signed in</span></div>
+          <div style="margin-bottom:8px"><strong>Started:</strong> <span id="profileStartDate">—</span></div>
+          <div><strong>Total Weeks:</strong> <span id="profileTotalWeeks">0</span></div>
+        </div>
+      </div>
+
+      <!-- Weekly History -->
+      <div class="card">
+        <div class="card-title">Weekly Progress History</div>
+        <div style="font-size:.78rem;color:var(--text2);margin-bottom:16px">Completion percentage for each week</div>
+        <div id="weeklyHistoryContainer"
+          style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Week Selector for Dashboard -->
+      <div class="card" style="margin-top:20px">
+        <div class="card-title">View Schedule for Week</div>
+        <div style="font-size:.78rem;color:var(--text2);margin-bottom:12px">Switch to a different week in the schedule
+          to see that week's progress</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <button class="setup-btn" onclick="goToWeek(Math.max(1, getCurrentWeek() - 1))" style="flex:0 0 auto">←
+            Previous</button>
+          <div
+            style="padding:8px 12px;background:var(--surface2);border-radius:6px;font-weight:600;min-width:100px;text-align:center">
+            <span style="font-size:1rem">Week <span id="currentWeekDisplay">0</span></span>
+          </div>
+          <button class="setup-btn" onclick="goToWeek(getCurrentWeek() + 1)" style="flex:0 0 auto">Next →</button>
         </div>
       </div>
     </div>
@@ -2651,12 +2698,12 @@
       document.querySelectorAll('.mcheck input').forEach(cb => {
         cb.addEventListener('change', e => {
           const id = e.target.id;
-          setState('chk_' + id, e.target.checked);
+          setState(getStateKey('chk_' + id, currentViewWeek), e.target.checked);
           e.target.closest('.mcheck').classList.toggle('done', e.target.checked);
           updateGlobalProgress();
           showNotif('Saved');
         });
-        const saved = getState('chk_' + cb.id);
+        const saved = getState(getStateKey('chk_' + cb.id, currentViewWeek));
         if (saved) { cb.checked = true; cb.closest('.mcheck').classList.add('done'); }
       });
       updateGlobalProgress();
@@ -2694,14 +2741,14 @@
       const grid = document.getElementById('roadmapGrid');
       grid.innerHTML = ROADMAP_DATA.map(ph => {
         const totalSub = ph.modules.reduce((a, m) => a + m.sub.length, 0);
-        const doneSub = ph.modules.reduce((a, m) => a + m.sub.filter((_, i) => getState('rm_' + m.id + '_s' + i)).length, 0);
+        const doneSub = ph.modules.reduce((a, m) => a + m.sub.filter((_, i) => getState(getStateKey('rm_' + m.id + '_s' + i, currentViewWeek))).length, 0);
         const pct = totalSub ? Math.round(doneSub / totalSub * 100) : 0;
 
         const modsHTML = ph.modules.map(m => {
-          const allDone = m.sub.every((_, i) => getState('rm_' + m.id + '_s' + i));
+          const allDone = m.sub.every((_, i) => getState(getStateKey('rm_' + m.id + '_s' + i, currentViewWeek)));
           const subHTML = m.sub.map((s, i) => `
-        <div class="subtask ${getState('rm_' + m.id + '_s' + i) ? 'done' : ''}" onclick="toggleSub('${m.id}',${i},this)">
-          <input type="checkbox" ${getState('rm_' + m.id + '_s' + i) ? 'checked' : ''} onclick="event.stopPropagation()">
+        <div class="subtask ${getState(getStateKey('rm_' + m.id + '_s' + i, currentViewWeek)) ? 'done' : ''}" onclick="toggleSub('${m.id}',${i},this)">
+          <input type="checkbox" ${getState(getStateKey('rm_' + m.id + '_s' + i, currentViewWeek)) ? 'checked' : ''} onclick="event.stopPropagation()">
           <label>${s}</label>
         </div>`).join('');
           return `
@@ -2738,14 +2785,14 @@
 
     function toggleSub(modId, idx, el) {
       const key = 'rm_' + modId + '_s' + idx;
-      const newVal = !getState(key);
-      setState(key, newVal);
+      const newVal = !getState(getStateKey(key, currentViewWeek));
+      setState(getStateKey(key, currentViewWeek), newVal);
       el.classList.toggle('done', newVal);
       el.querySelector('input').checked = newVal;
       // Update mod check
       const m = ROADMAP_DATA.flatMap(p => p.modules).find(m => m.id === modId);
       if (m) {
-        const allDone = m.sub.every((_, i) => getState('rm_' + modId + '_s' + i));
+        const allDone = m.sub.every((_, i) => getState(getStateKey('rm_' + modId + '_s' + i, currentViewWeek)));
         const mc = document.getElementById('modcheck-' + modId);
         if (mc) mc.classList.toggle('done', allDone);
       }
@@ -2758,12 +2805,12 @@
       const grid = document.getElementById('projGrid');
       grid.innerHTML = PROJECTS_DATA.map(proj => {
         const tasks = getProjectTasks(proj.id, proj.tasks);
-        const done = tasks.filter(t => getState('pt_' + t.id)).length;
+        const done = tasks.filter(t => getState(getStateKey('pt_' + t.id, currentViewWeek))).length;
         const pct = tasks.length ? Math.round(done / tasks.length * 100) : 0;
 
         const tasksHTML = tasks.map(t => `
-      <div class="ptask ${getState('pt_' + t.id) ? 'done' : ''}" onclick="togglePTask('${t.id}',this)">
-        <input type="checkbox" ${getState('pt_' + t.id) ? 'checked' : ''} onclick="event.stopPropagation()">
+      <div class="ptask ${getState(getStateKey('pt_' + t.id, currentViewWeek)) ? 'done' : ''}" onclick="togglePTask('${t.id}',this)">
+        <input type="checkbox" ${getState(getStateKey('pt_' + t.id, currentViewWeek)) ? 'checked' : ''} onclick="event.stopPropagation()">
         <label>${t.label}</label>
         <span class="ptask-diff diff-${t.diff || 'easy'}">${t.diff || 'easy'}</span>
       </div>`).join('');
@@ -2808,14 +2855,14 @@
     }
 
     function togglePTask(id, el) {
-      const newVal = !getState('pt_' + id);
-      setState('pt_' + id, newVal);
+      const newVal = !getState(getStateKey('pt_' + id, currentViewWeek));
+      setState(getStateKey('pt_' + id, currentViewWeek), newVal);
       el.classList.toggle('done', newVal);
       el.querySelector('input').checked = newVal;
       // Update progress bar
       PROJECTS_DATA.forEach(proj => {
         const tasks = getProjectTasks(proj.id, proj.tasks);
-        const done = tasks.filter(t => getState('pt_' + t.id)).length;
+        const done = tasks.filter(t => getState(getStateKey('pt_' + t.id, currentViewWeek))).length;
         const pct = tasks.length ? Math.round(done / tasks.length * 100) : 0;
         const bar = document.getElementById('pp2f-' + proj.id);
         if (bar) bar.style.width = pct + '%';
@@ -2829,11 +2876,11 @@
     function renderFutureRoles() {
       const grid = document.getElementById('futureGrid');
       grid.innerHTML = FUTURE_DATA.map(role => {
-        const done = role.steps.filter(s => getState('fs_' + s.id)).length;
+        const done = role.steps.filter(s => getState(getStateKey('fs_' + s.id, currentViewWeek))).length;
         const pct = Math.round(done / role.steps.length * 100);
         const stepsHTML = role.steps.map(s => `
-      <div class="fc-step ${getState('fs_' + s.id) ? 'done' : ''}" onclick="toggleFutureStep('${s.id}',this)">
-        <input type="checkbox" ${getState('fs_' + s.id) ? 'checked' : ''} onclick="event.stopPropagation()">
+      <div class="fc-step ${getState(getStateKey('fs_' + s.id, currentViewWeek)) ? 'done' : ''}" onclick="toggleFutureStep('${s.id}',this)">
+        <input type="checkbox" ${getState(getStateKey('fs_' + s.id, currentViewWeek)) ? 'checked' : ''} onclick="event.stopPropagation()">
         <label>${s.label}</label>
         <span class="fc-year">${s.year}</span>
       </div>`).join('');
@@ -2862,8 +2909,8 @@
     }
 
     function toggleFutureStep(id, el) {
-      const newVal = !getState('fs_' + id);
-      setState('fs_' + id, newVal);
+      const newVal = !getState(getStateKey('fs_' + id, currentViewWeek));
+      setState(getStateKey('fs_' + id, currentViewWeek), newVal);
       el.classList.toggle('done', newVal);
       el.querySelector('input').checked = newVal;
       renderFutureRoles();
@@ -2882,10 +2929,8 @@
       document.getElementById('progPct').textContent = todayPct + '%';
       document.getElementById('progCount').textContent = todayDone.length + ' / ' + todayAll.length;
 
-      // Ring shows overall weekly progress (all days combined)
-      const all = document.querySelectorAll('.mcheck input');
-      const done = document.querySelectorAll('.mcheck input:checked');
-      const weeklyPct = all.length ? Math.round(done.length / all.length * 100) : 0;
+      // Ring shows overall progress for the selected week
+      const weeklyPct = calculateWeekProgress(currentViewWeek);
       const ring = document.getElementById('mainRing');
       ring.style.strokeDashoffset = 264 - (weeklyPct / 100) * 264;
       document.getElementById('ringPct').textContent = weeklyPct + '%';
@@ -3015,6 +3060,41 @@
       document.getElementById('verseR').textContent = v.r;
     }
 
+    // ═══════════ WEEK TRACKING ═══════════
+    const WEEK_START_DATE_KEY = 'pp3_week_start';
+    let currentViewWeek = 1;
+
+    function getOrInitWeekStart() {
+      let startDate = localStorage.getItem(WEEK_START_DATE_KEY);
+      if (!startDate) {
+        startDate = new Date().toISOString().split('T')[0];
+        localStorage.setItem(WEEK_START_DATE_KEY, startDate);
+      }
+      return new Date(startDate);
+    }
+
+    function getCurrentWeek() {
+      const startDate = getOrInitWeekStart();
+      const today = new Date();
+      const diffTime = Math.abs(today - startDate);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      return Math.floor(diffDays / 7) + 1;
+    }
+
+    function getStateKey(baseKey, week = null) {
+      week = week !== null ? week : currentViewWeek;
+      return baseKey + '_w' + week;
+    }
+
+    function goToWeek(week) {
+      if (week < 1) return;
+      currentViewWeek = week;
+      document.getElementById('currentWeekDisplay').textContent = week;
+      renderSchedule();
+      updateGlobalProgress();
+      updateStreakDisplay();
+    }
+
     // ═══════════ PAGE NAV ═══════════
     function showPage(id) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -3024,6 +3104,56 @@
       if (id === 'roadmap') renderRoadmap();
       if (id === 'projects') renderProjects();
       if (id === 'future') renderFutureRoles();
+      if (id === 'profile') renderProfile();
+    }
+
+    function renderProfile() {
+      // Update user info
+      let userEmail = 'Not signed in';
+      try {
+        const user = JSON.parse(localStorage.getItem('pp3_auth_user') || '{}');
+        if (user.email) userEmail = user.email;
+      } catch (e) { }
+      document.getElementById('profileEmail').textContent = userEmail;
+
+      // Update dates
+      const startDate = getOrInitWeekStart();
+      document.getElementById('profileStartDate').textContent = startDate.toLocaleDateString();
+      document.getElementById('profileTotalWeeks').textContent = getCurrentWeek();
+      document.getElementById('currentWeekDisplay').textContent = currentViewWeek;
+
+      // Render weekly history
+      const container = document.getElementById('weeklyHistoryContainer');
+      container.innerHTML = '';
+      const maxWeek = getCurrentWeek();
+      for (let w = 1; w <= maxWeek; w++) {
+        const pct = calculateWeekProgress(w);
+        const card = document.createElement('div');
+        card.style.cssText = 'padding:12px;background:var(--surface2);border-radius:8px;text-align:center;cursor:pointer;border:1px solid var(--border2);transition:all 0.2s';
+        card.innerHTML = `<div style="font-weight:700;font-size:1.2rem;color:var(--teal);margin-bottom:4px">${pct}%</div><div style="font-size:.7rem;color:var(--text2)">Week ${w}</div>`;
+        card.onclick = () => goToWeek(w);
+        card.onmouseover = () => card.style.background = 'var(--surface3)';
+        card.onmouseout = () => card.style.background = 'var(--surface2)';
+        if (w === currentViewWeek) card.style.borderColor = 'var(--teal)';
+        container.appendChild(card);
+      }
+    }
+
+    function calculateWeekProgress(week) {
+      // Count all tasks for this week and how many are done
+      let total = 0, done = 0;
+      const schedule = SCHEDULE_DATA;
+      const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+      for (const day of days) {
+        const dayData = schedule[day];
+        if (dayData && dayData.blocks) {
+          for (const block of dayData.blocks) {
+            total++;
+            if (getState(getStateKey('chk_' + block.id, week))) done++;
+          }
+        }
+      }
+      return total > 0 ? Math.round(done / total * 100) : 0;
     }
 
     // ═══════════ NOTIFICATION ═══════════
