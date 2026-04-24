@@ -210,7 +210,7 @@ const API = (() => {
             custom_tasks_done:    tasks.filter(t => t.done).length,
             journal_entries:      journal.length,
             last_active:          pRes.data?.updated_at || null,
-            days_until_sept:      Math.max(0, Math.floor((new Date('2025-09-30') - new Date()) / 86400000))
+            days_until_sept:      Math.max(0, Math.floor((new Date(new Date().getFullYear() + (new Date().getMonth() >= 8 ? 1 : 0), 8, 30) - new Date()) / 86400000))
           };
         } catch {}
       }
