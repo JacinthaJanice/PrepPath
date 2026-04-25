@@ -278,6 +278,13 @@ app.get('/api/stats/:userId', async (req, res) => {
     const futureKeys  = Object.keys(state).filter(k => k.startsWith('fs_') && state[k]);
     const projKeys    = Object.keys(state).filter(k => k.startsWith('pt_') && state[k]);
 
+    // Days remaining until 30 September of the current academic year.
+    // If September has already passed this calendar year, target next year's date.
+    const now = new Date();
+    const targetYear = now.getMonth() >= 8 ? now.getFullYear() + 1 : now.getFullYear();
+    const septTarget = new Date(targetYear, 8, 30); // month 8 = September (0-indexed)
+    const daysUntilSept = Math.max(0, Math.floor((septTarget - now) / 86400000));
+
     res.json({
       success: true,
       stats: {
@@ -289,7 +296,7 @@ app.get('/api/stats/:userId', async (req, res) => {
         custom_tasks_done:    tasks.filter(t => t.done).length,
         journal_entries:      journal.length,
         last_active:          progressRes.data?.updated_at || null,
-        days_until_sept:      Math.max(0, Math.floor((new Date(new Date().getFullYear() + (new Date().getMonth() >= 8 ? 1 : 0), 8, 30) - new Date()) / 86400000))
+        days_until_sept:      daysUntilSept
       }
     });
   } catch (err) {

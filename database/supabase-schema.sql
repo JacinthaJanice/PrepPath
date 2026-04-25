@@ -1,7 +1,7 @@
 -- ════════════════════════════════════════════════════════════════════════════
 -- PREPPATH - SUPABASE DATABASE SCHEMA
--- This file mirrors database/setup.sql for reference.
--- Run database/setup.sql in your Supabase project → SQL Editor
+-- This is the canonical schema file. Run this SQL in your Supabase project
+-- via: Supabase Dashboard → SQL Editor → New Query → paste → Run
 -- ════════════════════════════════════════════════════════════════════════════
 
 -- 1. Create the progress/state table
@@ -58,6 +58,8 @@ CREATE TABLE IF NOT EXISTS study_sessions (
 -- AUTO-UPDATE TIMESTAMPS
 -- ════════════════════════════════════════════════════════════════════════════
 
+-- update_updated_at: automatically sets updated_at to the current timestamp
+-- whenever a row is modified. Attached as a BEFORE UPDATE trigger on each table.
 CREATE OR REPLACE FUNCTION update_updated_at()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -141,7 +143,8 @@ CREATE INDEX IF NOT EXISTS idx_sessions_topic       ON study_sessions(topic);
 -- USEFUL VIEWS
 -- ════════════════════════════════════════════════════════════════════════════
 
--- Daily completion summary
+-- daily_summary: shows which journal fields (learnt, gratitude, verse_reflection)
+-- have been filled in for each user/day combination. Useful for habit tracking UI.
 CREATE OR REPLACE VIEW daily_summary AS
 SELECT
   user_id,
@@ -151,7 +154,8 @@ SELECT
   verse_reflection IS NOT NULL AND verse_reflection != '' AS has_verse
 FROM journal;
 
--- Study streak (how many consecutive days journalled per user)
+-- journal_streak: returns total journalled days and the last entry date per user.
+-- Note: counts all distinct days journalled, not necessarily consecutive days.
 CREATE OR REPLACE VIEW journal_streak AS
 SELECT
   user_id,
