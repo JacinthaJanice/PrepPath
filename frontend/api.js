@@ -201,6 +201,12 @@ const API = (() => {
           const state = pRes.data?.state_data || {};
           const tasks = tRes.data || [];
           const journal = jRes.data || [];
+          // Days remaining until 30 September of the current academic year.
+          // If September has already passed this calendar year, target next year's date.
+          const now = new Date();
+          const targetYear = now.getMonth() >= 8 ? now.getFullYear() + 1 : now.getFullYear();
+          const septTarget = new Date(targetYear, 8, 30); // month 8 = September (0-indexed)
+          const daysUntilSept = Math.max(0, Math.floor((septTarget - now) / 86400000));
           return {
             schedule_tasks_done:  Object.keys(state).filter(k => k.startsWith('chk_') && state[k]).length,
             roadmap_steps_done:   Object.keys(state).filter(k => k.startsWith('rm_')  && state[k]).length,
@@ -210,7 +216,7 @@ const API = (() => {
             custom_tasks_done:    tasks.filter(t => t.done).length,
             journal_entries:      journal.length,
             last_active:          pRes.data?.updated_at || null,
-            days_until_sept:      Math.max(0, Math.floor((new Date('2025-09-30') - new Date()) / 86400000))
+            days_until_sept:      daysUntilSept
           };
         } catch {}
       }

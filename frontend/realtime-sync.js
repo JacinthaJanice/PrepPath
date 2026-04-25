@@ -181,7 +181,7 @@ const SYNC = (() => {
                 {
                     event: '*',
                     schema: 'public',
-                    table: 'tasks',
+                    table: 'custom_tasks',
                     filter: `user_id=eq.${userId}`
                 },
                 (payload) => {

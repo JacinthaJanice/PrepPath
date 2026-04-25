@@ -1,14 +1,21 @@
 // config.js — loaded before the main app
-// Change BACKEND_URL to your deployed backend once hosted
+//
+// Cross-device sync works via Supabase directly — no backend server required.
+// Set SUPABASE_URL and SUPABASE_ANON_KEY below (from Supabase → Settings → API)
+// and the app will sync in real-time across all devices automatically.
+//
+// BACKEND_URL is only needed if you run the optional Express backend.
+// Leave it empty ('') to use Supabase-direct mode (recommended for most users).
+// If you deploy the backend, set it to your hosted URL:
+//   Render.com: 'https://preppath-api.onrender.com'
+//   Railway:    'https://preppath-api.up.railway.app'
 
 window.PP_CONFIG = {
-  // ── Change this to your backend URL when deployed ──
-  // Local dev:  'http://localhost:3001'
-  // Render.com: 'https://preppath-api.onrender.com'
-  // Railway:    'https://preppath-api.up.railway.app'
-  BACKEND_URL: 'http://localhost:3001',
+  // ── Optional: only set if you run the Express backend ──
+  // Leave empty to use Supabase directly (works on any device, no localhost needed)
+  BACKEND_URL: '',
 
-  // Supabase direct (fallback if no backend)
+  // Supabase credentials — required for cross-device sync
   // Fill these from Supabase → Settings → API
   SUPABASE_URL: 'https://ydmmcxemzxxifpvdwgsw.supabase.co',
   SUPABASE_ANON_KEY: 'sb_publishable_5XFKr2QsT_4YFO9Wr3y1qQ_r2nQlICveyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlkbW1jeGVtenh4aWZwdmR3Z3N3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0OTM3MTIsImV4cCI6MjA5MTA2OTcxMn0.U0paO2Q7cQL-ldeuAK-55hCkrbtFyl_h-dM6u8Hz4lY',
